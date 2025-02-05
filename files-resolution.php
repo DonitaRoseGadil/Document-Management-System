@@ -3,7 +3,8 @@
 
 <?php 
 include "header.php"; 
-error_reporting(0);
+error_reporting(E_ALL); // Enable error reporting for development
+ini_set('display_errors', 1);
 session_start();
 ?>
 
@@ -46,6 +47,7 @@ session_start();
                                                 <th style="color: #FFFFFF;">AUTHOR/SPONSOR</th>
                                                 <th style="color: #FFFFFF;">REMARKS</th>
                                                 <th style="color: #FFFFFF;">DATE APPROVED</th>
+                                                <th style="color: #FFFFFF;">ACTION</th>
                                             </tr>
                                         </thead>
                                         <tbody style="color: #000000;">
@@ -53,7 +55,9 @@ session_start();
                                             include "connect.php";
 
                                             $sql = "SELECT reso_no, title, d_adopted, author_sponsor, remarks, d_approved FROM resolution";
-                                            $result = $conn->query($sql);
+                                            $stmt = $conn->prepare($sql);
+                                            $stmt->execute();
+                                            $result = $stmt->get_result();
 
                                             if (!$result) {
                                                 die("SQL Error: " . $conn->error);
@@ -61,14 +65,19 @@ session_start();
 
                                             while ($row = $result->fetch_assoc()) {
                                                 echo "<tr>
-                                                        <td>$row[reso_no]</td>
-                                                        <td>$row[title]</td>
-                                                        <td>$row[d_adopted]</td>
-                                                        <td>$row[author_sponsor]</td>
-                                                        <td>$row[remarks]</td>
-                                                        <td>$row[d_approved]</td>
+                                                        <td>{$row['reso_no']}</td>
+                                                        <td>{$row['title']}</td>
+                                                        <td>{$row['d_adopted']}</td>
+                                                        <td>{$row['author_sponsor']}</td>
+                                                        <td>{$row['remarks']}</td>
+                                                        <td>{$row['d_approved']}</td>
+                                                        <td class='text-center'>
+                                                            <a href='viewresolution.php?id={$row['reso_no']}' class='btn btn-primary btn-sm'><i class='fa fa-eye' aria-hidden='true'></i></a>
+                                                            <a href='editresolution.php?id={$row['reso_no']}' class='btn btn-success btn-sm'><i class='fa fa-edit' aria-hidden='true'></i></a>
+                                                            <a href='deleteresolution.php?id={$row['reso_no']}' class='btn btn-danger btn-sm'><i class='fa fa-trash' aria-hidden='true'></i></a>
+                                                        </td>
                                                     </tr>";
-                                            }
+                                                }
                                             ?>
                                         </tbody>
                                     </table>
