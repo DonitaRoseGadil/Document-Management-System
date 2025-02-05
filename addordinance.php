@@ -27,7 +27,7 @@
                     <div class="col-xl-8 col-xxl-12 items-center">                        
                         <div class="card" style="align-self: center;">
                             <div class="card-header d-flex justify-content-center">
-                                <h4 class="card-title text-center" style="color: #098209; ">ADD MEETING MINUTES</h4>
+                                <h4 class="card-title text-center" style="color: #098209; ">ADD ORDINANCE</h4>
                             </div>
                             <div class="card-body">
                                 <div class="basic-form">
