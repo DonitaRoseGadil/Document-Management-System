@@ -26,8 +26,8 @@
                             <div class="card-header d-flex justify-content-between align-items-center p-3 mt-4">
                                 <h1 class="card-title flex-grow-1 fs-4 fw-bold text-dark text-center" style="color: #000000">LIST OF ORDINANCES</h1>
                                 <div class="button-container d-flex justify-content-end">
-                                    <a href="addresolution.php">
-                                        <button type="button" class="btn btn-primary" style="background-color: #098209; color:#FFFFFF; border: none;"><i class="fa fa-plus"></i>&nbsp;Add New Resolution</button>
+                                    <a href="addordinance.php">
+                                        <button type="button" class="btn btn-primary" style="background-color: #098209; color:#FFFFFF; border: none;"><i class="fa fa-plus"></i>&nbsp;Add New Ordinance</button>
                                     </a>
                                 </div>
                             </div>
@@ -224,7 +224,7 @@
         ***********************************-->
         <div class="footer">
             <div class="copyright">
-                <p>Copyright © Designed &amp; Developed by <a href="#" target="_blank">Quixkit</a> 2019</p>
+                <!-- <p>Copyright © Designed &amp; Developed by <a href="#" target="_blank">Quixkit</a> 2019</p> -->
             </div>
         </div>
         <!--**********************************

@@ -1,11 +1,14 @@
 <!--**********************************
     Nav header start
 ***********************************-->
-<div class="nav-header" style="background-color: #098209;">
-    <a href="index.html" class="brand-logo">
+<div class="nav-header" style="background-color: #098209; display: flex; align-items: center;">
+    <a href="index.html" class="brand-logo" style="display: flex; align-items: center;">
         <img class="logo-abbr" src="./images/logo.png" alt="">
-        <img class="logo-compact" src="./images/logo-text.png" alt="">
-        <img class="brand-title" src="./images/logo-text.png" alt="">
+        <span id="brandText" class="brand-text" style="color: white; font-size: 14px; font-weight: bold; white-space: nowrap; margin-left: 5px;">
+            SANGGUNIANG BAYAN OFFICE
+        </span>
+        <!-- <img class="logo-compact" src="./images/logo-text.png" alt=""> -->
+        <!-- <img class="brand-title" src="./images/logo-text.png" alt=""> -->
     </a>
 
     <div class="nav-control">
@@ -13,6 +16,17 @@
             <span class="line"></span><span class="line"></span><span class="line"></span>
         </div>
     </div>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const hamburger = document.querySelector(".hamburger");
+        const brandText = document.getElementById("brandText");
+
+        hamburger.addEventListener("click", function () {
+            brandText.style.display = brandText.style.display === "none" ? "inline-block" : "none";
+        });
+    });
+</script>
+    
 </div>
 <!--**********************************
     Nav header end

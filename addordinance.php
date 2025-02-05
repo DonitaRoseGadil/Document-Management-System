@@ -1,62 +1,8 @@
-<?php
-
-if(isset($_POST['save'])){
-    include("connect.php");
-    error_reporting(0);
-    session_start();
-
-    $resoNo = $_POST['resoNo'];
-    $title = $_POST['title'];
-    $description = $_POST['description'];
-    $dateAdopted = $_POST['dateAdopted'];
-    $authorSponsor = $_POST['authorSponsor'];
-    $remarks = $_POST['remarks'];
-    $dateApproved = $_POST['dateApproved'];
-
-    $sql = "INSERT INTO `resolution`(`reso_no`, `title`, `descrip`, `d_adopted`, `author_sponsor`, `remarks`, `d_approved`) 
-            VALUES ('$resoNo', '$title', '$description', '$dateAdopted', '$authorSponsor', '$remarks', '$dateApproved')";
-
-    $query = mysqli_query($conn, $sql);    
-
-    // Close connection
-    mysqli_close($conn);
-
-    if($query) {
-        echo "<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Resolution Created',
-                        text: 'The resolution has been successfully created.',
-                        confirmButtonText: 'OK'
-                    });
-                });
-              </script>";
-    } else {
-        echo "<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'There was an error creating the resolution.',
-                        confirmButtonText: 'OK'
-                    });
-                });
-              </script>";
-    }
-}    
-?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <?php include "header.php"; ?>
-
-<head>
-    <!-- Include SweetAlert CSS and JS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-</head>
 
 <body>
 
@@ -68,6 +14,7 @@ if(isset($_POST['save'])){
         <?php 
             include "navheader.php";
             include "sidebar.php"; 
+        
         ?>
 
         <!--**********************************
@@ -80,7 +27,7 @@ if(isset($_POST['save'])){
                     <div class="col-xl-8 col-xxl-12 items-center">                        
                         <div class="card" style="align-self: center;">
                             <div class="card-header d-flex justify-content-center">
-                                <h4 class="card-title text-center" style="color: #098209; ">ADD RESOLUTION</h4>
+                                <h4 class="card-title text-center" style="color: #098209; ">ADD ORDINANCE</h4>
                             </div>
                             <div class="card-body">
                                 <div class="basic-form">
@@ -144,10 +91,7 @@ if(isset($_POST['save'])){
                                         <div class="form-group row">
                                             <div class="col-sm-10 mt-4 justify">
                                                 <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data">Save</button>
-                                                <a href="files-resolution.php">
-                                                    <button type="button" class="btn btn-primary" id="cancel_btn" name="cancel" value="Cancel">Cancel</button>
-                                                </a>
-                                                
+                                                <button type="submit" class="btn btn-primary" id="cancel_btn" name="cancel" value="Cancel">Cancel</button>
                                             </div>
                                         </div>
                                     </form>

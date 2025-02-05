@@ -23,43 +23,52 @@
                 <div class="row page-titles mx-0">
                     <div class="col-sm-6 p-md-0">
                         <div class="welcome-text">
-                            <!-- <h4 style="color: #098209">Hi, Welcome!</h4> -->
-                            <h4 style="color: #098209" class="mb-2">Document Management System</h4>
-                            <p style="color: #098209" class="mb-0">Sangguniang Bayan Office</p>
+                            <h4 style="color: #098209" class="mb-0">Document Management System</h4>
+                            <p style="color: #098209"class="mb-0">Sangguniang Bayan Office</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
-                <!-- Minutes Chart -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Minutes</h5>
-                            <canvas id="minutesChart"></canvas>
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="card">
+                            <div class="stat-widget-one card-body">
+                                <div class="stat-icon d-inline-block">
+                                    <i class="ti-file text-success border-success"></i>
+                                </div>
+                                <div class="stat-content d-inline-block">
+                                    <div class="stat-text">Resolution</div>
+                                    <div class="stat-digit">1,012</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                 <!-- Ordinance Chart -->
-                 <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Ordinance</h5>
-                            <canvas id="ordinanceChart"></canvas>
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="card">
+                            <div class="stat-widget-one card-body">
+                                <div class="stat-icon d-inline-block">
+                                    <i class="ti-folder text-primary border-primary"></i>
+                                </div>
+                                <div class="stat-content d-inline-block">
+                                    <div class="stat-text">Ordinances</div>
+                                    <div class="stat-digit">961</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Resolution Chart -->
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Resolution</h5>
-                            <canvas id="resolutionChart"></canvas>
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="card">
+                            <div class="stat-widget-one card-body">
+                                <div class="stat-icon d-inline-block">
+                                    <i class="ti-agenda text-danger border-danger"></i>
+                                </div>
+                                <div class="stat-content d-inline-block">
+                                    <div class="stat-text">Meeting Minutes</div>
+                                    <div class="stat-digit">770</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -98,40 +107,6 @@
         Scripts
     ***********************************-->
     <!-- Required vendors -->
-
-    <script>
-    window.onload = function() {
-        console.log(document.getElementById('minutesChart')); // Debugging check
-
-        const createChart = (id, label, data) => {
-            let ctx = document.getElementById(id);
-            if (!ctx) return; // Prevents error if element is missing
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['January', 'February', 'March', 'April', 'May'],
-                    datasets: [{
-                        label: label,
-                        data: data,
-                        backgroundColor: 'rgba(9, 130, 9, 0.5)',
-                        borderColor: 'rgba(9, 130, 9, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: { y: { beginAtZero: true } }
-                }
-            });
-        };
-
-        createChart('minutesChart', 'Minutes', [12, 19, 3, 5, 2]);
-        createChart('ordinanceChart', 'Ordinance', [7, 11, 5, 8, 4]);
-        createChart('resolutionChart', 'Resolution', [10, 15, 7, 3, 6]);
-    };
-</script>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="./vendor/global/global.min.js"></script>
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
