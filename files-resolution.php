@@ -46,6 +46,7 @@ session_start();
                                                 <th style="color: #FFFFFF;">AUTHOR/SPONSOR</th>
                                                 <th style="color: #FFFFFF;">REMARKS</th>
                                                 <th style="color: #FFFFFF;">DATE APPROVED</th>
+                                                <th style="color: #FFFFFF;">ACTIONS</th>
                                             </tr>
                                         </thead>
                                         <tbody style="color: #000000;">

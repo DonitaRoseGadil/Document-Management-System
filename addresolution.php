@@ -1,6 +1,5 @@
 <?php
 
-
 if(isset($_POST['save'])){
     include("connect.php");
     error_reporting(0);
@@ -21,15 +20,43 @@ if(isset($_POST['save'])){
 
     // Close connection
     mysqli_close($conn);
-    }
-    
-?>
 
+    if($query) {
+        echo "<script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Resolution Created',
+                        text: 'The resolution has been successfully created.',
+                        confirmButtonText: 'OK'
+                    });
+                });
+              </script>";
+    } else {
+        echo "<script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'There was an error creating the resolution.',
+                        confirmButtonText: 'OK'
+                    });
+                });
+              </script>";
+    }
+}    
+?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <?php include "header.php"; ?>
+
+<head>
+    <!-- Include SweetAlert CSS and JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+</head>
 
 <body>
 
@@ -41,7 +68,6 @@ if(isset($_POST['save'])){
         <?php 
             include "navheader.php";
             include "sidebar.php"; 
-        
         ?>
 
         <!--**********************************
@@ -118,7 +144,10 @@ if(isset($_POST['save'])){
                                         <div class="form-group row">
                                             <div class="col-sm-10 mt-4 justify">
                                                 <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data">Save</button>
-                                                <button type="submit" class="btn btn-primary" id="cancel_btn" name="cancel" value="Cancel">Cancel</button>
+                                                <a href="files-resolution.php">
+                                                    <button type="button" class="btn btn-primary" id="cancel_btn" name="cancel" value="Cancel">Cancel</button>
+                                                </a>
+                                                
                                             </div>
                                         </div>
                                     </form>

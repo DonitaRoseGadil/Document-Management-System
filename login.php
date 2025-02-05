@@ -1,3 +1,25 @@
+<?php
+include("connect.php");
+session_start();
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $email = mysqli_real_escape_string($check, $_POST['email']);
+    $password = mysqli_real_escape_string($check, $_POST['password']);
+
+    $data = mysqli_query($check, "SELECT * FROM admin WHERE email='$email' AND password='$password'");
+
+    if (mysqli_num_rows($data) == 1) {
+        $_SESSION['message'] = "success";
+        header("Location: login.php"); // Redirect to prevent form resubmission
+        exit();
+    } else {
+        $_SESSION['message'] = "error";
+        header("Location: login.php");
+        exit();
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en" class="h-100">
 
@@ -33,14 +55,14 @@
                                 <div class="auth-form">
                                     <h1 class="text-center" style="color:#098209">Log in<h1>
                                     <h4 class="text-center mb-4" style="color:#000000">Sign in your account</h4>
-                                    <form action="dashboard.php" method="POST">
+                                    <form id="loginForm" action="dashboard.php" method="POST">
                                         <div class="form-group">
                                             <!-- <label ><strong>Email</strong></label> -->
-                                            <input type="email" class="form-control" placeholder="Email" name="email">
+                                            <input type="email" class="form-control" placeholder="Email" name="email" id="email">
                                         </div>
                                         <div class="form-group">
                                             <!-- <label><strong>Password</strong></label> -->
-                                            <input type="password" class="form-control" placeholder="Password" name="password">
+                                            <input type="password" class="form-control" placeholder="Password" name="password" id="password">
                                         </div>
                                         <div class="form-row d-flex justify-content-between mt-4 mb-2">
                                             <div class="form-group">
@@ -74,6 +96,31 @@
     <script src="./vendor/global/global.min.js"></script>
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <?php
+        if (isset($_SESSION['message'])) {
+            if ($_SESSION['message'] == "success") {
+                echo "<script>
+                    Swal.fire({
+                        title: 'Login Successful!',
+                        icon: 'success'
+                    }).then(() => {
+                        window.location.href = 'dashboard.php';
+                    });
+                </script>";
+            } elseif ($_SESSION['message'] == "error") {
+                echo "<script>
+                    Swal.fire({
+                        title: 'Wrong Credentials',
+                        icon: 'error',
+                        confirmButtonText: 'Try Again'
+                    });
+                </script>";
+            }
+            unset($_SESSION['message']); // Clear session message after showing alert
+        }
+    ?>
 
 </body>
 
