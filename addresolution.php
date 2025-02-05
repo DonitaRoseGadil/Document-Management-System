@@ -50,8 +50,8 @@ if(isset($_POST['save'])){
         <div class="content-body">
             <div class="container-fluid" >
                 <!-- row -->
-                <div class="row">
-                    <div class="col-xl-8 col-xxl-12">                        
+                <div class="row d-flex justify-content-center">
+                    <div class="col-xl-8 col-xxl-12 items-center">                        
                         <div class="card" style="align-self: center;">
                             <div class="card-header d-flex justify-content-center">
                                 <h4 class="card-title text-center" style="color: #098209; ">Add Resolution</h4>
@@ -139,7 +139,7 @@ if(isset($_POST['save'])){
         ***********************************-->
         <div class="footer">
             <div class="copyright">
-                <p>Copyright © Designed &amp; Developed by <a href="#" target="_blank">Quixkit</a> 2019</p>
+                <!-- <p>Copyright © Designed &amp; Developed by <a href="#" target="_blank">Quixkit</a> 2019</p> -->
             </div>
         </div>
         <!--**********************************

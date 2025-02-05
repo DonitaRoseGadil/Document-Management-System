@@ -15,6 +15,7 @@
                 </a>
                 <ul aria-expanded="false">
                     <li><a href="./files-resolution.php" style="color: #FFFFFF;">Resolution</a></li>
+                    <li><a href="./files-ordinances.php" style="color: #FFFFFF;">Ordinances</a></li>
                     <li><a href="./files-meetingminutes.php" style="color: #FFFFFF;">Meeting Minutes</a></li>
                 </ul>
             </li>

@@ -34,176 +34,24 @@
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table id="example" class="display" style="min-width: 845px">
-                                        <thead class="text-center" style="background-color: #098209; color: #FFFFFF;">
+                                        <thead class="text-left" style="background-color: #098209; color: #FFFFFF;">
                                             <tr>
-                                                <th style="color: #FFFFFF;">RESOLUTION NO./ MO NO.</th>
-                                                <th style="color: #FFFFFF;">TITLE</th>
-                                                <th style="color: #FFFFFF;">DATE ADOPTED</th>
-                                                <th style="color: #FFFFFF;">AUTHOR/SPONSOR</th>
-                                                <th style="color: #FFFFFF;">REMARKS</th>
-                                                <th style="color: #FFFFFF;">DATE APPROVED</th>
+                                                <th style="color: #FFFFFF;">NUMBER OF REGULAR SESSION</th>
+                                                <th style="color: #FFFFFF;">DATE</th>
+                                                <th style="color: #FFFFFF;">ATTACHMENT</th>
+
                                             </tr>
                                         </thead>
-                                        <tbody style="color: #000000;">
+                                        <tbody class="text-left" style="color: #000000;" >
                                         <tr>
-                                            <td>MO-001-2025</td>
+                                            <td>4th Regular Session</td>
+                                            <td>January 27, 2025</td>
                                             <td>Green City Initiative</td>
-                                            <td>2025-01-15</td>
-                                            <td>Councilor Jane Doe</td>
-                                            <td>Approved</td>
-                                            <td>2025-01-20</td>
                                         </tr>
                                         <tr>
-                                            <td>RES-002-2025</td>
+                                            <td>5th Regular Session</td>
+                                            <td>February 3, 2025</td>
                                             <td>Community Cleanup Drive</td>
-                                            <td>2025-01-18</td>
-                                            <td>Councilor Mark Cruz</td>
-                                            <td>Pending</td>
-                                            <td>N/A</td>
-                                        </tr>
-                                        <tr>
-                                            <td>MO-003-2025</td>
-                                            <td>Tree Planting Program</td>
-                                            <td>2025-01-25</td>
-                                            <td>Mayor Anna Reyes</td>
-                                            <td>Approved</td>
-                                            <td>2025-01-30</td>
-                                        </tr>
-                                        <tr>
-                                            <td>RES-004-2025</td>
-                                            <td>Digital Literacy for Seniors</td>
-                                            <td>2025-02-01</td>
-                                            <td>Vice Mayor Lily Gomez</td>
-                                            <td>Ongoing Implementation</td>
-                                            <td>2025-02-05</td>
-                                        </tr>
-                                        <tr>
-                                            <td>MO-005-2025</td>
-                                            <td>Public Wi-Fi Expansion</td>
-                                            <td>2025-02-10</td>
-                                            <td>Councilor John Smith</td>
-                                            <td>Approved</td>
-                                            <td>2025-02-15</td>
-                                        </tr>
-                                        <tr>
-                                            <td>RES-006-2025</td>
-                                            <td>Flood Control Measures</td>
-                                            <td>2025-02-18</td>
-                                            <td>Councilor Sarah Tan</td>
-                                            <td>Pending Budget Approval</td>
-                                            <td>N/A</td>
-                                        </tr>
-                                        <tr>
-                                            <td>MO-007-2025</td>
-                                            <td>Support for Local Farmers</td>
-                                            <td>2025-02-22</td>
-                                            <td>Mayor Paul Reyes</td>
-                                            <td>Approved</td>
-                                            <td>2025-02-28</td>
-                                        </tr>
-                                        <tr>
-                                            <td>RES-008-2025</td>
-                                            <td>Sports Development Fund</td>
-                                            <td>2025-03-05</td>
-                                            <td>Councilor Emma Torres</td>
-                                            <td>Ongoing Review</td>
-                                            <td>N/A</td>
-                                        </tr>
-                                        <tr>
-                                            <td>MO-009-2025</td>
-                                            <td>Community Health Clinics</td>
-                                            <td>2025-03-12</td>
-                                            <td>Vice Mayor Lily Gomez</td>
-                                            <td>Approved</td>
-                                            <td>2025-03-18</td>
-                                        </tr>
-                                        <tr>
-                                            <td>RES-010-2025</td>
-                                            <td>Energy Conservation Campaign</td>
-                                            <td>2025-03-20</td>
-                                            <td>Councilor Jane Doe</td>
-                                            <td>Approved</td>
-                                            <td>2025-03-25</td>
-                                        </tr>
-                                        <tr>
-                                            <td>MO-011-2025</td>
-                                            <td>School Safety Awareness</td>
-                                            <td>2025-04-01</td>
-                                            <td>Councilor Mark Cruz</td>
-                                            <td>Pending</td>
-                                            <td>N/A</td>
-                                        </tr>
-                                        <tr>
-                                            <td>RES-012-2025</td>
-                                            <td>Promotion of Arts and Culture</td>
-                                            <td>2025-04-10</td>
-                                            <td>Mayor Anna Reyes</td>
-                                            <td>Approved</td>
-                                            <td>2025-04-15</td>
-                                        </tr>
-                                        <tr>
-                                            <td>MO-013-2025</td>
-                                            <td>Infrastructure Development Plan</td>
-                                            <td>2025-04-20</td>
-                                            <td>Vice Mayor Lily Gomez</td>
-                                            <td>Pending Review</td>
-                                            <td>N/A</td>
-                                        </tr>
-                                        <tr>
-                                            <td>RES-014-2025</td>
-                                            <td>Waste Management Policy</td>
-                                            <td>2025-04-30</td>
-                                            <td>Councilor Sarah Tan</td>
-                                            <td>Approved</td>
-                                            <td>2025-05-05</td>
-                                        </tr>
-                                        <tr>
-                                            <td>MO-015-2025</td>
-                                            <td>Disaster Preparedness Program</td>
-                                            <td>2025-05-10</td>
-                                            <td>Mayor Paul Reyes</td>
-                                            <td>Ongoing</td>
-                                            <td>N/A</td>
-                                        </tr>
-                                        <tr>
-                                            <td>RES-016-2025</td>
-                                            <td>Public Transport Improvement</td>
-                                            <td>2025-05-20</td>
-                                            <td>Councilor Emma Torres</td>
-                                            <td>Approved</td>
-                                            <td>2025-05-25</td>
-                                        </tr>
-                                        <tr>
-                                            <td>MO-017-2025</td>
-                                            <td>Community Safety Initiative</td>
-                                            <td>2025-06-01</td>
-                                            <td>Vice Mayor Lily Gomez</td>
-                                            <td>Pending</td>
-                                            <td>N/A</td>
-                                        </tr>
-                                        <tr>
-                                            <td>RES-018-2025</td>
-                                            <td>Traffic Management Solutions</td>
-                                            <td>2025-06-15</td>
-                                            <td>Councilor John Smith</td>
-                                            <td>Ongoing</td>
-                                            <td>N/A</td>
-                                        </tr>
-                                        <tr>
-                                            <td>MO-019-2025</td>
-                                            <td>Housing for Low-Income Families</td>
-                                            <td>2025-06-25</td>
-                                            <td>Mayor Anna Reyes</td>
-                                            <td>Approved</td>
-                                            <td>2025-07-01</td>
-                                        </tr>
-                                        <tr>
-                                            <td>RES-020-2025</td>
-                                            <td>Green Energy Solutions</td>
-                                            <td>2025-07-10</td>
-                                            <td>Councilor Sarah Tan</td>
-                                            <td>Pending</td>
-                                            <td>N/A</td>
                                         </tr>
                                         </tbody>
                                     </table>

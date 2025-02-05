@@ -21,8 +21,8 @@
                     <div class="col-xl-12">
                         <img src="./images/logo.png" alt="Welcome Image" class="img-fluid d-block mx-auto" style="width: 50%; height: 50%;">
                         <h1 class="text-center mt-4" style="color:#000000; font-weight: bold;">WELCOME<h1>
-                        <h3 class="text-center mt-2" style="color:#000000;">Document Management System</h3>
-                        <h5 class="text-center mt-4" style="color:#000000;">Log in to Continue</h5>
+                        <h3 class="text-center mt-2" style="color:#000000;">Sangguniang Bayan Office</h3>
+                        <h4 class="text-center mt-2" style="color:#000000;">Document Management System</h4>
                     </div>
                 </div>
                 <!--TEXT RIGHT-->
@@ -33,14 +33,14 @@
                                 <div class="auth-form">
                                     <h1 class="text-center" style="color:#098209">Log in<h1>
                                     <h4 class="text-center mb-4" style="color:#000000">Sign in your account</h4>
-                                    <form action="dashboard.php">
+                                    <form action="dashboard.php" method="POST">
                                         <div class="form-group">
-                                            <label><strong>Email</strong></label>
-                                            <input type="email" class="form-control" value="hello@example.com">
+                                            <!-- <label ><strong>Email</strong></label> -->
+                                            <input type="email" class="form-control" placeholder="Email" name="email">
                                         </div>
                                         <div class="form-group">
-                                            <label><strong>Password</strong></label>
-                                            <input type="password" class="form-control" value="Password">
+                                            <!-- <label><strong>Password</strong></label> -->
+                                            <input type="password" class="form-control" placeholder="Password" name="password">
                                         </div>
                                         <div class="form-row d-flex justify-content-between mt-4 mb-2">
                                             <div class="form-group">
