@@ -23,8 +23,9 @@
                 <div class="row page-titles mx-0">
                     <div class="col-sm-6 p-md-0">
                         <div class="welcome-text">
-                            <h4 style="color: #098209">Hi, welcome back!</h4>
-                            <p class="mb-0">Your business dashboard template</p>
+                            <!-- <h4 style="color: #098209">Hi, Welcome!</h4> -->
+                            <h4 style="color: #098209" class="mb-0">Document Management System</h4>
+                            <p style="color: #098209" class="mb-0">Sangguniang Bayan Office</p>
                         </div>
                     </div>
                 </div>

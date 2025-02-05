@@ -24,10 +24,10 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center p-3 mt-4">
-                                <h1 class="card-title flex-grow-1 fs-4 fw-bold text-dark text-center" style="color: #000000">MINUTES OF THE MEETING</h1>
+                                <h1 class="card-title flex-grow-1 fs-4 fw-bold text-dark text-center" style="color: #000000">LIST OF RESOLUTION</h1>
                                 <div class="button-container d-flex justify-content-end">
-                                    <a href="addmeetingminutes.php">
-                                        <button type="button" class="btn btn-primary" style="background-color: #098209; color:#FFFFFF; border: none;"><i class="fa fa-plus"></i>&nbsp;Add New Subject</button>
+                                    <a href="addresolution.php">
+                                        <button type="button" class="btn btn-primary" style="background-color: #098209; color:#FFFFFF; border: none;"><i class="fa fa-plus"></i>&nbsp;Add New Resolution</button>
                                     </a>
                                 </div>
                             </div>
@@ -36,12 +36,12 @@
                                     <table id="example" class="display" style="min-width: 845px">
                                         <thead class="text-center" style="background-color: #098209; color: #FFFFFF;">
                                             <tr>
-                                                <th style="color: #FFFFFF;">DATE</th>
+                                                <th style="color: #FFFFFF;">MO NO.</th>
                                                 <th style="color: #FFFFFF;">TITLE</th>
-                                                <th style="color: #FFFFFF;">STATUS</th>
-                                                <!-- <th style="color: #FFFFFF;">AUTHOR/SPONSOR</th>
+                                                <th style="color: #FFFFFF;">DATE ADOPTED</th>
+                                                <th style="color: #FFFFFF;">AUTHOR/SPONSOR</th>
                                                 <th style="color: #FFFFFF;">REMARKS</th>
-                                                <th style="color: #FFFFFF;">DATE APPROVED</th> -->
+                                                <th style="color: #FFFFFF;">DATE APPROVED</th>
                                             </tr>
                                         </thead>
                                         <tbody style="color: #000000;">
