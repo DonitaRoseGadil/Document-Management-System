@@ -4,6 +4,12 @@
 
 <?php include "header.php"; ?>
 
+<head>
+    <!-- Include SweetAlert CSS and JS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+</head>
+
 <body>
 
     <!--**********************************
@@ -14,7 +20,6 @@
         <?php 
             include "navheader.php";
             include "sidebar.php"; 
-        
         ?>
 
         <!--**********************************
@@ -33,50 +38,15 @@
                                 <div class="basic-form">
                                     <form action="addresolution.php" method="post">
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No. / MO No.:</label>
+                                            <label class="col-sm-3 col-form-label" style="color: #000000">No. of Regular Session</label>
                                             <div class="col-sm-9">
                                                 <input type="text" class="form-control" placeholder="Please type here..." id="resoNo" name="resoNo">
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." id="title" name="title">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Description:</label>
-                                            <div class="col-sm-9">
-                                                <textarea class="form-control" style="resize: none;" rows="4" placeholder="Please type here..." id="description" name="description"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Adopted:</label>
-                                            <div class="col-sm-9">
-                                                <input type="date" class="form-control" placeholder="Please type here..." id="dateAdopted" name="dateAdopted">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color: #000000">Author / Sponsor:</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." id="authorSponsor" name="authorSponsor">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color: #000000">Remarks:</label>
-                                            <div class="col-sm-9">
-                                                <select id="remarks" name="remarks" class="form-control">
-                                                    <option selected>Choose...</option>
-                                                    <option>Draft</option>
-                                                    <option>Referred to Committee</option>
-                                                    <option>Approved</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Approved:</label>
-                                            <div class="col-sm-9">
-                                                <input type="date" class="form-control" placeholder="Please type here..." id="dateApproved" name="dateApproved">
+                                                <input type="date" class="form-control" placeholder="Please type here..." id="date" name="date">
                                             </div>
                                         </div>
                                         <div class="input-group mb-3">
@@ -84,15 +54,13 @@
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
                                             </div>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="attachment" name="attachment">
-                                                <label class="custom-file-label">Choose file</label>
+                                                <input type="file" class="custom-file-input" id="attachment" name="attachment" name="attachment">
+                                                <label class="custom-file-label" for="attachment">Choose file</label>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
-                                            <div class="col-sm-10 mt-4 justify">
-                                                <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data">Save</button>
-                                                <button type="submit" class="btn btn-primary" id="cancel_btn" name="cancel" value="Cancel">Cancel</button>
-                                            </div>
+                                        <div class="form-group row d-flex justify-content-center">
+                                            <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;">Save</button>
+                                            <a href="files-resolution.php" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
                                         </div>
                                     </form>
                                 </div>
@@ -104,27 +72,6 @@
         </div>
         <!--**********************************
             Content body end
-        ***********************************-->
-
-
-        <!--**********************************
-            Footer start
-        ***********************************-->
-        <div class="footer">
-            <div class="copyright">
-                <!-- <p>Copyright © Designed &amp; Developed by <a href="#" target="_blank">Quixkit</a> 2019</p> -->
-            </div>
-        </div>
-        <!--**********************************
-            Footer end
-        ***********************************-->
-
-        <!--**********************************
-           Support ticket button start
-        ***********************************-->
-
-        <!--**********************************
-           Support ticket button end
         ***********************************-->
 
         
