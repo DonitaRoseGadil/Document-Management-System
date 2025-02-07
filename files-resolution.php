@@ -1,12 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-
 <?php 
 include "header.php"; 
 error_reporting(E_ALL); // Enable error reporting for development
 ini_set('display_errors', 1);
 session_start();
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
 
 <body>
 
@@ -52,33 +52,36 @@ session_start();
                                         </thead>
                                         <tbody style="color: #000000;">
                                             <?php
-                                            include "connect.php";
+                                                include "connect.php";
 
-                                            $sql = "SELECT reso_no, title, d_adopted, author_sponsor, remarks, d_approved FROM resolution";
-                                            $stmt = $conn->prepare($sql);
-                                            $stmt->execute();
-                                            $result = $stmt->get_result();
+                                                $sql = "SELECT reso_no, title, d_adopted, author_sponsor, remarks, d_approved FROM resolution";
+                                                $stmt = $conn->prepare($sql);
+                                                $stmt->execute();
+                                                $result = $stmt->get_result();
 
-                                            if (!$result) {
-                                                die("SQL Error: " . $conn->error);
-                                            }
-
-                                            while ($row = $result->fetch_assoc()) {
-                                                echo "<tr>
-                                                        <td>{$row['reso_no']}</td>
-                                                        <td>{$row['title']}</td>
-                                                        <td>{$row['d_adopted']}</td>
-                                                        <td>{$row['author_sponsor']}</td>
-                                                        <td>{$row['remarks']}</td>
-                                                        <td>{$row['d_approved']}</td>
-                                                        <td class='text-center d-flex justify-content-center gap-2'>
-                                                            <a href='viewresolution.php?id={$row['reso_no']}' class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' aria-hidden='true'></i></a>
-                                                            <a href='editresolution.php?id={$row['reso_no']}' class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' aria-hidden='true'></i></a>
-                                                            <a href='deleteresolution.php?id={$row['reso_no']}' class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-trash' aria-hidden='true'></i></a>
-                                                        </td>
-                                                    </tr>";
+                                                if (!$result) {
+                                                    die("SQL Error: " . $conn->error);
                                                 }
-                                            ?>
+
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    ?>
+                                                    <tr>
+                                                            <td><?php echo $row["reso_no"] ?></td>
+                                                            <td><?php echo $row["title"] ?></td>
+                                                            <td><?php echo $row["d_adopted"] ?></td>
+                                                            <td><?php echo $row["author_sponsor"] ?></td>
+                                                            <td><?php echo $row["remarks"] ?></td>
+                                                            <td><?php echo $row["d_approved"] ?></td>
+                                                            <td  class='text-center d-flex justify-content-center gap-2'>
+                                                                <a href="view.php?reso_no=<?php echo $row["reso_no"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' aria-hidden='true'></i></a>
+                                                                <a href="editresolution.php?reso_no=<?php echo $row["reso_no"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' aria-hidden='true'></i></a>
+                                                                <a href="deleteresolution.php?reso_no=<?php echo $row["reso_no"] ?>" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1' ><i class='fa fa-trash' aria-hidden='true'></i></a>
+                                                            </td>
+                                                        </tr>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                            
                                         </tbody>
                                     </table>
                                 </div>
@@ -127,11 +130,27 @@ session_start();
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
     
-
-
     <!-- Datatable -->
     <script src="./vendor/datatables/js/jquery.dataTables.min.js"></script>
     <script src="./js/plugins-init/datatables.init.js"></script>
+
+    <script>
+        function confirmDelete(resoNo) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Confirm'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'deleteresolution.php?id=' + resoNo;
+                }
+            });
+        }
+    </script>
 
 </body>
 
