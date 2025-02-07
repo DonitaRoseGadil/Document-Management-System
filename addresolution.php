@@ -18,9 +18,6 @@ if(isset($_POST['save'])){
 
     $query = mysqli_query($conn, $sql);    
 
-    // Close connection
-    mysqli_close($conn);
-
     if($query) {
         echo "<script>
                 document.addEventListener('DOMContentLoaded', function() {
@@ -43,6 +40,8 @@ if(isset($_POST['save'])){
                     });
                 });
               </script>";
+        header("Location: files-resolution.php");
+        exit;    
     }
 }    
 ?>
@@ -55,7 +54,6 @@ if(isset($_POST['save'])){
 <head>
     <!-- Include SweetAlert CSS and JS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 </head>
 
 <body>
@@ -196,6 +194,7 @@ if(isset($_POST['save'])){
     <script src="./vendor/global/global.min.js"></script>
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
     
 </body>
 
