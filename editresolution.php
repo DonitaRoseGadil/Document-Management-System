@@ -1,3 +1,50 @@
+<?php
+
+if(isset($_POST['save'])){
+    include("connect.php");
+    error_reporting(0);
+    session_start();
+
+    $reso_no = $_GET['reso_no'];
+
+    $resoNo = $_POST['resoNo'];
+    $title = $_POST['title'];
+    $description = $_POST['description'];
+    $authorSponsor = $_POST['authorSponsor'];
+    $remarks = $_POST['remarks'];
+    $dateApproved = $_POST['dateApproved'];
+
+    $sql = "UPDATE `resolution` SET `reso_no`='$resoNo', `title`='$title', `descrip`='$description', `author_sponsor`='$authorSponsor', `remarks`='$remarks', `d_approved`='$dateApproved' WHERE reso_no = $resoNo";
+
+    $query = mysqli_query($conn, $sql);    
+
+    if($query) {
+        echo "<script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Resolution Created',
+                        text: 'The resolution has been successfully Updated.',
+                        confirmButtonText: 'OK'
+                    });
+                });
+              </script>";
+    } else {
+        echo "<script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'There was an error updating the resolution.',
+                        confirmButtonText: 'OK'
+                    });
+                });
+              </script>";
+        header("Location: files-resolution.php");
+        exit;    
+    }
+}    
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -7,7 +54,6 @@
 <head>
     <!-- Include SweetAlert CSS and JS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 </head>
 
 <body>
@@ -32,51 +78,46 @@
                     <div class="col-xl-8 col-xxl-12 items-center">                        
                         <div class="card" style="align-self: center;">
                             <div class="card-header d-flex justify-content-center">
-                                <h4 class="card-title text-center" style="color: #098209; ">ADD ORDINANCE</h4>
+                                <h4 class="card-title text-center" style="color: #098209; ">EDIT RESOLUTION</h4>
                             </div>
+                            <?php 
+                                include "connect.php";
+                                $reso_no = $_GET['reso_no'];
+                                $sql = "SELECT * FROM resolution WHERE reso_no = $reso_no LIMIT 1";
+                                $result= mysqli_query($conn, $sql);   
+                                $row = mysqli_fetch_assoc($result); 
+                            ?>
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form action="addresolution.php" method="post">
+                                    <form action="a" method="post">
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No.:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." id="resoNo" name="resoNo">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color: #000000">Municipal Ordinance No.:</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." id="moNo" name="moNo">
+                                                <input type="text" class="form-control" value="<?php echo $row['reso_no']?>" id="resoNo" name="resoNo">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Date:</label>
                                             <div class="col-sm-9">
-                                                <input type="date" class="form-control" placeholder="Please type here..." id="date" name="date">
+                                                <input type="date" class="form-control" value="<?php echo $row['d_approved']?>" id="date" name="date">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." id="title" name="title">
+                                                <input type="text" class="form-control" value="<?php echo $row['title']?>" id="title" name="title">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Description:</label>
                                             <div class="col-sm-9">
-                                                <textarea class="form-control" style="resize: none;" rows="4" placeholder="Please type here..." id="description" name="description"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Adopted:</label>
-                                            <div class="col-sm-9">
-                                                <input type="date" class="form-control" placeholder="Please type here..." id="dateAdopted" name="dateAdopted">
+                                                <textarea class="form-control" style="resize: none;" rows="4" value="<?php echo $row['descrip']?>" id="description" name="description"></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Author / Sponsor:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." id="authorSponsor" name="authorSponsor">
+                                                <input type="text" class="form-control" value="<?php echo $row['author_sponsor']?>" id="authorSponsor" name="authorSponsor">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -86,10 +127,10 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color: #000000">Remarks:</label>
+                                            <label class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
                                             <div class="col-sm-9">
                                                 <select id="remarks" name="remarks" class="form-control">
-                                                    <option selected>Choose...</option>
+                                                    <option selected></option>
                                                     <option>Draft</option>
                                                     <option>Information</option>
                                                     <option>Referred to Committee</option>
@@ -97,23 +138,17 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Approved:</label>
-                                            <div class="col-sm-9">
-                                                <input type="date" class="form-control" placeholder="Please type here..." id="dateAdopted" name="dateAdopted">
-                                            </div>
-                                        </div>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
                                             </div>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="attachment" name="attachment" name="attachment">
+                                                <input type="file" class="custom-file-input" id="attachment" name="attachment" name="attachment" onchange="updateFileName()">
                                                 <label class="custom-file-label" for="attachment">Choose file</label>
                                             </div>
                                         </div>
                                         <div class="form-group row d-flex justify-content-center">
-                                            <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;">Save</button>
+                                            <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;">Update</button>
                                             <a href="files-resolution.php" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
                                         </div>
                                     </form>
@@ -141,6 +176,14 @@
     <script src="./vendor/global/global.min.js"></script>
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
+    <script>
+        function updateFileName() {
+            const fileInput = document.getElementById('attachment');
+            const fileName = fileInput.files[0].name;
+            const label = document.querySelector('.custom-file-label');
+            label.textContent = fileName;
+        }
+    </script>
     
 </body>
 
