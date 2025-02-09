@@ -121,19 +121,15 @@ if(isset($_POST['save'])){
                                                     <option selected>Choose...</option>
                                                     <option>Draft</option>
                                                     <option>Information</option>
+                                                    
                                                     <option>Referred to Committee</option>
                                                     <option>Approved</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
-                                            </div>
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="attachment" name="attachment" name="attachment" onchange="updateFileName()">
-                                                <label class="custom-file-label" for="attachment">Choose file</label>
-                                            </div>
+                                            <input type="file" class="form-control" id="attachment" name="attachment" style="padding: 3px;">
+                                            <label class="input-group-text" for="attachment" style="background-color: #098209;">Upload</label>
                                         </div>
                                         <div class="form-group row d-flex justify-content-center">
                                             <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;">Save</button>
@@ -164,14 +160,6 @@ if(isset($_POST['save'])){
     <script src="./vendor/global/global.min.js"></script>
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
-    <script>
-        function updateFileName() {
-            const fileInput = document.getElementById('attachment');
-            const fileName = fileInput.files[0].name;
-            const label = document.querySelector('.custom-file-label');
-            label.textContent = fileName;
-        }
-    </script>
     
 </body>
 
