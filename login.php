@@ -23,16 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html lang="en" class="h-100">
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Document Management System</title>
-    <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="./images/logo.png">
-    <link href="./css/style.css" rel="stylesheet">
 
-</head>
+<?php include "header.php"; ?>
 
 <body class="h-100" style="background: url('./images/loginBG.png') no-repeat center center fixed; background-size: cover;">
     <div class="authincation h-100">
