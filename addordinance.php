@@ -1,14 +1,59 @@
+<?php
+
+if(isset($_POST['save'])){
+    include("connect.php");
+    error_reporting(0);
+    session_start();
+
+    $moNo = $_POST['moNo'];
+    $title = $_POST['title'];
+    $dateAdopted = $_POST['d_adopted'];
+    $authorSponsor = $_POST['authorSponsor'];
+    $remarks = $_POST['remarks'];
+    $dateApproved = $_POST['dateApproved'];
+
+    $sql = "INSERT INTO `ordinance`(`mo_no`, `title`, `d_adopted`, `author_sponsor`, `remarks`, `d_approved`) 
+            VALUES ('$moNo', '$title', '$dateAdopted', '$authorSponsor', '$remarks', '$dateApproved')";
+
+    $query = mysqli_query($conn, $sql);    
+
+    if($query) {
+        echo "<script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Ordinance Created',
+                        text: 'The ordinance has been successfully Created.',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = 'files-ordinances.php';
+                        }
+                    });
+                });
+              </script>";    
+    } else {
+        echo "<script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'There was an error creating the ordinance.',
+                        confirmButtonText: 'OK'
+                    });
+                });
+              </script>";
+        header("Location: files-ordinances.php");
+        exit;    
+    }
+}    
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
 
 <?php include "header.php"; ?>
-
-<head>
-    <!-- Include SweetAlert CSS and JS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-</head>
 
 <body>
 
@@ -36,13 +81,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form action="addresolution.php" method="post">
-                                        <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No.:</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." id="resoNo" name="resoNo">
-                                            </div>
-                                        </div>
+                                    <form action="addordinance.php" method="post">
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Municipal Ordinance No.:</label>
                                             <div class="col-sm-9">
@@ -50,9 +89,9 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date:</label>
+                                            <label class="col-sm-32 col-form-label" style="color:#000000">Date Adopted:</label>
                                             <div class="col-sm-9">
-                                                <input type="date" class="form-control" placeholder="Please type here..." id="date" name="date">
+                                                <input type="date" class="form-control" placeholder="Please type here..." id="dateAdopted" name="dateAdopted">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -68,9 +107,9 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Adopted:</label>
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Approved:</label>
                                             <div class="col-sm-9">
-                                                <input type="date" class="form-control" placeholder="Please type here..." id="dateAdopted" name="dateAdopted">
+                                                <input type="date" class="form-control" placeholder="Please type here..." id="dateApproved" name="dateApproved">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -97,12 +136,6 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Approved:</label>
-                                            <div class="col-sm-9">
-                                                <input type="date" class="form-control" placeholder="Please type here..." id="dateAdopted" name="dateAdopted">
-                                            </div>
-                                        </div>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
@@ -114,7 +147,7 @@
                                         </div>
                                         <div class="form-group row d-flex justify-content-center">
                                             <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;">Save</button>
-                                            <a href="files-resolution.php" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
+                                            <a href="files-ordinances.php" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
                                         </div>
                                     </form>
                                 </div>

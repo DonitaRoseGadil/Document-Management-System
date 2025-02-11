@@ -8,7 +8,6 @@ if(isset($_POST['save'])){
     $resoNo = $_POST['resoNo'];
     $title = $_POST['title'];
     $description = $_POST['description'];
-    $dateAdopted = $_POST['dateAdopted'];
     $authorSponsor = $_POST['authorSponsor'];
     $remarks = $_POST['remarks'];
     $dateApproved = $_POST['dateApproved'];
@@ -36,19 +35,21 @@ if(isset($_POST['save'])){
 
     $query = mysqli_query($conn, $sql);    
 
-    if ($query) {
-        ?>
-        <script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Resolution Created',
-                    text: 'The resolution has been successfully created.',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    window.location.href = 'files-resolution.php';
+    if($query) {
+        echo "<script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Resolution Created',
+                        text: 'The resolution has been successfully Created.',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = 'files-resolution.php';
+                        }
+                    });
                 });
-        </script>;
-        <?php
+              </script>";    
     } else {
         ?>
         <script>
@@ -111,7 +112,7 @@ if(isset($_POST['save'])){
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date:</label>
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Approved:</label>
                                             <div class="col-sm-9">
                                                 <input type="date" class="form-control" placeholder="Please type here..." id="dateApproved" name="dateApproved">
                                             </div>
@@ -147,6 +148,7 @@ if(isset($_POST['save'])){
                                                     <option selected>Choose...</option>
                                                     <option>Draft</option>
                                                     <option>Information</option>
+                                                    
                                                     <option>Referred to Committee</option>
                                                     <option>Approved</option>
                                                 </select>

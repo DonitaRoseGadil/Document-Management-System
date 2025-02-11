@@ -5,10 +5,6 @@
 <?php include "header.php"; ?>
 
 <head>
-    <!-- Include SweetAlert CSS and JS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-
     <style>
         .card {
             margin-bottom: 15px;
@@ -67,27 +63,22 @@
                                                 <label class="custom-file-label" for="attachment">Choose file</label>
                                             </div>
                                         </div>
+                                        <div class="d-flex justify-content-between align-items-center mt-5 mb-3">
+                                            <h5 class="text-primary">AGENDA ITEM</h5>
+                                            <button type="button" class="btn btn-primary" id="add-card-btn" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;"><i class="fa fa-plus"></i>  Form</button>
+                                        </div>
+                                        <div id="dynamic-form-container">
+                                            <!-- Dynamic cards will be appended here -->
+                                        </div>
+                                        <div class="form-group row d-flex justify-content-center mt-5">
+                                            <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;">Save</button>
+                                            <a href="files-resolution.php" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row d-flex justify-content-center">
-                    <div class="col-xl-8 col-xxl-12">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h5 class="text-primary" style="color: #098209;">AGENDA ITEM</h5>
-                            <button type="button" class="btn btn-primary" id="add-card-btn" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;"><i class="fa fa-plus"></i>  Form</button>
-                        </div>
-
-                        <div id="dynamic-form-container">
-                            <!-- Dynamic cards will be appended here -->
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row d-flex justify-content-center mt-5 mb-5">
-                    <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;">Save</button>
-                    <a href="files-resolution.php" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
                 </div>
             </div>
         </div>
@@ -121,7 +112,7 @@
             card.classList.add("card", "p-3");
             
             card.innerHTML = `
-                <div class="card-body">
+                <div class="card-body mt-3">
                     <div class="basic-form">
                         <form action="" method="">
                             <div class="form-group row">

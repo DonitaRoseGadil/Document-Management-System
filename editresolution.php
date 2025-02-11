@@ -26,9 +26,13 @@ if(isset($_POST['save'])){
                         title: 'Resolution Created',
                         text: 'The resolution has been successfully Updated.',
                         confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = 'files-resolution.php';
+                        }
                     });
                 });
-              </script>";
+              </script>";    
     } else {
         echo "<script>
                 document.addEventListener('DOMContentLoaded', function() {
@@ -97,9 +101,9 @@ if(isset($_POST['save'])){
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date:</label>
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Approved:</label>
                                             <div class="col-sm-9">
-                                                <input type="date" class="form-control" value="<?php echo $row['d_approved']?>" id="date" name="date">
+                                                <input type="date" class="form-control" value="<?php echo $row['d_approved']?>" id="dateApproved" name="dateApproved">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -129,13 +133,12 @@ if(isset($_POST['save'])){
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
                                             <div class="col-sm-9">
-                                                <select id="remarks" name="remarks" class="form-control">
-                                                    <option selected></option>
-                                                    <option>Draft</option>
-                                                    <option>Information</option>
-                                                    <option>Referred to Committee</option>
-                                                    <option>Approved</option>
-                                                </select>
+                                            <select id="remarks" name="remarks" class="form-control">
+                                                <option value="Draft" <?php if ($row['remarks'] == "Draft") echo "selected"; ?>>Draft</option>
+                                                <option value="Information" <?php if ($row['remarks'] == "Information") echo "selected"; ?>>Information</option>
+                                                <option value="Referred to Committee" <?php if ($row['remarks'] == "Referred to Committee") echo "selected"; ?>>Referred to Committee</option>
+                                                <option value="Approved" <?php if ($row['remarks'] == "Approved") echo "selected"; ?>>Approved</option>
+                                            </select>
                                             </div>
                                         </div>
                                         <div class="input-group mb-3">

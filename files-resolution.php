@@ -53,7 +53,7 @@ session_start();
                                             <?php
                                                 include "connect.php";
 
-                                                $sql = "SELECT reso_no, title, d_adopted, author_sponsor, remarks, d_approved FROM resolution";
+                                                $sql = "SELECT reso_no, title, author_sponsor, remarks, d_approved FROM resolution";
                                                 $stmt = $conn->prepare($sql);
                                                 $stmt->execute();
                                                 $result = $stmt->get_result();
