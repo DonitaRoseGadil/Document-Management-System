@@ -43,7 +43,7 @@ session_start();
                                             <tr>
                                                 <th style="color: #FFFFFF;">RESOLUTION NO./ MO NO.</th>
                                                 <th style="color: #FFFFFF;">TITLE</th>
-                                                <th style="color: #FFFFFF;">DATE ADOPTED</th>
+                                                <!-- <th style="color: #FFFFFF;">DATE ADOPTED</th> -->
                                                 <th style="color: #FFFFFF;">AUTHOR/SPONSOR</th>
                                                 <th style="color: #FFFFFF;">REMARKS</th>
                                                 <th style="color: #FFFFFF;">DATE APPROVED</th>
@@ -54,7 +54,7 @@ session_start();
                                             <?php
                                                 include "connect.php";
 
-                                                $sql = "SELECT reso_no, title, d_adopted, author_sponsor, remarks, d_approved FROM resolution";
+                                                $sql = "SELECT reso_no, title, author_sponsor, remarks, d_approved FROM resolution";
                                                 $stmt = $conn->prepare($sql);
                                                 $stmt->execute();
                                                 $result = $stmt->get_result();
@@ -68,7 +68,6 @@ session_start();
                                                     <tr>
                                                             <td><?php echo $row["reso_no"] ?></td>
                                                             <td><?php echo $row["title"] ?></td>
-                                                            <td><?php echo $row["d_adopted"] ?></td>
                                                             <td><?php echo $row["author_sponsor"] ?></td>
                                                             <td><?php echo $row["remarks"] ?></td>
                                                             <td><?php echo $row["d_approved"] ?></td>
