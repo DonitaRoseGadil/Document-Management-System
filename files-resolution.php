@@ -43,7 +43,6 @@ session_start();
                                             <tr>
                                                 <th style="color: #FFFFFF;">RESOLUTION NO./ MO NO.</th>
                                                 <th style="color: #FFFFFF;">TITLE</th>
-                                                <th style="color: #FFFFFF;">DATE ADOPTED</th>
                                                 <th style="color: #FFFFFF;">AUTHOR/SPONSOR</th>
                                                 <th style="color: #FFFFFF;">REMARKS</th>
                                                 <th style="color: #FFFFFF;">DATE APPROVED</th>
@@ -68,12 +67,11 @@ session_start();
                                                     <tr>
                                                             <td><?php echo $row["reso_no"] ?></td>
                                                             <td><?php echo $row["title"] ?></td>
-                                                            <td><?php echo $row["d_adopted"] ?></td>
                                                             <td><?php echo $row["author_sponsor"] ?></td>
                                                             <td><?php echo $row["remarks"] ?></td>
                                                             <td><?php echo $row["d_approved"] ?></td>
                                                             <td  class='text-center d-flex justify-content-center gap-2'>
-                                                                <a href="view.php?reso_no=<?php echo $row["reso_no"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' aria-hidden='true'></i></a>
+                                                                <a href="viewresolution.php?reso_no=<?php echo $row["reso_no"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' aria-hidden='true'></i></a>
                                                                 <a href="editresolution.php?reso_no=<?php echo $row["reso_no"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' aria-hidden='true'></i></a>
                                                                 <a href="deleteresolution.php?reso_no=<?php echo $row["reso_no"] ?>" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1' ><i class='fa fa-trash' aria-hidden='true'></i></a>
                                                             </td>

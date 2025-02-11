@@ -12,37 +12,57 @@ if(isset($_POST['save'])){
     $authorSponsor = $_POST['authorSponsor'];
     $remarks = $_POST['remarks'];
     $dateApproved = $_POST['dateApproved'];
+    $attachment = '';
 
-    $sql = "INSERT INTO `resolution`(`reso_no`, `title`, `descrip`, `d_adopted`, `author_sponsor`, `remarks`, `d_approved`) 
-            VALUES ('$resoNo', '$title', '$description', '$dateAdopted', '$authorSponsor', '$remarks', '$dateApproved')";
+    if (!empty($_FILES['attachment'])) {
+        $type = $_FILES['attachment']['type'];
+        if ($type == 'application/pdf' || $type == 'application/msword') {
+            $attachment = $_FILES['attachment']['name'];
+            if ($attachment != '') {
+                move_uploaded_file($_FILES['attachment']['tmp_name'], 'files/'.$attachment);
+            }
+        } else {
+            echo '
+            <div class="form-group row" style="display: block;">
+                <div class="col-sm-9">
+                    <div class="alert alert-danger"><strong>Error: </strong> Only Supported Files (PDF and DOCX).</div>
+                </div>
+            </div>';
+        }
+    }
+
+    $sql = "INSERT INTO resolution(reso_no, title, descrip, d_adopted, author_sponsor, remarks, d_approved, attachment) 
+            VALUES ('$resoNo', '$title', '$description', '$dateAdopted', '$authorSponsor', '$remarks', '$dateApproved', '$attachment')";
 
     $query = mysqli_query($conn, $sql);    
 
-    if($query) {
-        echo "<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Resolution Created',
-                        text: 'The resolution has been successfully created.',
-                        confirmButtonText: 'OK'
-                    });
+    if ($query) {
+        ?>
+        <script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Resolution Created',
+                    text: 'The resolution has been successfully created.',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location.href = 'files-resolution.php';
                 });
-              </script>";
+        </script>;
+        <?php
     } else {
-        echo "<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'There was an error creating the resolution.',
-                        confirmButtonText: 'OK'
-                    });
+        ?>
+        <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'There was an error creating the resolution.',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location.href = 'files-resolution.php';
                 });
               </script>";
-        header("Location: files-resolution.php");
-        exit;    
-    }
+        <?php
+    }    
 }    
 ?>
 
@@ -54,6 +74,7 @@ if(isset($_POST['save'])){
 <head>
     <!-- Include SweetAlert CSS and JS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 </head>
 
 <body>
@@ -82,7 +103,7 @@ if(isset($_POST['save'])){
                             </div>
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form action="addresolution.php" method="post">
+                                    <form action="addresolution.php" method="post" enctype="multipart/form-data">
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No.:</label>
                                             <div class="col-sm-9">
@@ -92,7 +113,7 @@ if(isset($_POST['save'])){
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Date:</label>
                                             <div class="col-sm-9">
-                                                <input type="date" class="form-control" placeholder="Please type here..." id="date" name="date">
+                                                <input type="date" class="form-control" placeholder="Please type here..." id="dateApproved" name="dateApproved">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -136,7 +157,7 @@ if(isset($_POST['save'])){
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
                                             </div>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="attachment" name="attachment" name="attachment" onchange="updateFileName()">
+                                                <input type="file" class="custom-file-input" id="attachment" name="attachment" onchange="updateFileName()">
                                                 <label class="custom-file-label" for="attachment">Choose file</label>
                                             </div>
                                         </div>
@@ -169,6 +190,7 @@ if(isset($_POST['save'])){
     <script src="./vendor/global/global.min.js"></script>
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
+
     <script>
         function updateFileName() {
             const fileInput = document.getElementById('attachment');
