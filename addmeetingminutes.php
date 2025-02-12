@@ -1,8 +1,72 @@
+<?php
+    if(isset($_POST['save'])){
+        include "connect.php";
+        error_reporting(0);
+        session_start();
+
+        $no_regSession = $_POST['no_regSession'];
+        $date = $_POST['date'];
+        $genAttachment = $_POST['genAttachment'];
+
+        // Loop through dynamic cards
+        if (!empty($_POST['resNo'])) {
+            foreach ($_POST['resNo'] as $key => $resNo) {
+                $title = $_POST['title'][$key];
+                $type = $_POST['type'][$key];
+                $status = $_POST['status'][$key];
+                $attachment = $_POST['attachment'][$key]; 
+
+                $sql =  "INSERT INTO `minutes` (`no_regSession`, `date`, `genAttachment`, `resNo`, `title`, `type`, `status`, `attachment`) 
+                VALUES ('$no_regSession', '$date', '$genAttachment', '$resNo', '$title', '$type', '$status', '$attachment')";
+        
+                $query = mysqli_query($conn, $sql);
+
+            }
+        }       
+
+        if($query) {
+            echo "<script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Resolution Created',
+                            text: 'The minutes has been successfully Created.',
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = 'files-meetingminutes.php';
+                            }
+                        });
+                    });
+                  </script>";    
+        } else {
+            echo "<script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'There was an error creating the resolution.',
+                            confirmButtonText: 'OK'
+                        });
+                    });
+                  </script>";
+            header("Location: files-meetingminutes.php");
+            exit;    
+        }
+    }
+
+?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
 
-<?php include "header.php"; ?>
+<?php 
+    include "header.php"; 
+    include "connect.php";
+
+?>
 
 <head>
     <style>
@@ -12,6 +76,7 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
     </style>
+
 
 </head>
 
@@ -41,11 +106,11 @@
                             </div>
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form action="addresolution.php" method="post">
+                                    <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post">
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">No. of Regular Session</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." id="resoNo" name="resoNo">
+                                                <input type="text" class="form-control" placeholder="Please type here..." id="no_regSession" name="no_regSession">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -59,7 +124,7 @@
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
                                             </div>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="attachment" name="attachment" name="attachment">
+                                                <input type="file" class="custom-file-input" id="attachment" name="genAttachment">
                                                 <label class="custom-file-label" for="attachment">Choose file</label>
                                             </div>
                                         </div>
@@ -114,50 +179,54 @@
             card.innerHTML = `
                 <div class="card-body mt-3">
                     <div class="basic-form">
-                        <form action="" method="">
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label" style="color: #000000">Title:</label>
-                                <div class="col-sm-9">
-                                    <input type="text" class="form-control" placeholder="Please type here..." id="title" name="title">
-                                </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No.:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="resNo[]" required>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label" style="color: #000000">Type:</label>
-                                <div class="col-sm-9">
-                                    <select id="remarks" name="remarks" class="form-control">
-                                        <option selected>Choose...</option>
-                                        <option>Draft</option>
-                                        <option>Information</option>
-                                        <option>Referred to Committee</option>
-                                        <option>Approved</option>
-                                    </select>
-                                </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label" style="color: #000000">Title:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="title[]" required>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
-                                <div class="col-sm-9">
-                                    <select id="remarks" name="remarks" class="form-control">
-                                        <option selected>Choose...</option>
-                                        <option>Draft</option>
-                                        <option>Information</option>
-                                        <option>Referred to Committee</option>
-                                        <option>Approved</option>
-                                    </select>
-                                </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="type" class="col-sm-3 col-form-label" style="color: #000000">Type:</label>
+                            <div class="col-sm-9">
+                                <select id="type" name="type[]" class="form-control">
+                                    <option value="" selected>Choose...</option>
+                                    <option value="Draft">Draft</option>
+                                    <option value="Information">Information</option>
+                                    <option value="Referred to Committee">Referred to Committee</option>
+                                    <option value="Approved">Approved</option>
+                                </select>
                             </div>
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
-                                </div>
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="attachment" name="attachment" name="attachment">
-                                    <label class="custom-file-label" for="attachment">Choose file</label>
-                                </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="status" class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
+                            <div class="col-sm-9">
+                                <select id="status" name="status[]" class="form-control">
+                                    <option value="" selected>Choose...</option>
+                                    <option value="Draft">Draft</option>
+                                    <option value="Information">Information</option>
+                                    <option value="Referred to Committee">Referred to Committee</option>
+                                    <option>Approved</option>
+                                </select>
                             </div>
-                            <div class="form-group row d-flex justify-content-center">
-                                <button type="button" class="btn btn-danger delete-btn ml-2 flex"><i class='fa fa-trash' aria-hidden='true'> Delete</i></button>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
                             </div>
-                        </form>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="attachment" name="attachment" name="attachment">
+                                <label class="custom-file-label" for="attachment">Choose file</label>
+                            </div>
+                        </div>
+                        <div class="form-group row d-flex justify-content-center">
+                            <button type="button" class="btn btn-danger delete-btn ml-2 flex"><i class='fa fa-trash' aria-hidden='true'> Delete</i></button>
+                        </div>
                     </div>
                 </div>
             `;
