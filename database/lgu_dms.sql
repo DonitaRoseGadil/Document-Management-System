@@ -46,7 +46,7 @@ CREATE TABLE `minutes` (
 
 --
 -- Table structure for table `ordinance`
---
+-- new table
 
 CREATE TABLE `ordinance` (
   `id` int(10) NOT NULL,
