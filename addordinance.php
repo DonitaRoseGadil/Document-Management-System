@@ -7,13 +7,14 @@ if(isset($_POST['save'])){
 
     $moNo = $_POST['moNo'];
     $title = $_POST['title'];
-    $dateAdopted = $_POST['d_adopted'];
+    $dateAdopted = $_POST['dateAdopted'];
     $authorSponsor = $_POST['authorSponsor'];
+    $coAuthor = $_POST['coAuthor'];
     $remarks = $_POST['remarks'];
     $dateApproved = $_POST['dateApproved'];
 
-    $sql = "INSERT INTO `ordinance`(`mo_no`, `title`, `d_adopted`, `author_sponsor`, `remarks`, `d_approved`) 
-            VALUES ('$moNo', '$title', '$dateAdopted', '$authorSponsor', '$remarks', '$dateApproved')";
+    $sql = "INSERT INTO `ordinance`(`mo_no`, `title`, `d_adopted`, `author_sponsor`, `co_author`, `remarks`, `d_approved`) 
+            VALUES ('$moNo', '$title', '$dateAdopted', '$authorSponsor', '$coAuthor', '$remarks', '$dateApproved')";
 
     $query = mysqli_query($conn, $sql);    
 
@@ -89,29 +90,23 @@ if(isset($_POST['save'])){
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-32 col-form-label" style="color:#000000">Date Adopted:</label>
-                                            <div class="col-sm-9">
-                                                <input type="date" class="form-control" placeholder="Please type here..." id="dateAdopted" name="dateAdopted">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
                                             <div class="col-sm-9">
                                                 <input type="text" class="form-control" placeholder="Please type here..." id="title" name="title">
                                             </div>
                                         </div>
                                         <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Adopted:</label>
+                                            <div class="col-sm-9">
+                                                <input type="date" class="form-control" placeholder="Please type here..." id="dateAdopted" name="dateAdopted">
+                                            </div>
+                                        </div>
+                                        <!-- <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Description:</label>
                                             <div class="col-sm-9">
                                                 <textarea class="form-control" style="resize: none;" rows="4" placeholder="Please type here..." id="description" name="description"></textarea>
                                             </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Approved:</label>
-                                            <div class="col-sm-9">
-                                                <input type="date" class="form-control" placeholder="Please type here..." id="dateApproved" name="dateApproved">
-                                            </div>
-                                        </div>
+                                        </div> -->
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Author / Sponsor:</label>
                                             <div class="col-sm-9">
@@ -122,6 +117,12 @@ if(isset($_POST['save'])){
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Co-Author:</label>
                                             <div class="col-sm-9">
                                                 <input type="text" class="form-control" placeholder="Please type here..." id="coAuthor" name="coAuthor">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Approved:</label>
+                                            <div class="col-sm-9">
+                                                <input type="date" class="form-control" placeholder="Please type here..." id="dateApproved" name="dateApproved">
                                             </div>
                                         </div>
                                         <div class="form-group row">

@@ -9,11 +9,12 @@ if(isset($_POST['save'])){
     $title = $_POST['title'];
     $description = $_POST['description'];
     $authorSponsor = $_POST['authorSponsor'];
+    $coAuthor = $_POST['coAuthor'];
     $remarks = $_POST['remarks'];
     $dateApproved = $_POST['dateApproved'];
 
-    $sql = "INSERT INTO `resolution`(`reso_no`, `title`, `descrip`, `author_sponsor`, `remarks`, `d_approved`) 
-            VALUES ('$resoNo', '$title', '$description', '$authorSponsor', '$remarks', '$dateApproved')";
+    $sql = "INSERT INTO `resolution`(`reso_no`, `title`, `descrip`, `author_sponsor`, `co_author`, `remarks`, `d_approved`) 
+            VALUES ('$resoNo', '$title', '$description', '$authorSponsor', '$coAuthor', '$remarks', '$dateApproved')";
 
     $query = mysqli_query($conn, $sql);    
 
@@ -124,7 +125,6 @@ if(isset($_POST['save'])){
                                                     <option selected>Choose...</option>
                                                     <option>Draft</option>
                                                     <option>Information</option>
-                                                    
                                                     <option>Referred to Committee</option>
                                                     <option>Approved</option>
                                                 </select>

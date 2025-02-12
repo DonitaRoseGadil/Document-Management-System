@@ -11,10 +11,11 @@ if(isset($_POST['save'])){
     $title = $_POST['title'];
     $description = $_POST['description'];
     $authorSponsor = $_POST['authorSponsor'];
+    $coAuthor = $_POST['coAuthor'];
     $remarks = $_POST['remarks'];
     $dateApproved = $_POST['dateApproved'];
 
-    $sql = "UPDATE `resolution` SET `reso_no`='$resoNo', `title`='$title', `descrip`='$description', `author_sponsor`='$authorSponsor', `remarks`='$remarks', `d_approved`='$dateApproved' WHERE reso_no = $resoNo";
+    $sql = "UPDATE `resolution` SET `reso_no`='$resoNo', `title`='$title', `descrip`='$description', `author_sponsor`='$authorSponsor', `co_author`='$coAuthor', `remarks`='$remarks', `d_approved`='$dateApproved' WHERE reso_no = $resoNo";
 
     $query = mysqli_query($conn, $sql);    
 
@@ -127,7 +128,7 @@ if(isset($_POST['save'])){
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Co-Author:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." id="coAuthor" name="coAuthor">
+                                                <input type="text" class="form-control" placeholder="Please type here..." value="<?php echo $row['co_author']?>" id="coAuthor" name="coAuthor">
                                             </div>
                                         </div>
                                         <div class="form-group row">

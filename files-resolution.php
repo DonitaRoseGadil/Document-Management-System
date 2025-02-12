@@ -45,6 +45,7 @@ session_start();
                                                 <th style="color: #FFFFFF;">TITLE</th>
                                                 <!-- <th style="color: #FFFFFF;">DATE ADOPTED</th> -->
                                                 <th style="color: #FFFFFF;">AUTHOR/SPONSOR</th>
+                                                <th style="color: #FFFFFF;">CO-AUTHOR</th>
                                                 <th style="color: #FFFFFF;">REMARKS</th>
                                                 <th style="color: #FFFFFF;">DATE APPROVED</th>
                                                 <th style="color: #FFFFFF;">ACTION</th>
@@ -54,7 +55,7 @@ session_start();
                                             <?php
                                                 include "connect.php";
 
-                                                $sql = "SELECT reso_no, title, author_sponsor, remarks, d_approved FROM resolution";
+                                                $sql = "SELECT reso_no, title, author_sponsor, co_author, remarks, d_approved FROM resolution";
                                                 $stmt = $conn->prepare($sql);
                                                 $stmt->execute();
                                                 $result = $stmt->get_result();
@@ -69,6 +70,7 @@ session_start();
                                                             <td><?php echo $row["reso_no"] ?></td>
                                                             <td><?php echo $row["title"] ?></td>
                                                             <td><?php echo $row["author_sponsor"] ?></td>
+                                                            <td><?php echo $row["co_author"] ?></td>
                                                             <td><?php echo $row["remarks"] ?></td>
                                                             <td><?php echo $row["d_approved"] ?></td>
                                                             <td  class='text-center d-flex justify-content-center gap-2'>
