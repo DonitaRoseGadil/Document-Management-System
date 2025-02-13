@@ -57,15 +57,6 @@
     <script src="./vendor/global/global.min.js"></script>
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
-
-    <script>
-        function updateFileName() {
-            const fileInput = document.getElementById('attachment');
-            const fileName = fileInput.files[0].name;
-            const label = document.querySelector('.custom-file-label');
-            label.textContent = fileName;
-        }
-    </script>
     
 </body>
 
