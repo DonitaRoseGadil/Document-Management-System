@@ -5,6 +5,9 @@ if(isset($_POST['save'])){
     error_reporting(0);
     session_start();
 
+    $reso = $_GET['resoNo'];
+
+    $id = intval($_POST['id']);
     $resoNo = $_POST['resoNo'];
     $title = $_POST['title'];
     $description = $_POST['description'];
@@ -13,7 +16,7 @@ if(isset($_POST['save'])){
     $remarks = $_POST['remarks'];
     $dateApproved = $_POST['dateApproved'];
 
-    $sql = "UPDATE `resolution` SET `reso_no`='$resoNo', `title`='$title', `descrip`='$description', `author_sponsor`='$authorSponsor', `co_author`='$coAuthor', `remarks`='$remarks', `d_approved`='$dateApproved' WHERE reso_no = $resoNo";
+    $sql = "UPDATE `resolution` SET `reso_no`='$resoNo', `title`='$title', `descrip`='$description', `author_sponsor`='$authorSponsor', `co_author`='$coAuthor', `remarks`='$remarks', `d_approved`='$dateApproved' WHERE id = $id";
 
     $query = mysqli_query($conn, $sql);    
 
@@ -22,8 +25,8 @@ if(isset($_POST['save'])){
                 document.addEventListener('DOMContentLoaded', function() {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Resolution Created',
-                        text: 'The resolution has been successfully Updated.',
+                        title: 'Resolution Updated',
+                        text: 'The resolution has been successfully updated.',
                         confirmButtonText: 'OK'
                     }).then((result) => {
                         if (result.isConfirmed) {
@@ -93,6 +96,11 @@ if(isset($_POST['save'])){
                             <div class="card-body">
                                 <div class="basic-form">
                                     <form action="" method="post">
+                                        <div class="form-group row">
+                                            <div class="col-sm-9">
+                                                <input type="hidden" class="form-control" value="<?php echo $row['id']?>" id="id" name="id">
+                                            </div>
+                                        </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No.:</label>
                                             <div class="col-sm-9">

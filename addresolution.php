@@ -16,7 +16,7 @@ if(isset($_POST['save'])){
 
     if (!empty($_FILES['attachment'])) {
         $type = $_FILES['attachment']['type'];
-        if ($type == 'application/pdf' || $type == 'application/msword') {
+        if ($type == 'application/pdf' || $type == 'application/msword'|| $type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
             $attachment = $_FILES['attachment']['name'];
             if ($attachment != '') {
                 move_uploaded_file($_FILES['attachment']['tmp_name'], 'files/'.$attachment);
@@ -65,7 +65,8 @@ if(isset($_POST['save'])){
               </script>";
         <?php
     }    
-}    
+}   
+ 
 ?>
 
 <!DOCTYPE html>
