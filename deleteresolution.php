@@ -2,15 +2,15 @@
 include "connect.php";
 session_start();
 
-if (isset($_GET["reso_no"]) && is_numeric($_GET["reso_no"])) {
-    $reso_no = intval($_GET["reso_no"]); // Ensure it's an integer
+if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
+    $id = intval($_GET["id"]); // Ensure it's an integer
 
     // Use prepared statements for security
-    $sql = "DELETE FROM `resolution` WHERE reso_no = ?";
+    $sql = "DELETE FROM `resolution` WHERE id = ?";
     $stmt = mysqli_prepare($conn, $sql);
 
     if ($stmt) {
-        mysqli_stmt_bind_param($stmt, "i", $reso_no);
+        mysqli_stmt_bind_param($stmt, "i", $id);
         mysqli_stmt_execute($stmt);
 
         if (mysqli_stmt_affected_rows($stmt) > 0) {
