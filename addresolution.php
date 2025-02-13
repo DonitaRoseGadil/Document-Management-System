@@ -104,6 +104,7 @@ if(isset($_POST['save'])){
                             <div class="card-header d-flex justify-content-center">
                                 <h4 class="card-title text-center" style="color: #098209; ">ADD RESOLUTION</h4>
                             </div>
+                            
                             <div class="card-body">
                                 <div class="basic-form">
                                     <form action="addresolution.php" method="post" enctype="multipart/form-data">
