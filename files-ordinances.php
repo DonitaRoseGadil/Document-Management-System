@@ -69,15 +69,15 @@ session_start();
                                                     <tr>
                                                             <td><?php echo $row["mo_no"] ?></td>
                                                             <td><?php echo $row["title"] ?></td>
+                                                            <td><?php echo $row["d_adopted"] ?></td>
                                                             <td><?php echo $row["author_sponsor"] ?></td>
                                                             <td><?php echo $row["co_author"] ?></td>
-                                                            <td><?php echo $row["d_adopted"] ?></td>
                                                             <td><?php echo $row["remarks"] ?></td>
                                                             <td><?php echo $row["d_approved"] ?></td>
                                                             <td  class='text-center d-flex justify-content-center gap-2'>
                                                                 <a href="view.php?mo_no=<?php echo $row["mo_no"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' aria-hidden='true'></i></a>
-                                                                <a href="editordinance.php?reso_no=<?php echo $row["mo_no"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' aria-hidden='true'></i></a>
-                                                                <a href="deleteordinance.php?reso_no=<?php echo $row["mo_no"] ?>" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1' ><i class='fa fa-trash' aria-hidden='true'></i></a>
+                                                                <a href="editordinance.php?mo_no=<?php echo $row["mo_no"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' aria-hidden='true'></i></a>
+                                                                <a href="deleteordinance.php?mo_no=<?php echo $row["mo_no"] ?>" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1' ><i class='fa fa-trash' aria-hidden='true'></i></a>
                                                             </td>
                                                         </tr>
                                                         <?php
