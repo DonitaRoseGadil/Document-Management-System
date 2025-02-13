@@ -27,26 +27,8 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `minutes`
---
-
-CREATE TABLE `minutes` (
-  `id` int(11) NOT NULL,
-  `no_regSession` varchar(255) NOT NULL,
-  `date` date NOT NULL,
-  `genAttachment` longblob NOT NULL,
-  `resNo` varchar(255) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `type` varchar(255) NOT NULL,
-  `status` varchar(255) NOT NULL,
-  `attachment` longblob NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `ordinance`
--- new table
+-- 
 
 CREATE TABLE `ordinance` (
   `id` int(10) NOT NULL,
@@ -110,12 +92,6 @@ INSERT INTO `resolution` (`id`, `reso_no`, `title`, `descrip`, `d_adopted`, `aut
 --
 -- Indexes for dumped tables
 --
-
---
--- Indexes for table `minutes`
---
-ALTER TABLE `minutes`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `minutes`
