@@ -1,4 +1,8 @@
-
+<?php 
+    error_reporting(E_ALL); // Enable error reporting for development
+    ini_set('display_errors', 1);
+    session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -50,7 +54,32 @@
                                             </tr>
                                         </thead>
                                         <tbody class="text-left" style="color: #000000;" >
-                                        
+                                            <?php
+                                                include "connect.php";
+                                                $sql = "SELECT id, no_regSession, date, title FROM minutes";
+                                                $stmt = $conn->prepare($sql);
+                                                $stmt->execute();
+                                                $result = $stmt->get_result();
+
+                                                if (!$result) {
+                                                    die("SQL Error: " . $conn->error);
+                                                }
+
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    ?>
+                                                    <tr>
+                                                        <td><?php echo $row["no_regSession"] ?></td>
+                                                        <td><?php echo $row["date"] ?></td>
+                                                        <td><?php echo $row["title"] ?></td>
+                                                        <td  class='text-center d-flex justify-content-center gap-2'>
+                                                            <a href="viewminutes.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' aria-hidden='true'></i></a>
+                                                            <a href="editminutes.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' aria-hidden='true'></i></a>
+                                                            <a href="deleteminutes.php?id=<?php echo $row["id"] ?>" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1' ><i class='fa fa-trash' aria-hidden='true'></i></a>
+                                                        </td>
+                                                    </tr>
+                                                    <?php
+                                                }
+                                                ?>
                                         </tbody>
                                     </table>
                                 </div>
