@@ -5,8 +5,6 @@ if(isset($_POST['save'])){
     error_reporting(0);
     session_start();
 
-    $reso_no = $_GET['reso_no'];
-
     $resoNo = $_POST['resoNo'];
     $title = $_POST['title'];
     $description = $_POST['description'];
@@ -87,8 +85,8 @@ if(isset($_POST['save'])){
                             </div>
                             <?php 
                                 include "connect.php";
-                                $reso_no = $_GET['reso_no'];
-                                $sql = "SELECT * FROM resolution WHERE reso_no = $reso_no LIMIT 1";
+                                $id = $_GET['id'];
+                                $sql = "SELECT * FROM resolution WHERE id = $id LIMIT 1";
                                 $result= mysqli_query($conn, $sql);   
                                 $row = mysqli_fetch_assoc($result); 
                             ?>
