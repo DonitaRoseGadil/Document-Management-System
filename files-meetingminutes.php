@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,26 +34,23 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="example" class="display" style="min-width: 845px">
-                                        <thead class="text-left" style="background-color: #098209; color: #FFFFFF;">
+                                    <table id="example" class="display" style="min-width: 845px; width: 100%;">
+                                        <colgroup>
+                                            <col style="width: 25%;">
+                                            <col style="width: 20%;">
+                                            <col style="width: 40%;">
+                                            <col style="width: 25%;">
+                                        </colgroup>
+                                        <thead class="text-center" style="background-color: #098209; color: #FFFFFF;">
                                             <tr>
                                                 <th style="color: #FFFFFF;">NUMBER OF REGULAR SESSION</th>
                                                 <th style="color: #FFFFFF;">DATE</th>
-                                                <th style="color: #FFFFFF;">ATTACHMENT</th>
-
+                                                <th style="color: #FFFFFF;">TITLE</th>
+                                                <th style="color: #FFFFFF;">ACTION</th>
                                             </tr>
                                         </thead>
                                         <tbody class="text-left" style="color: #000000;" >
-                                        <tr>
-                                            <td>4th Regular Session</td>
-                                            <td>January 27, 2025</td>
-                                            <td>Green City Initiative</td>
-                                        </tr>
-                                        <tr>
-                                            <td>5th Regular Session</td>
-                                            <td>February 3, 2025</td>
-                                            <td>Community Cleanup Drive</td>
-                                        </tr>
+                                        
                                         </tbody>
                                     </table>
                                 </div>
