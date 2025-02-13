@@ -9,29 +9,12 @@ if(isset($_POST['save'])){
     $title = $_POST['title'];
     $description = $_POST['description'];
     $authorSponsor = $_POST['authorSponsor'];
+    $coAuthor = $_POST['coAuthor'];
     $remarks = $_POST['remarks'];
     $dateApproved = $_POST['dateApproved'];
-    $attachment = '';
 
-    if (!empty($_FILES['attachment'])) {
-        $type = $_FILES['attachment']['type'];
-        if ($type == 'application/pdf' || $type == 'application/msword') {
-            $attachment = $_FILES['attachment']['name'];
-            if ($attachment != '') {
-                move_uploaded_file($_FILES['attachment']['tmp_name'], 'files/'.$attachment);
-            }
-        } else {
-            echo '
-            <div class="form-group row" style="display: block;">
-                <div class="col-sm-9">
-                    <div class="alert alert-danger"><strong>Error: </strong> Only Supported Files (PDF and DOCX).</div>
-                </div>
-            </div>';
-        }
-    }
-
-    $sql = "INSERT INTO resolution(reso_no, title, descrip, d_adopted, author_sponsor, remarks, d_approved, attachment) 
-            VALUES ('$resoNo', '$title', '$description', '$dateAdopted', '$authorSponsor', '$remarks', '$dateApproved', '$attachment')";
+    $sql = "INSERT INTO `resolution`(`reso_no`, `title`, `descrip`, `author_sponsor`, `co_author`, `remarks`, `d_approved`) 
+            VALUES ('$resoNo', '$title', '$description', '$authorSponsor', '$coAuthor', '$remarks', '$dateApproved')";
 
     $query = mysqli_query($conn, $sql);    
 
@@ -51,19 +34,19 @@ if(isset($_POST['save'])){
                 });
               </script>";    
     } else {
-        ?>
-        <script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'There was an error creating the resolution.',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    window.location.href = 'files-resolution.php';
+        echo "<script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'There was an error creating the resolution.',
+                        confirmButtonText: 'OK'
+                    });
                 });
               </script>";
-        <?php
-    }    
+        header("Location: files-resolution.php");
+        exit;    
+    }
 }    
 ?>
 
@@ -71,12 +54,6 @@ if(isset($_POST['save'])){
 <html lang="en">
 
 <?php include "header.php"; ?>
-
-<head>
-    <!-- Include SweetAlert CSS and JS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-</head>
 
 <body>
 
@@ -104,7 +81,7 @@ if(isset($_POST['save'])){
                             </div>
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form action="addresolution.php" method="post" enctype="multipart/form-data">
+                                    <form action="addresolution.php" method="post">
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No.:</label>
                                             <div class="col-sm-9">
@@ -148,20 +125,14 @@ if(isset($_POST['save'])){
                                                     <option selected>Choose...</option>
                                                     <option>Draft</option>
                                                     <option>Information</option>
-                                                    
                                                     <option>Referred to Committee</option>
                                                     <option>Approved</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
-                                            </div>
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="attachment" name="attachment" onchange="updateFileName()">
-                                                <label class="custom-file-label" for="attachment">Choose file</label>
-                                            </div>
+                                            <input type="file" class="form-control" id="attachment" name="attachment" style="padding: 3px;">
+                                            <label class="input-group-text" for="attachment" style="background-color: #098209;">Upload</label>
                                         </div>
                                         <div class="form-group row d-flex justify-content-center">
                                             <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;">Save</button>
@@ -192,15 +163,6 @@ if(isset($_POST['save'])){
     <script src="./vendor/global/global.min.js"></script>
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
-
-    <script>
-        function updateFileName() {
-            const fileInput = document.getElementById('attachment');
-            const fileName = fileInput.files[0].name;
-            const label = document.querySelector('.custom-file-label');
-            label.textContent = fileName;
-        }
-    </script>
     
 </body>
 
