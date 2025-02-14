@@ -7,6 +7,7 @@ if(isset($_POST['save'])){
 
     $mo_no = $_GET['mo_no'];
 
+    $id = intval($_POST['id']);
     $moNo = $_POST['moNo'];
     $title = $_POST['title'];
     $dateAdopted = $_POST['dateAdopted'];
@@ -15,7 +16,7 @@ if(isset($_POST['save'])){
     $remarks = $_POST['remarks'];
     $dateApproved = $_POST['dateApproved'];
 
-    $sql = "UPDATE `ordinance` SET `mo_no`='$moNo', `title`='$title', `d_Adopted`='$dateAdopted', `author_sponsor`='$authorSponsor', `co_author`='$coAuthor', `remarks`='$remarks', `d_approved`='$dateApproved' WHERE mo_no = $moNo";
+    $sql = "UPDATE `ordinance` SET `mo_no`='$moNo', `title`='$title', `d_Adopted`='$dateAdopted', `author_sponsor`='$authorSponsor', `co_author`='$coAuthor', `remarks`='$remarks', `d_approved`='$dateApproved' WHERE id = $id";
 
     $query = mysqli_query($conn, $sql);    
 
@@ -87,14 +88,19 @@ if(isset($_POST['save'])){
                             </div>
                             <?php 
                                 include "connect.php";
-                                $mo_no = $_GET['mo_no'];
-                                $sql = "SELECT * FROM ordinance WHERE mo_no = $mo_no LIMIT 1";
+                                $id = $_GET['id'];
+                                $sql = "SELECT * FROM ordinance WHERE id = $id LIMIT 1";
                                 $result= mysqli_query($conn, $sql);   
                                 $row = mysqli_fetch_assoc($result); 
                             ?>
                             <div class="card-body">
                                 <div class="basic-form">
                                     <form action="" method="post">
+                                    <div class="form-group row">
+                                            <div class="col-sm-9">
+                                                <input type="hidden" class="form-control" value="<?php echo $row['id']?>" id="id" name="id">
+                                            </div>
+                                        </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">MO No.:</label>
                                             <div class="col-sm-9">

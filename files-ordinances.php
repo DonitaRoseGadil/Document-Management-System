@@ -1,5 +1,4 @@
 <?php 
-include "header.php"; 
 error_reporting(E_ALL); // Enable error reporting for development
 ini_set('display_errors', 1);
 session_start();
@@ -8,6 +7,9 @@ session_start();
 
 <!DOCTYPE html>
 <html lang="en">
+
+<?php include"header.php" ?>
+
 <body>
 
     <!--**********************************
@@ -55,7 +57,7 @@ session_start();
                                         <?php
                                                 include "connect.php";
 
-                                                $sql = "SELECT mo_no, title, d_adopted, author_sponsor, co_author, remarks, d_approved FROM ordinance";
+                                                $sql = "SELECT id, mo_no, title, d_adopted, author_sponsor, co_author, remarks, d_approved FROM ordinance";
                                                 $stmt = $conn->prepare($sql);
                                                 $stmt->execute();
                                                 $result = $stmt->get_result();
@@ -75,9 +77,9 @@ session_start();
                                                             <td><?php echo $row["remarks"] ?></td>
                                                             <td><?php echo $row["d_approved"] ?></td>
                                                             <td  class='text-center d-flex justify-content-center gap-2'>
-                                                                <a href="view.php?mo_no=<?php echo $row["mo_no"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' aria-hidden='true'></i></a>
-                                                                <a href="editordinance.php?mo_no=<?php echo $row["mo_no"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' aria-hidden='true'></i></a>
-                                                                <a href="deleteordinance.php?mo_no=<?php echo $row["mo_no"] ?>" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1' ><i class='fa fa-trash' aria-hidden='true'></i></a>
+                                                                <a href="view.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' aria-hidden='true'></i></a>
+                                                                <a href="editordinance.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' aria-hidden='true'></i></a>
+                                                                <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1' ><i class='fa fa-trash' aria-hidden='true'></i></a>
                                                             </td>
                                                         </tr>
                                                         <?php
@@ -138,18 +140,18 @@ session_start();
     <script src="./js/plugins-init/datatables.init.js"></script>
 
     <script>
-        function confirmDelete(resoNo) {
+        function confirmDelete(id) {
             Swal.fire({
+                icon: 'warning',
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
-                icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Confirm'
+                confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = 'deleteordinance.php?id=' + moNo;
+                    window.location.href = 'deleteordinance.php?id=' + id;
                 }
             });
         }
