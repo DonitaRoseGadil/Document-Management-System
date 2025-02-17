@@ -7,7 +7,9 @@ if(isset($_POST['save'])){
 
     $reso = $_GET['resoNo'];
 
-    $id = intval($_POST['id']);
+    $id = $_GET['id'];
+
+    //$id = intval($_POST['id']);
     $resoNo = $_POST['resoNo'];
     $title = $_POST['title'];
     $description = $_POST['description'];

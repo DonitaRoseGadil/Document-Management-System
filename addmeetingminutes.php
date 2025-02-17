@@ -220,7 +220,7 @@
                                     <option value="Draft">Draft</option>
                                     <option value="Information">Information</option>
                                     <option value="Referred to Committee">Referred to Committee</option>
-                                    <option>Approved</option>
+                                    <option value="Approved">Approved</option>
                                 </select>
                             </div>
                         </div>
