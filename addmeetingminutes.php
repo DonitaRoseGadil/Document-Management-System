@@ -104,7 +104,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post">
+                                    <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" enctype="multipart/form-data">
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">No. of Regular Session</label>
                                             <div class="col-sm-9">
@@ -122,7 +122,7 @@
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
                                             </div>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="genAttachment" name="genAttachment" onchange="updateFileName()">
+                                                <input type="file" class="custom-file-input" id="genAttachment[]" name="genAttachment[]" multiple onchange="updateFileName()">
                                                 <label class="custom-file-label" for="genAttachment">Choose file</label>
                                             </div>
                                         </div>

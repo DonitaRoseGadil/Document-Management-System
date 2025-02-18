@@ -72,7 +72,7 @@
                                                         <td><?php echo $row["date"] ?></td>
                                                         <td><?php echo $row["title"] ?></td>
                                                         <td  class='text-center d-flex justify-content-center gap-2'>
-                                                            <a href="viewminutes.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' aria-hidden='true'></i></a>
+                                                            <a href="viewmeetingminutes.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' aria-hidden='true'></i></a>
                                                             <a href="editmeetingminutes.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' aria-hidden='true'></i></a>
                                                             <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1' ><i class='fa fa-trash' aria-hidden='true'></i></a>
                                                         </td>
