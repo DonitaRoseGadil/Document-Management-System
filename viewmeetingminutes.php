@@ -89,7 +89,7 @@
                     <div class="col-xl-8 col-xxl-12 items-center">                        
                         <div class="card" style="align-self: center;">
                             <div class="card-header d-flex justify-content-center">
-                                <h4 class="card-title text-center" style="color: #098209; ">EDIT MEETING MINUTES</h4>
+                                <h4 class="card-title text-center" style="color: #098209; ">VIEW MEETING MINUTES</h4>
                             </div>
                             <?php
                                 include("connect.php");
@@ -124,7 +124,7 @@
                                             </div>
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input" value="<?php echo $row['genAttachment']?>" id="genAttachment" name="genAttachment" onchange="updateFileName()">
-                                                <label class="custom-file-label" for="genAttachment">Choose file</label>
+                                                <label class="custom-file-label" for="attachment">Choose file</label>
                                             </div>
                                         </div>
                                         <div class="form-group row">

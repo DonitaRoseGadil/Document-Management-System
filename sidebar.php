@@ -21,11 +21,11 @@
             </li>
             <!--PROFILES-->
             <li>
-                <a href="./profiles.php" aria-expanded="false" style="color: #FFFFFF;"> <i class="icon icon-users-mm"></i><span class="nav-text">Profiles</span> </a>
+                <a href="./accountSettings.php" aria-expanded="false" style="color: #FFFFFF;"> <i class="icon icon-settings-gear-64"></i><span class="nav-text">Account Settings</span> </a>
             </li>
             <!--SETTINGS-->
             <li>
-                <a href="./settings.php" aria-expanded="false" style="color: #FFFFFF;"> <i class="icon icon-settings-gear-64"></i><span class="nav-text">Settings</span> </a>
+                <a href="./manual.php" aria-expanded="false" style="color: #FFFFFF;"> <i class="icon icon-book-open-2"></i><span class="nav-text">Manual</span> </a>
             </li>
         </ul>
 
