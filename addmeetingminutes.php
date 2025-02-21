@@ -104,7 +104,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post">
+                                    <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" enctype="multipart/form-data">
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">No. of Regular Session</label>
                                             <div class="col-sm-9">
@@ -122,8 +122,8 @@
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
                                             </div>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="attachment" name="genAttachment">
-                                                <label class="custom-file-label" for="attachment">Choose file</label>
+                                                <input type="file" class="custom-file-input" id="genAttachment[]" name="genAttachment[]" multiple onchange="updateFileName()">
+                                                <label class="custom-file-label" for="genAttachment">Choose file</label>
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center mt-5 mb-3">
@@ -163,7 +163,18 @@
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
 
+
     <script>
+        function updateFileName() {
+            const fileInput = document.getElementById('attachment');
+            const fileName = fileInput.files[0].name;
+            const label = document.querySelector('.custom-file-label');
+            label.textContent = fileName;
+        }
+    </script>
+
+    <script>
+        
         document.getElementById("add-card-btn").addEventListener("click", function() {
             addDynamicCard();
         });
@@ -209,7 +220,7 @@
                                     <option value="Draft">Draft</option>
                                     <option value="Information">Information</option>
                                     <option value="Referred to Committee">Referred to Committee</option>
-                                    <option>Approved</option>
+                                    <option value="Approved">Approved</option>
                                 </select>
                             </div>
                         </div>
@@ -218,7 +229,7 @@
                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
                             </div>
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="attachment" name="attachment" name="attachment">
+                                <input type="file" class="custom-file-input" id="attachment" name="attachment" onchange="updateFileName()">
                                 <label class="custom-file-label" for="attachment">Choose file</label>
                             </div>
                         </div>
