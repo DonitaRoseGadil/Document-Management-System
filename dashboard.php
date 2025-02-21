@@ -113,24 +113,26 @@
                 </div>
             </div>
 
-            <h4 class="mt-4 ml-4" style="color: #098209;">SHORTCUTS</h4>
+            <!-- Shortcuts Section (Right) -->
+            <div class="col-lg-6">
+                <h4 class="mt-4 ml-4" style="color: #098209;">SHORTCUTS</h4>
                 <div class="row flex-column ml-2" style="gap: 2px;">
                     <div class="col-lg-6">
-                        <div class="card p-2" style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209;">
-                            <div style="color: black;"><strong>Resolution No. 1 Lorem Ipsum</strong></div>
-                            <div style="color: gray; font-size: 0.7rem;">February 20, 2025 3:00 P.M.</div>
+                        <div class="card p-2 d-flex align-items-center justify-content-between" style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209;">
+                            <div style="color: black;"><strong>Add file resolution</strong></div>
+                            <button class="btn btn-success btn-sm">+</button>
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <div class="card p-2" style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209;">
-                            <div style="color: black;"><strong>Resolution No. 2 Lorem Ipsum</strong></div>
-                            <div style="color: gray; font-size: 0.7rem;">February 20, 2025 3:00 P.M.</div>
+                        <div class="card p-2 d-flex align-items-center justify-content-between" style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209;">
+                            <div style="color: black;"><strong>Add file ordinances</strong></div>
+                            <button class="btn btn-success btn-sm">+</button>
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <div class="card p-2" style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209;">
-                            <div style="color: black;"><strong>Resolution No. 3 Lorem Ipsum</strong></div>
-                            <div style="color: gray; font-size: 0.7rem;">February 20, 2025 3:00 P.M.</div>
+                        <div class="card p-2 d-flex align-items-center justify-content-between" style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209;">
+                            <div style="color: black;"><strong>Add new meeting</strong></div>
+                            <button class="btn btn-success btn-sm">+</button>
                         </div>
                     </div>
                 </div>
