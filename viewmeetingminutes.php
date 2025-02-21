@@ -1,63 +1,3 @@
-<?php
-
-    if(isset($_POST['save'])) {
-        include("connect.php");
-        error_reporting(0);
-        session_start();
-
-        $id = intval($_POST['id']);
-        $no_regSession = $_POST['no_regSession'];
-        $date = $_POST['date'];
-        $genAttachment = $_POST['genAttachment'];
-        $resNo = $_POST['resNo'];
-        $title = $_POST['title'];
-        $type = $_POST['type'];
-        $status = $_POST['status'];
-        $attachment = $_POST['attachment'];
-
-        $sql = "UPDATE `minutes` SET `no_regSession`=`$no_regSession`,
-                                    `date`=`$date`,
-                                    `genAttachment`=`$genAttachment`,
-                                    `resNo`=`$resNo`,
-                                    `title`=`$title`,
-                                    `type`=`$type`,
-                                    `status`=`$status`,
-                                    `attachment`=`$attachment` WHERE `id`=`$id`";
-
-        $query = mysqli_query($conn, $sql);
-
-        if($query) {
-            echo "<script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Meeting Minutes Updated',
-                            text: 'The minutes has been successfully updated.',
-                            confirmButtonText: 'OK'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = 'files-resolution.php';
-                            }
-                        });
-                    });
-                  </script>";    
-        } else {
-            echo "<script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'There was an error updating the minutes.',
-                            confirmButtonText: 'OK'
-                        });
-                    });
-                  </script>";
-            header("Location: files-meetingminutes.php");
-            exit;    
-        }
-    }
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -102,47 +42,39 @@
                                 <div class="basic-form">
                                     <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post">
                                         <div class="form-group row">
-                                            <div class="col-sm-9">
-                                                <input type="hidden" class="form-control" value="<?php echo $row['id']?>" id="id" name="id">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">No. of Regular Session</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." value="<?php echo $row['no_regSession']?>" id="no_regSession" name="no_regSession">
+                                                <input type="text" class="form-control" placeholder="Please type here..." value="<?php echo $row['no_regSession']?>" id="no_regSession" name="no_regSession" disabled>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Date:</label>
                                             <div class="col-sm-9">
-                                                <input type="date" class="form-control" placeholder="Please type here..." value="<?php echo $row['date']?>" id="date" name="date">
+                                                <input type="date" class="form-control" placeholder="Please type here..." value="<?php echo $row['date']?>" id="date" name="date" disabled>
                                             </div>
                                         </div>
                                         <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
-                                            </div>
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" value="<?php echo $row['genAttachment']?>" id="genAttachment" name="genAttachment" onchange="updateFileName()">
-                                                <label class="custom-file-label" for="attachment">Choose file</label>
+                                            <input type="text" class="form-control" value="<?php echo $row['genAttachment']?>" id="genAttachment" name="genAttachment" disabled>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" style="background-color: #098209; border: none; outline: none;" type="button">View File</button>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No.:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" value="<?php echo $row['resNo']?>" name="resNo" required>
+                                                <input type="text" class="form-control" value="<?php echo $row['resNo']?>" name="resNo" disabled>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Title:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" value="<?php echo $row['title']?>" name="title" required>
+                                                <input type="text" class="form-control" value="<?php echo $row['title']?>" name="title" disabled>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="type" class="col-sm-3 col-form-label" style="color: #000000">Type:</label>
                                             <div class="col-sm-9">
-                                                <select id="type" value="<?php echo $row['type']?>" name="type" class="form-control">
+                                                <select id="type" value="<?php echo $row['type']?>" name="type" class="form-control" disabled>
                                                     <option value="" selected>Choose...</option>
                                                     <option value="Draft" <?php if ($row['type'] == "Draft") echo "selected"; ?>>Draft</option>
                                                     <option value="Information" <?php if ($row['type'] == "Information") echo "selected"; ?>>Information</option>
@@ -154,7 +86,7 @@
                                         <div class="form-group row">
                                             <label for="status" class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
                                             <div class="col-sm-9">
-                                                <select id="status" name="status" class="form-control">
+                                                <select id="status" value="<?php echo $row['status']?>" name="status" class="form-control" disabled>
                                                     <option value="" selected>Choose...</option>
                                                     <option value="Draft" <?php if ($row['status'] == "Draft") echo "selected"; ?>>Draft</option>
                                                     <option value="Information" <?php if ($row['status'] == "Information") echo "selected"; ?>>Information</option>
@@ -164,17 +96,10 @@
                                             </div>
                                         </div>
                                         <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
+                                            <input type="text" class="form-control" value="<?php echo $row['attachment']?>" id="attachment" name="attachment" disabled>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" style="background-color: #098209; border: none; outline: none;" type="button">View File</button>
                                             </div>
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" value="<?php echo $row['attachment']?>" id="attachment" name="attachment" onchange="updateFileName()">
-                                                <label class="custom-file-label" for="attachment">Choose file</label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row d-flex justify-content-center mt-5">
-                                            <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;">Update</button>
-                                            <a href="files-meetingminutes.php" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
                                         </div>
                                     </form>
                                 </div>

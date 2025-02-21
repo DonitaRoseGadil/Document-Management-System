@@ -159,6 +159,13 @@ if(isset($_POST['save'])){
                                 $sql = "SELECT * FROM resolution WHERE id = $id LIMIT 1";
                                 $result= mysqli_query($conn, $sql);   
                                 $row = mysqli_fetch_assoc($result); 
+
+                                $sql2 = "SELECT remarks FROM resolution WHERE id = '$id'";
+                                $result2 = mysqli_query($conn, $sql2);
+                                $row2 = mysqli_fetch_assoc($result2);
+
+
+                                $selectedRemarks = $row2['remarks']; 
                             ?>
                             <div class="card-body">
                                 <div class="basic-form">
@@ -189,7 +196,7 @@ if(isset($_POST['save'])){
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Description:</label>
                                             <div class="col-sm-9">
-                                                <textarea class="form-control" style="resize: none;" rows="4" value="<?php echo $row['descrip']?>" id="description" name="description"></textarea>
+                                                <textarea class="form-control" style="resize: none;" rows="4" id="description" name="description"><?php echo htmlspecialchars($row['descrip']); ?></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -204,24 +211,42 @@ if(isset($_POST['save'])){
                                                 <input type="text" class="form-control" placeholder="Please type here..." value="<?php echo $row['co_author']?>" id="coAuthor" name="coAuthor">
                                             </div>
                                         </div>
+                                        <?php 
+                                            include "connect.php";
+                                            $id = $_GET['id'];
+                                            $sql = "SELECT * FROM resolution WHERE id = $id LIMIT 1";
+                                            $result= mysqli_query($conn, $sql);   
+                                            $row = mysqli_fetch_assoc($result); 
+
+                                            $sql2 = "SELECT remarks FROM resolution WHERE id = '$id'";
+                                            $result2 = mysqli_query($conn, $sql2);
+                                            $row2 = mysqli_fetch_assoc($result2);
+                                            $selectedRemarks = $row2['remarks']; 
+                                        ?>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
                                             <div class="col-sm-9">
-                                            <select id="remarks" name="remarks" class="form-control">
-                                                <option value="Draft" <?php if ($row['remarks'] == "Draft") echo "selected"; ?>>Draft</option>
-                                                <option value="Information" <?php if ($row['remarks'] == "Information") echo "selected"; ?>>Information</option>
-                                                <option value="Referred to Committee" <?php if ($row['remarks'] == "Referred to Committee") echo "selected"; ?>>Referred to Committee</option>
-                                                <option value="Approved" <?php if ($row['remarks'] == "Approved") echo "selected"; ?>>Approved</option>
-                                            </select>
+                                                <select id="remarks" name="remarks" class="form-control">
+                                                    <option value="" <?php echo ($selectedRemarks == '') ? 'selected' : ''; ?>>Choose...</option>
+                                                    <option value="Draft" <?php echo ($selectedRemarks == 'Draft') ? 'selected' : ''; ?>>Draft</option>
+                                                    <option value="Information" <?php echo ($selectedRemarks == 'Information') ? 'selected' : ''; ?>>Information</option>
+                                                    <option value="Referred to Committee" <?php echo ($selectedRemarks == 'Referred to Committee') ? 'selected' : ''; ?>>Referred to Committee</option>
+                                                    <option value="Approved" <?php echo ($selectedRemarks == 'Approved') ? 'selected' : ''; ?>>Approved</option>
+                                                  </select>
                                             </div>
                                         </div>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
                                             </div>
+                                            <?php
+                                                include "connect.php";
+                                                $filePath = $row['attachment']; 
+                                                $fileName = basename($filePath); 
+                                            ?>
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input" id="attachment" name="attachment" name="attachment" onchange="updateFileName()">
-                                                <label class="custom-file-label" for="attachment">Choose file</label>
+                                                <label class="custom-file-label" for="attachment"><?php echo $fileName ? $fileName : "Choose file"; ?></label>
                                             </div>
                                         </div>
                                         <div class="form-group row d-flex justify-content-center">

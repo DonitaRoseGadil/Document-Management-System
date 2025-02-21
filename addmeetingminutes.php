@@ -6,7 +6,7 @@
 
         $no_regSession = $_POST['no_regSession'];
         $date = $_POST['date'];
-        $genAttachment = $_POST['genAttachment'];
+        $genAttachment = $_FILES['genAttachment'];
 
         // Loop through dynamic cards
         if (!empty($_POST['resNo'])) {
@@ -14,7 +14,7 @@
                 $title = $_POST['title'][$key];
                 $type = $_POST['type'][$key];
                 $status = $_POST['status'][$key];
-                $attachment = $_POST['attachment'][$key]; 
+                $attachment = $_FILES['attachment'][$key]; 
 
                 $sql =  "INSERT INTO `minutes` (`no_regSession`, `date`, `genAttachment`, `resNo`, `title`, `type`, `status`, `attachment`) 
                 VALUES ('$no_regSession', '$date', '$genAttachment', '$resNo', '$title', '$type', '$status', '$attachment')";
@@ -188,12 +188,12 @@
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
                                             </div>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="genAttachment[]" name="genAttachment[]" multiple onchange="updateFileName()">
+                                                <input type="file" class="custom-file-input" id="genAttachment" name="genAttachment" onchange="updateFileName(this)">
                                                 <label class="custom-file-label" for="genAttachment">Choose file</label>
                                             </div>
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center mt-5 mb-3">
-                                            <h5 class="text-primary">AGENDA ITEM</h5>
+                                            <h5 style="color: #098209;">AGENDA ITEM</h5>
                                             <button type="button" class="btn btn-primary" id="add-card-btn" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;"><i class="fa fa-plus"></i>  Form</button>
                                         </div>
                                         <div id="dynamic-form-container">
@@ -229,18 +229,12 @@
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
 
+    <script> 
 
-    <script>
-        function updateFileName() {
-            const fileInput = document.getElementById('attachment');
-            const fileName = fileInput.files[0].name;
-            const label = document.querySelector('.custom-file-label');
-            label.textContent = fileName;
-        }
-    </script>
+        document.addEventListener("DOMContentLoaded", function() {
+            addDynamicCard(); // Add a default card when the page loads
+        });
 
-    <script>
-        
         document.getElementById("add-card-btn").addEventListener("click", function() {
             addDynamicCard();
         });
@@ -295,7 +289,7 @@
                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
                             </div>
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="attachment" name="attachment" onchange="updateFileName()">
+                                <input type="file" class="custom-file-input" id="attachment" name="attachment" onchange="updateFileName(this)">
                                 <label class="custom-file-label" for="attachment">Choose file</label>
                             </div>
                         </div>
@@ -311,6 +305,14 @@
             card.querySelector(".delete-btn").addEventListener("click", function () {
                 container.removeChild(card);
             });
+        }
+
+        function updateFileName(input) {
+            if (input.files.length > 0) {
+                let fileName = input.files[0].name;
+                let label = input.nextElementSibling; 
+                label.innerText = fileName;
+            }
         }
 
     </script>

@@ -68,9 +68,9 @@
                                                 while ($row = mysqli_fetch_assoc($result)) {
                                                     ?>
                                                     <tr>
-                                                        <td><?php echo $row["no_regSession"] ?></td>
-                                                        <td><?php echo $row["date"] ?></td>
-                                                        <td><?php echo $row["title"] ?></td>
+                                                        <td style="pointer-events: none;"><?php echo $row["no_regSession"] ?></td>
+                                                        <td style="pointer-events: none;"><?php $formattedDate = new DateTime($row["date"]);echo $formattedDate->format("m/d/Y");?></td>
+                                                        <td style="pointer-events: none;"><?php echo $row["title"] ?></td>
                                                         <td  class='text-center d-flex justify-content-center gap-2'>
                                                             <a href="viewmeetingminutes.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' style="color: #FFFFFF;" aria-hidden='true'></i></a>
                                                             <a href="editmeetingminutes.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' style="color:#FFFFFF" aria-hidden='true'></i></a>
