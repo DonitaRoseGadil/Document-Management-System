@@ -8,12 +8,12 @@
         $id = intval($_POST['id']);
         $no_regSession = $_POST['no_regSession'];
         $date = $_POST['date'];
-        $genAttachment = $_POST['genAttachment'];
+        $genAttachment = $_FILES['genAttachment']['name'];
         $resNo = $_POST['resNo'];
         $title = $_POST['title'];
         $type = $_POST['type'];
         $status = $_POST['status'];
-        $attachment = $_POST['attachment'];
+        $attachment = $_FILES['attachment']['name'];
 
         $sql = "UPDATE `minutes` SET `no_regSession`=`$no_regSession`,
                                     `date`=`$date`,
@@ -36,7 +36,7 @@
                             confirmButtonText: 'OK'
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                window.location.href = 'files-resolution.php';
+                                window.location.href = 'files-meetingminutes.php';
                             }
                         });
                     });
@@ -100,7 +100,7 @@
                             ?>
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post">
+                                    <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" enctype="multipart/form-data">
                                         <div class="form-group row">
                                             <div class="col-sm-9">
                                                 <input type="hidden" class="form-control" value="<?php echo $row['id']?>" id="id" name="id">
