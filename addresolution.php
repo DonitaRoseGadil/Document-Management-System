@@ -80,6 +80,73 @@ if(isset($_POST['save'])){
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 </head>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const requiredFields = ["resoNo", "title", "description", "authorSponsor", "coAuthor", "dateApproved", "remarks"];
+
+        function validateField(field) {
+            let inputElement = document.getElementById(field);
+            let errorElement = document.getElementById(field + "-error");
+
+            if (!inputElement.value.trim() || (field === "remarks" && inputElement.value === "Choose...")) {
+                if (!errorElement) {
+                    let errorMsg = document.createElement("div");
+                    errorMsg.id = field + "-error";
+                    errorMsg.className = "text-danger mt-1";
+                    errorMsg.textContent = "Required missing field.";
+                    inputElement.parentNode.appendChild(errorMsg);
+                }
+            } else {
+                if (errorElement) {
+                    errorElement.remove();
+                }
+            }
+        }
+
+        // Add event listeners for real-time validation
+        requiredFields.forEach(function (field) {
+            let inputElement = document.getElementById(field);
+
+            if (inputElement) {
+                // "input" event - Hide error while typing
+                inputElement.addEventListener("input", function () {
+                    validateField(field);
+                });
+
+                // "change" event for dropdown validation
+                if (field === "remarks") {
+                    inputElement.addEventListener("change", function () {
+                        validateField(field);
+                    });
+                }
+
+                // "focusout" event - Show error if empty when user leaves field
+                inputElement.addEventListener("focusout", function () {
+                    validateField(field);
+                });
+            }
+        });
+
+        // Form submit validation
+        document.querySelector("form").addEventListener("submit", function (event) {
+            let isValid = true;
+            requiredFields.forEach(function (field) {
+                validateField(field);
+                if (!document.getElementById(field).value.trim() || 
+                    (field === "remarks" && document.getElementById(field).value === "Choose...")) {
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
+
+
+
 <body>
 
     <!--**********************************

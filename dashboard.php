@@ -84,8 +84,62 @@
                     </div>
                 </div>
             </div>
+            <h4 class="mt-4 ml-4" style="color: #098209;">RECENT ACTIVITIES</h4>
+                <div class="row flex-column ml-2" style="gap: 2px;">
+                    <div class="col-lg-6">
+                        <div class="card p-2" style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209;">
+                            <div style="color: black;"><strong>Resolution No. 1 Lorem Ipsum</strong></div>
+                            <div style="color: gray; font-size: 0.7rem;">February 20, 2025 3:00 P.M.</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card p-2" style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209;">
+                            <div style="color: black;"><strong>Resolution No. 2 Lorem Ipsum</strong></div>
+                            <div style="color: gray; font-size: 0.7rem;">February 20, 2025 3:00 P.M.</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card p-2" style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209;">
+                            <div style="color: black;"><strong>Resolution No. 3 Lorem Ipsum</strong></div>
+                            <div style="color: gray; font-size: 0.7rem;">February 20, 2025 3:00 P.M.</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card p-2" style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209;">
+                            <div style="color: black;"><strong>Resolution No. 4 Lorem Ipsum</strong></div>
+                            <div style="color: gray; font-size: 0.7rem;">February 20, 2025 3:00 P.M.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="mt-4 ml-4" style="color: #098209;">SHORTCUTS</h4>
+                <div class="row flex-column ml-2" style="gap: 2px;">
+                    <div class="col-lg-6">
+                        <div class="card p-2" style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209;">
+                            <div style="color: black;"><strong>Resolution No. 1 Lorem Ipsum</strong></div>
+                            <div style="color: gray; font-size: 0.7rem;">February 20, 2025 3:00 P.M.</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card p-2" style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209;">
+                            <div style="color: black;"><strong>Resolution No. 2 Lorem Ipsum</strong></div>
+                            <div style="color: gray; font-size: 0.7rem;">February 20, 2025 3:00 P.M.</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card p-2" style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209;">
+                            <div style="color: black;"><strong>Resolution No. 3 Lorem Ipsum</strong></div>
+                            <div style="color: gray; font-size: 0.7rem;">February 20, 2025 3:00 P.M.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
+        </div>
+
+        
         <!--**********************************
             Footer start
         ***********************************-->
