@@ -73,7 +73,7 @@ session_start();
                                                             <td><?php echo $row["remarks"] ?></td>
                                                             <td><?php echo $row["d_approved"] ?></td>
                                                             <td  class='text-center d-flex justify-content-center gap-2'>
-                                                                <a href="view.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' aria-hidden='true'></i></a>
+                                                                <a href="viewresolution.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' aria-hidden='true'></i></a>
                                                                 <a href="editresolution.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' aria-hidden='true'></i></a>
                                                                 <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1' ><i class='fa fa-trash' aria-hidden='true'></i></a>
                                                             </td>

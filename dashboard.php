@@ -84,59 +84,56 @@
                     </div>
                 </div>
             </div>
-            <h4 class="mt-4 ml-4" style="color: #098209;">RECENT ACTIVITIES</h4>
-                <div class="row flex-column ml-2" style="gap: 2px;">
-                    <div class="col-lg-6">
-                        <div class="card p-2" style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209;">
-                            <div style="color: black;"><strong>Resolution No. 1 Lorem Ipsum</strong></div>
-                            <div style="color: gray; font-size: 0.7rem;">February 20, 2025 3:00 P.M.</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="card p-2" style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209;">
-                            <div style="color: black;"><strong>Resolution No. 2 Lorem Ipsum</strong></div>
-                            <div style="color: gray; font-size: 0.7rem;">February 20, 2025 3:00 P.M.</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="card p-2" style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209;">
-                            <div style="color: black;"><strong>Resolution No. 3 Lorem Ipsum</strong></div>
-                            <div style="color: gray; font-size: 0.7rem;">February 20, 2025 3:00 P.M.</div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="card p-2" style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209;">
-                            <div style="color: black;"><strong>Resolution No. 4 Lorem Ipsum</strong></div>
-                            <div style="color: gray; font-size: 0.7rem;">February 20, 2025 3:00 P.M.</div>
-                        </div>
-                    </div>
-                </div>
+
+            <div class="row">
+            <!-- Recent Activities Section (Left) -->
+            <div class="col-lg-6">
+                <h4 class="mt-4 ml-4" style="color: #098209;">RECENT ACTIVITIES</h4>
+                <div class="row flex-column ml-2" id="recentActivities" style="gap: 2px;">
+                <p id="lastUpdated" style="color: gray; margin-left: 10px;"></p>
             </div>
+
+            </div>
+
 
             <!-- Shortcuts Section (Right) -->
             <div class="col-lg-6">
                 <h4 class="mt-4 ml-4" style="color: #098209;">SHORTCUTS</h4>
                 <div class="row flex-column ml-2" style="gap: 2px;">
-                    <div class="col-lg-6">
-                        <div class="card p-2 d-flex align-items-center justify-content-between" style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209;">
-                            <div style="color: black;"><strong>Add file resolution</strong></div>
-                            <button class="btn btn-success btn-sm">+</button>
+                    <div class="col-lg-12">
+                        <div class="card p-2 d-flex align-items-center" 
+                            style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209; 
+                                    display: flex; flex-direction: row; justify-content: space-between;">
+                            <span style="color: black; font-weight: bold;">Add new file resolution</span>
+                            <button class="btn btn-success btn-sm" onclick="window.location.href='addresolution.php';">+</button>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="card p-2 d-flex align-items-center justify-content-between" style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209;">
-                            <div style="color: black;"><strong>Add file ordinances</strong></div>
-                            <button class="btn btn-success btn-sm">+</button>
+
+                    <div class="col-lg-12">
+                        <div class="card p-2 d-flex align-items-center" 
+                            style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209; 
+                                    display: flex; flex-direction: row; justify-content: space-between;">
+                            <span style="color: black; font-weight: bold;">Add new file ordinances</span>
+                            <button class="btn btn-success btn-sm" onclick="window.location.href='addordinance.php';">+</button>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="card p-2 d-flex align-items-center justify-content-between" style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209;">
-                            <div style="color: black;"><strong>Add new meeting</strong></div>
-                            <button class="btn btn-success btn-sm">+</button>
+
+                    <div class="col-lg-12">
+                        <div class="card p-2 d-flex align-items-center" 
+                            style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209; 
+                                    display: flex; flex-direction: row; justify-content: space-between;">
+                            <span style="color: black; font-weight: bold;">Add new meeting minutes</span>
+                            <button class="btn btn-success btn-sm" onclick="window.location.href='addmeetingminutes.php';">+</button>
                         </div>
                     </div>
                 </div>
             </div>
+
+            </div>
+        </div>
+
+
+            
         </div>
 
         </div>
@@ -163,6 +160,50 @@
     <script src="./vendor/global/global.min.js"></script>
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetchRecentActivities();
+        });
+
+        function fetchRecentActivities() {
+            fetch("fetch_recent_activities.php?timestamp=" + new Date().getTime()) // Prevent cache issues
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Fetched Data:", data); // Debugging output
+                    let activitiesContainer = document.getElementById("recentActivities");
+                    let lastUpdatedElement = document.getElementById("lastUpdated");
+
+                    if (!activitiesContainer) {
+                        console.error("Element #recentActivities not found!");
+                        return;
+                    }
+
+                    activitiesContainer.innerHTML = ""; // Clear previous content
+
+                    if (data.activities && data.activities.length > 0) {
+                        data.activities.forEach(activity => {
+                            let activityHTML = `
+                                <div class="col-lg-12">
+                                    <div class="card p-2" style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209;">
+                                        <div style="color: black;"><strong>${activity.title}</strong></div>
+                                        <div style="color: gray; font-size: 0.7rem;">${activity.date}</div>
+                                    </div>
+                                </div>
+                            `;
+                            activitiesContainer.innerHTML += activityHTML;
+                        });
+                        lastUpdatedElement.innerText = "Last updated: " + data.last_update;
+                    } else {
+                        activitiesContainer.innerHTML = '<p style="color: gray; margin-left: 10px;">No recent activities.</p>';
+                        lastUpdatedElement.innerText = "";
+                    }
+                })
+                .catch(error => console.error("Error fetching activities:", error));
+        }
+</script>
+
+
 </body>
 
 </html>

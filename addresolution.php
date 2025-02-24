@@ -31,9 +31,9 @@ if(isset($_POST['save'])){
         }
     }
 
-    $sql = "INSERT INTO resolution(reso_no, title, descrip, d_adopted, author_sponsor, co_author, remarks, d_approved, attachment) 
-            VALUES ('$resoNo', '$title', '$description', '$dateAdopted', '$authorSponsor', '$coAuthor', '$remarks', '$dateApproved', '$attachment')";
-
+    $sql = "INSERT INTO resolution(reso_no, title, descrip, d_adopted, author_sponsor, co_author, remarks, d_approved, attachment, updated_at) 
+        VALUES ('$resoNo', '$title', '$description', '$dateAdopted', '$authorSponsor', '$coAuthor', '$remarks', '$dateApproved', '$attachment', NOW())";
+    
     $query = mysqli_query($conn, $sql);    
 
     if($query) {
