@@ -54,9 +54,9 @@
                                             </div>
                                         </div>
                                         <div class="input-group mb-3">
-                                            <input type="text" class="form-control" value="<?php echo $row['genAttachment']?>" id="genAttachment" name="genAttachment" disabled>
+                                            <input type="text" class="form-control" value="<?php echo $row['genAttachment']; ?>" id="genAttachment" name="genAttachment" disabled>
                                             <div class="input-group-append">
-                                                <button class="btn btn-primary" style="background-color: #098209; border: none; outline: none;" type="button"  onclick="viewFile('genAttachment')">View File</button>
+                                                <button class="btn btn-primary" style="background-color: #098209; border: none; outline: none;" type="button" onclick="viewFile('<?php echo $row['id']; ?>', 'genAttachment')">View File</button>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -96,9 +96,9 @@
                                             </div>
                                         </div>
                                         <div class="input-group mb-3">
-                                            <input type="text" class="form-control" value="<?php echo $row['attachment']?>" id="attachment" name="attachment" disabled>
+                                            <input type="text" class="form-control" value="<?php echo $row['attachment']; ?>" id="attachment" name="attachment" disabled>
                                             <div class="input-group-append">
-                                                <button class="btn btn-primary" style="background-color: #098209; border: none; outline: none;" type="button">View File</button>
+                                                <button class="btn btn-primary" style="background-color: #098209; border: none; outline: none;" type="button" onclick="viewFile('<?php echo $row['id']; ?>', 'attachment')">View File</button>
                                             </div>
                                         </div>
                                     </form>
@@ -129,21 +129,21 @@
 
 
     <script>
-        function updateFileName() {
-            const fileInput = document.getElementById('attachment');
-            const fileName = fileInput.files[0].name;
-            const label = document.querySelector('.custom-file-label');
-            label.textContent = fileName;
+        function viewFile(id, field) {
+        let filePath = document.getElementById(field).value;
+        
+        if (!filePath) {
+            alert("No file available to view.");
+            return;
         }
 
-        function viewFile(inputId) {
-            let filePath = document.getElementById(inputId).value;
-            if (filePath) {
-                window.open(filePath, '_blank');
-            } else {
-                alert("No file available to view.");
-            }
+        // Check if filePath is a direct URL or stored in the database
+        if (filePath.startsWith("http") || filePath.endsWith(".pdf")) {
+            window.open(filePath, '_blank');  // Open direct URL
+        } else {
+            window.open(`fetch_pdf.php?id=${id}&field=${field}`, '_blank'); // Fetch from database
         }
+    }
     </script>
     
 </body>

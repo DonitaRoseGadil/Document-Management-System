@@ -6,33 +6,61 @@
         session_start();
 
         $id = intval($_POST['id']);
-        $no_regSession = $_POST['no_regSession'];
-        $date = $_POST['date'];
+        $no_regSession = mysqli_real_escape_string($conn, $_POST['no_regSession']);
+        $date = mysqli_real_escape_string($conn, $_POST['date']);
+        $resNo = mysqli_real_escape_string($conn, $_POST['resNo']);
+        $title = mysqli_real_escape_string($conn, $_POST['title']);
+        $type = mysqli_real_escape_string($conn, $_POST['type']);
+        $status = mysqli_real_escape_string($conn, $_POST['status']);
+
+        // Handle file uploads
         $genAttachment = $_FILES['genAttachment']['name'];
-        $resNo = $_POST['resNo'];
-        $title = $_POST['title'];
-        $type = $_POST['type'];
-        $status = $_POST['status'];
         $attachment = $_FILES['attachment']['name'];
 
-        $sql = "UPDATE `minutes` SET `no_regSession`=`$no_regSession`,
-                                    `date`=`$date`,
-                                    `genAttachment`=`$genAttachment`,
-                                    `resNo`=`$resNo`,
-                                    `title`=`$title`,
-                                    `type`=`$type`,
-                                    `status`=`$status`,
-                                    `attachment`=`$attachment` WHERE `id`=`$id`";
+        $uploadDir = "uploads/";  // Define upload directory
+
+        if (!empty($genAttachment)) {
+            $genAttachmentPath = $uploadDir . basename($genAttachment);
+            move_uploaded_file($_FILES["genAttachment"]["tmp_name"], $genAttachmentPath);
+        } else {
+            // Keep the old file if no new file is uploaded
+            $genAttachmentQuery = "SELECT genAttachment FROM minutes WHERE id = $id";
+            $result = mysqli_query($conn, $genAttachmentQuery);
+            $row = mysqli_fetch_assoc($result);
+            $genAttachment = $row['genAttachment'];
+        }
+
+        if (!empty($attachment)) {
+            $attachmentPath = $uploadDir . basename($attachment);
+            move_uploaded_file($_FILES["attachment"]["tmp_name"], $attachmentPath);
+        } else {
+            // Keep the old file if no new file is uploaded
+            $attachmentQuery = "SELECT attachment FROM minutes WHERE id = $id";
+            $result = mysqli_query($conn, $attachmentQuery);
+            $row = mysqli_fetch_assoc($result);
+            $attachment = $row['attachment'];
+        }
+
+        // Update query
+        $sql = "UPDATE `minutes` SET 
+                `no_regSession` = '$no_regSession',
+                `date` = '$date',
+                `genAttachment` = '$genAttachment',
+                `resNo` = '$resNo',
+                `title` = '$title',
+                `type` = '$type',
+                `status` = '$status',
+                `attachment` = '$attachment' WHERE `id` = $id";
 
         $query = mysqli_query($conn, $sql);
 
-        if($query) {
+        if ($query) {
             echo "<script>
                     document.addEventListener('DOMContentLoaded', function() {
                         Swal.fire({
                             icon: 'success',
                             title: 'Meeting Minutes Updated',
-                            text: 'The minutes has been successfully updated.',
+                            text: 'The minutes have been successfully updated.',
                             confirmButtonText: 'OK'
                         }).then((result) => {
                             if (result.isConfirmed) {
@@ -40,7 +68,7 @@
                             }
                         });
                     });
-                  </script>";    
+                  </script>";
         } else {
             echo "<script>
                     document.addEventListener('DOMContentLoaded', function() {
@@ -53,7 +81,7 @@
                     });
                   </script>";
             header("Location: files-meetingminutes.php");
-            exit;    
+            exit;
         }
     }
 ?>
@@ -93,10 +121,16 @@
                             </div>
                             <?php
                                 include("connect.php");
-                                $id = $_GET['id'];
+                                $id = intval($_GET['id']); // Ensure ID is an integer
                                 $sql = "SELECT * FROM `minutes` WHERE id = $id LIMIT 1";
                                 $result = mysqli_query($conn, $sql);
-                                $row = mysqli_fetch_assoc($result);
+                                
+                                if ($result && mysqli_num_rows($result) > 0) {
+                                    $row = mysqli_fetch_assoc($result);
+                                } else {
+                                    echo "<script>alert('Invalid Record ID!'); window.location.href='files-meetingminutes.php';</script>";
+                                    exit;
+                                }
                             ?>
                             <div class="card-body">
                                 <div class="basic-form">
@@ -123,8 +157,10 @@
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
                                             </div>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" value="<?php echo $row['genAttachment']?>" id="genAttachment" name="genAttachment" onchange="updateFileName()">
-                                                <label class="custom-file-label" for="genAttachment">Choose file</label>
+                                                <input type="file" class="custom-file-input" id="genAttachment" name="genAttachment" onchange="updateFileName('genAttachmentLabel')">
+                                                <label class="custom-file-label" id="genAttachmentLabel"> 
+                                                    <?php echo !empty($row['genAttachment']) ? $row['genAttachment'] : "Choose file"; ?>
+                                                </label>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -168,8 +204,10 @@
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
                                             </div>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" value="<?php echo $row['attachment']?>" id="attachment" name="attachment" onchange="updateFileName()">
-                                                <label class="custom-file-label" for="attachment">Choose file</label>
+                                                <input type="file" class="custom-file-input" id="attachment" name="attachment" onchange="updateFileName('attachmentLabel')">
+                                                <label class="custom-file-label" id="attachmentLabel"> 
+                                                    <?php echo !empty($row['attachment']) ? $row['attachment'] : "Choose file"; ?>
+                                                </label>
                                             </div>
                                         </div>
                                         <div class="form-group row d-flex justify-content-center mt-5">
@@ -204,11 +242,10 @@
 
 
     <script>
-        function updateFileName() {
-            const fileInput = document.getElementById('attachment');
-            const fileName = fileInput.files[0].name;
-            const label = document.querySelector('.custom-file-label');
-            label.textContent = fileName;
+        function updateFileName(labelId) {
+            const fileInput = document.getElementById(labelId.replace("Label", ""));
+            const fileName = fileInput.files.length > 0 ? fileInput.files[0].name : "Choose file";
+            document.getElementById(labelId).textContent = fileName;
         }
     </script>
     
