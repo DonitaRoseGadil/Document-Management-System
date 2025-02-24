@@ -17,8 +17,39 @@ if(isset($_POST['save'])){
     $coAuthor = $_POST['coAuthor'];
     $remarks = $_POST['remarks'];
     $dateApproved = $_POST['dateApproved'];
+    $attachment = '';
 
-    $sql = "UPDATE `resolution` SET `reso_no`='$resoNo', `title`='$title', `descrip`='$description', `author_sponsor`='$authorSponsor', `co_author`='$coAuthor', `remarks`='$remarks', `d_approved`='$dateApproved' WHERE id = $id";
+    if (!empty($_FILES['attachment']['name'])) {
+        $type = $_FILES['attachment']['type'];
+        if ($type == 'application/pdf' || $type == 'application/msword'|| $type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+            $attachment = $_FILES['attachment']['name'];
+            if ($attachment != '') {
+                move_uploaded_file($_FILES['attachment']['tmp_name'], 'files/'.$attachment);
+            }
+        } else {
+            echo '
+            <div class="form-group row" style="display: block;">
+                <div class="col-sm-9">
+                    <div class="alert alert-danger"><strong>Error: </strong> Only Supported Files (PDF and DOCX).</div>
+                </div>
+            </div>';
+        }
+    }
+
+    $sql = "UPDATE `resolution` SET 
+    `reso_no`='$resoNo', 
+    `title`='$title', 
+    `descrip`='$description', 
+    `author_sponsor`='$authorSponsor', 
+    `co_author`='$coAuthor', 
+    `remarks`='$remarks', 
+    `d_approved`='$dateApproved'";
+
+    if (!empty($attachment)) {
+        $sql .= ", `attachment`='$attachment'";
+    }
+
+    $sql .= " WHERE id = $id";
 
     $query = mysqli_query($conn, $sql);    
 
@@ -169,7 +200,7 @@ if(isset($_POST['save'])){
                             ?>
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form action="" method="post">
+                                    <form action="" method="post" enctype="multipart/form-data">
                                         <div class="form-group row">
                                             <div class="col-sm-9">
                                                 <input type="hidden" class="form-control" value="<?php echo $row['id']?>" id="id" name="id">

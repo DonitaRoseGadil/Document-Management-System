@@ -208,7 +208,7 @@ if(isset($_POST['save'])){
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
                                             </div>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="attachment" name="attachment" name="attachment">
+                                                <input type="file" class="custom-file-input" id="attachment" name="attachment" name="attachment" onchange="updateFileName()">
                                                 <label class="custom-file-label" for="attachment">Choose file</label>
                                             </div>
                                         </div>

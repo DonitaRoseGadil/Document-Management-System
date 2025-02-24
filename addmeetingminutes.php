@@ -6,31 +6,47 @@
 
         $no_regSession = $_POST['no_regSession'];
         $date = $_POST['date'];
-        $genAttachment = $_FILES['genAttachment'];
 
-        // Loop through dynamic cards
-        if (!empty($_POST['resNo'])) {
+        // Upload General Attachment
+        $genAttachmentPath  = "";
+        if (!empty($_FILES['genAttachment']['name'])) {
+            $genAttachmentPath = "uploads/" . basename($_FILES['genAttachment']['name']);
+            move_uploaded_file($_FILES['genAttachment']['tmp_name'], $genAttachmentPath);
+        }
+
+        // Check if attachments exist
+        if (isset($_FILES['attachment']) && is_array($_FILES['attachment']['name'])) {
             foreach ($_POST['resNo'] as $key => $resNo) {
                 $title = $_POST['title'][$key];
                 $type = $_POST['type'][$key];
                 $status = $_POST['status'][$key];
-                $attachment = $_FILES['attachment'][$key]; 
 
-                $sql =  "INSERT INTO `minutes` (`no_regSession`, `date`, `genAttachment`, `resNo`, `title`, `type`, `status`, `attachment`) 
-                VALUES ('$no_regSession', '$date', '$genAttachment', '$resNo', '$title', '$type', '$status', '$attachment')";
-        
-                $query = mysqli_query($conn, $sql);
+                // Handle attachment for each resolution
+                $attachmentPath = "";
+                if (!empty($_FILES['attachment']['name'][$key])) {
+                    $attachmentName = $_FILES['attachment']['name'][$key];
+                    $attachmentTmpName = $_FILES['attachment']['tmp_name'][$key];
+                    $attachmentPath = "uploads/" . basename($attachmentName);
+                    move_uploaded_file($attachmentTmpName, $attachmentPath);
+                }
 
+                // Insert into database
+                $sql = "INSERT INTO `minutes` (`no_regSession`, `date`, `genAttachment`, `resNo`, `title`, `type`, `status`, `attachment`) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("ssssssss", $no_regSession, $date, $genAttachmentPath, $resNo, $title, $type, $status, $attachmentPath);
+                $stmt->execute();
             }
         }       
 
-        if($query) {
+        if ($stmt) {
             echo "<script>
                     document.addEventListener('DOMContentLoaded', function() {
                         Swal.fire({
                             icon: 'success',
                             title: 'Resolution Created',
-                            text: 'The minutes has been successfully Created.',
+                            text: 'The minutes have been successfully created.',
                             confirmButtonText: 'OK'
                         }).then((result) => {
                             if (result.isConfirmed) {
@@ -53,6 +69,9 @@
             header("Location: files-meetingminutes.php");
             exit;    
         }
+
+        $stmt->close();
+        $conn->close();
     }
 
 ?>
@@ -289,7 +308,7 @@
                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
                             </div>
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="attachment" name="attachment" onchange="updateFileName(this)">
+                                <input type="file" class="custom-file-input" id="attachment" name="attachment[]" onchange="updateFileName(this)">
                                 <label class="custom-file-label" for="attachment">Choose file</label>
                             </div>
                         </div>
