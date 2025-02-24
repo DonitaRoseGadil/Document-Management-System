@@ -56,7 +56,7 @@
                                         <div class="input-group mb-3">
                                             <input type="text" class="form-control" value="<?php echo $row['genAttachment']?>" id="genAttachment" name="genAttachment" disabled>
                                             <div class="input-group-append">
-                                                <button class="btn btn-primary" style="background-color: #098209; border: none; outline: none;" type="button">View File</button>
+                                                <button class="btn btn-primary" style="background-color: #098209; border: none; outline: none;" type="button"  onclick="viewFile('genAttachment')">View File</button>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -134,6 +134,15 @@
             const fileName = fileInput.files[0].name;
             const label = document.querySelector('.custom-file-label');
             label.textContent = fileName;
+        }
+
+        function viewFile(inputId) {
+            let filePath = document.getElementById(inputId).value;
+            if (filePath) {
+                window.open(filePath, '_blank');
+            } else {
+                alert("No file available to view.");
+            }
         }
     </script>
     
