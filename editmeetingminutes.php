@@ -45,12 +45,12 @@
         $sql = "UPDATE `minutes` SET 
                 `no_regSession` = '$no_regSession',
                 `date` = '$date',
-                `genAttachment` = '$genAttachment',
+                `genAttachment` = '$genAttachmentPath',
                 `resNo` = '$resNo',
                 `title` = '$title',
                 `type` = '$type',
                 `status` = '$status',
-                `attachment` = '$attachment' WHERE `id` = $id";
+                `attachment` = '$attachmentPath' WHERE `id` = $id";
 
         $query = mysqli_query($conn, $sql);
 
