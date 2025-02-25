@@ -1,9 +1,8 @@
 <?php 
-error_reporting(E_ALL); // Enable error reporting for development
-ini_set('display_errors', 1);
-session_start();
+    error_reporting(E_ALL); // Enable error reporting for development
+    ini_set('display_errors', 1);
+    session_start();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -34,30 +33,35 @@ session_start();
                                 <h1 class="card-title flex-grow-1 fs-4 fw-bold text-dark text-center" style="color: #000000">LIST OF ORDINANCES</h1>
                                 <div class="button-container d-flex justify-content-end">
                                     <a href="addordinance.php">
-                                        <button type="button" class="btn btn-primary" style="background-color: #098209; color:#FFFFFF; border: none;"><i class="fa fa-plus"></i>&nbsp;Add New Ordinance</button>
+                                        <button type="button" class="btn btn-primary" style="background-color: #098209; color:#FFFFFF; border: none;"><i class="fa fa-plus"></i>&nbsp;New Ordinance</button>
                                     </a>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table id="example" class="display" style="min-width: 845px">
+                                        <colgroup>
+                                            <col style="width: 15%;">
+                                            <col style="width: 25%;">
+                                            <col style="width: 15%;">
+                                            <col style="width: 15%;">
+                                            <col style="width: 15%;">
+                                            <col style="width: 15%;">
+                                        </colgroup>
                                         <thead class="text-center" style="background-color: #098209; color: #FFFFFF;">
                                             <tr>
-                                                <th style="color: #FFFFFF;">MO NO.</th>
+                                                <th style="color: #FFFFFF;">RES NO./MO NO.</th>
                                                 <th style="color: #FFFFFF;">TITLE</th>
                                                 <th style="color: #FFFFFF;">DATE ADOPTED</th>
                                                 <th style="color: #FFFFFF;">AUTHOR/SPONSOR</th>
-                                                <th style="color: #FFFFFF;">CO-AUTHOR</th>
                                                 <th style="color: #FFFFFF;">REMARKS</th>
-                                                <th style="color: #FFFFFF;">DATE APPROVED</th>
                                                 <th style="color: #FFFFFF;">ACTION</th>
                                             </tr>
                                         </thead>
                                         <tbody style="color: #000000;">
-                                        <?php
+                                            <?php
                                                 include "connect.php";
-
-                                                $sql = "SELECT id, mo_no, title, d_adopted, author_sponsor, co_author, remarks, d_approved FROM ordinance";
+                                                $sql = "SELECT id, mo_no, title, date_adopted, author_sponsor FROM ordinance";
                                                 $stmt = $conn->prepare($sql);
                                                 $stmt->execute();
                                                 $result = $stmt->get_result();
@@ -69,22 +73,20 @@ session_start();
                                                 while ($row = mysqli_fetch_assoc($result)) {
                                                     ?>
                                                     <tr>
-                                                            <td><?php echo $row["mo_no"] ?></td>
-                                                            <td><?php echo $row["title"] ?></td>
-                                                            <td><?php echo $row["d_adopted"] ?></td>
-                                                            <td><?php echo $row["author_sponsor"] ?></td>
-                                                            <td><?php echo $row["co_author"] ?></td>
-                                                            <td><?php echo $row["remarks"] ?></td>
-                                                            <td><?php echo $row["d_approved"] ?></td>
-                                                            <td  class='text-center d-flex justify-content-center gap-2'>
-                                                                <a href="view.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' aria-hidden='true'></i></a>
-                                                                <a href="editordinance.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' aria-hidden='true'></i></a>
-                                                                <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1' ><i class='fa fa-trash' aria-hidden='true'></i></a>
-                                                            </td>
-                                                        </tr>
-                                                        <?php
-                                                        }
-                                                        ?>
+                                                        <td><?php echo $row["mo_no"]?></td>
+                                                        <td><?php echo $row["title"] ?></td>
+                                                        <td><?php echo $row["date_adopted"] ?></td>
+                                                        <td><?php echo $row["author_sponsor"] ?></td>
+                                                        <td>View</td>
+                                                        <td class='text-center d-flex justify-content-center gap-2'>
+                                                            <a href="viewordinance.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' style="color: #FFFFFF;" aria-hidden='true'></i></a>
+                                                            <a href="editordinance.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' style="color:#FFFFFF" aria-hidden='true'></i></a>
+                                                            <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-trash' style="color: #FFFFFF;" aria-hidden='true'></i></a>
+                                                        </td>
+                                                    </tr>
+                                                    <?php
+                                                }
+                                            ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -97,28 +99,6 @@ session_start();
         <!--**********************************
             Content body end
         ***********************************-->
-
-
-        <!--**********************************
-            Footer start
-        ***********************************-->
-        <div class="footer">
-            <div class="copyright">
-                <!-- <p>Copyright © Designed &amp; Developed by <a href="#" target="_blank">Quixkit</a> 2019</p> -->
-            </div>
-        </div>
-        <!--**********************************
-            Footer end
-        ***********************************-->
-
-        <!--**********************************
-           Support ticket button start
-        ***********************************-->
-
-        <!--**********************************
-           Support ticket button end
-        ***********************************-->
-
         
     </div>
     <!--**********************************
@@ -133,8 +113,6 @@ session_start();
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
     
-
-
     <!-- Datatable -->
     <script src="./vendor/datatables/js/jquery.dataTables.min.js"></script>
     <script src="./js/plugins-init/datatables.init.js"></script>
@@ -148,7 +126,7 @@ session_start();
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'Confirm'
             }).then((result) => {
                 if (result.isConfirmed) {
                     window.location.href = 'deleteordinance.php?id=' + id;

@@ -1,79 +1,3 @@
-<?php
-
-if(isset($_POST['save'])){
-    include("connect.php");
-    error_reporting(0);
-    session_start();
-
-    $id = intval($_POST['id']);
-    $moNo = $_POST['moNo'];
-    $title = $_POST['title'];
-    $dateAdopted = $_POST['dateAdopted'];
-    $authorSponsor = $_POST['authorSponsor'];
-    $dateFwd = $_POST['dateFwd'];
-    $dateSigned = $_POST['dateSigned'];
-    $spApproval = $_POST['spApproval'];
-
-    // Handle file uploads
-    $attachment = $_FILES['attachment']['name'];
-
-    $uploadDir = "uploads/";  // Define upload directory
-
-    if (!empty($attachment)) {
-        $attachmentPath = $uploadDir . basename($attachment);
-        move_uploaded_file($_FILES["attachment"]["tmp_name"], $attachmentPath);
-    } else {
-        // Keep the old file if no new file is uploaded
-        $attachmentQuery = "SELECT attachment FROM ordinance WHERE id = $id";
-        $result = mysqli_query($conn, $attachmentQuery);
-        $row = mysqli_fetch_assoc($result);
-        $attachment = $row['attachment'];
-    }
-
-    $sql = "UPDATE `ordinance` SET 
-                    `mo_no`='$moNo', 
-                    `title`='$title', 
-                    `date_adopted`='$dateAdopted', 
-                    `author_sponsor`='$authorSponsor', 
-                    `date_fwd`='$dateFwd',
-                    `date_signed`='$dateSigned',
-                    `sp_approval`='$spApproval', 
-                    `attachment`='$attachmentPath' WHERE id = $id";
-
-    $query = mysqli_query($conn, $sql);    
-
-    if($query) {
-        echo "<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Ordinance Updated',
-                        text: 'The ordinance has been successfully updated.',
-                        confirmButtonText: 'OK'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = 'files-ordinances.php';
-                        }
-                    });
-                });
-              </script>";    
-    } else {
-        echo "<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'There was an error updating the ordinance.',
-                        confirmButtonText: 'OK'
-                    });
-                });
-              </script>";
-        header("Location: files-ordinances.php");
-        exit;    
-    }
-}    
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -106,7 +30,7 @@ if(isset($_POST['save'])){
                     <div class="col-xl-8 col-xxl-12 items-center">                        
                         <div class="card" style="align-self: center;">
                             <div class="card-header d-flex justify-content-center">
-                                <h4 class="card-title text-center" style="color: #098209; ">EDIT ORDINANCE</h4>
+                                <h4 class="card-title text-center" style="color: #098209; ">VIEW ORDINANCE</h4>
                             </div>
                             <?php 
                                 include "connect.php";
@@ -117,7 +41,7 @@ if(isset($_POST['save'])){
                             ?>
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form action="" method="post" enctype="multipart/form-data">
+                                    <form action="" method="post">
                                     <div class="form-group row">
                                             <div class="col-sm-9">
                                                 <input type="hidden" class="form-control" value="<?php echo $row['id']?>" id="id" name="id">
@@ -141,12 +65,6 @@ if(isset($_POST['save'])){
                                                 <input type="date" class="form-control" value="<?php echo $row['date_adopted']?>" id="dateAdopted" name="dateAdopted">
                                             </div>
                                         </div>
-                                        <!-- <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Description:</label>
-                                            <div class="col-sm-9">
-                                                <textarea class="form-control" style="resize: none;" rows="4" value=" id="description" name="description"></textarea>
-                                            </div>
-                                        </div> -->
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Author / Sponsor:</label>
                                             <div class="col-sm-9">
@@ -172,19 +90,10 @@ if(isset($_POST['save'])){
                                             </div>
                                         </div>
                                         <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
+                                            <input type="text" class="form-control" value="<?php echo $row['attachment']; ?>" id="attachment" name="attachment" disabled>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" style="background-color: #098209; border: none; outline: none;" type="button" onclick="viewFile('<?php echo $row['id']; ?>', 'attachment')">View File</button>
                                             </div>
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="attachment" name="attachment" onchange="updateFileName('attachmentLabel')">
-                                                <label class="custom-file-label" id="attachmentLabel"> 
-                                                    <?php echo !empty($row['attachment']) ? $row['attachment'] : "Choose file"; ?>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row d-flex justify-content-center">
-                                            <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;">Update</button>
-                                            <a href="files-ordinances.php" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
                                         </div>
                                     </form>
                                 </div>
@@ -211,13 +120,25 @@ if(isset($_POST['save'])){
     <script src="./vendor/global/global.min.js"></script>
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
+
     <script>
-        function updateFileName(labelId) {
-            const fileInput = document.getElementById(labelId.replace("Label", ""));
-            const fileName = fileInput.files.length > 0 ? fileInput.files[0].name : "Choose file";
-            document.getElementById(labelId).textContent = fileName;
+        function viewFile(id, field) {
+            let filePath = document.getElementById(field).value;
+            
+            if (!filePath) {
+                alert("No file available to view.");
+                return;
+            }
+
+            // Check if filePath is a direct URL or stored in the database
+            if (filePath.startsWith("http") || filePath.endsWith(".pdf")) {
+                window.open(filePath, '_blank');  // Open direct URL
+            } else {
+                window.open(`fetch_pdf.php?id=${id}&field=${field}`, '_blank'); // Fetch from database
+            }
         }
     </script>
+    
     
 </body>
 
