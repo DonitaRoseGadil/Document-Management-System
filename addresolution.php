@@ -12,37 +12,28 @@ if(isset($_POST['save'])){
     $coAuthor = $_POST['coAuthor'];
     $remarks = $_POST['remarks'];
     $dateApproved = $_POST['dateApproved'];
-    $attachment = '';
+    $attachmentPath = "";
 
-    if (!empty($_FILES['attachment'])) {
-        $type = $_FILES['attachment']['type'];
-        if ($type == 'application/pdf' || $type == 'application/msword'|| $type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-            $attachment = $_FILES['attachment']['name'];
-            if ($attachment != '') {
-                move_uploaded_file($_FILES['attachment']['tmp_name'], 'files/'.$attachment);
-            }
-        } else {
-            echo '
-            <div class="form-group row" style="display: block;">
-                <div class="col-sm-9">
-                    <div class="alert alert-danger"><strong>Error: </strong> Only Supported Files (PDF and DOCX).</div>
-                </div>
-            </div>';
-        }
+    if (!empty($_FILES['attachment']['name'])) {
+        $attachmentPath = "uploads/" . basename($_FILES['attachment']['name']);
+        move_uploaded_file($_FILES['attachment']['tmp_name'], $attachmentPath);
     }
+    
+     // Insert into database
+     $sql = "INSERT INTO `resolution` (`reso_no`, `title`, `descrip`, `author_sponsor`, `co_author`, `remarks`, `d_approved`, `attachment`) 
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-    $sql = "INSERT INTO resolution(reso_no, title, descrip, d_adopted, author_sponsor, co_author, remarks, d_approved, attachment) 
-            VALUES ('$resoNo', '$title', '$description', '$dateAdopted', '$authorSponsor', '$coAuthor', '$remarks', '$dateApproved', '$attachment')";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssssssss", $resoNo, $title, $description, $authorSponsor, $coAuthor, $remarks, $dateApproved, $attachmentPath);
+    $stmt->execute();
 
-    $query = mysqli_query($conn, $sql);    
-
-    if($query) {
+    if ($stmt) {
         echo "<script>
                 document.addEventListener('DOMContentLoaded', function() {
                     Swal.fire({
                         icon: 'success',
                         title: 'Resolution Created',
-                        text: 'The resolution has been successfully Created.',
+                        text: 'The minutes have been successfully created.',
                         confirmButtonText: 'OK'
                     }).then((result) => {
                         if (result.isConfirmed) {
@@ -52,19 +43,22 @@ if(isset($_POST['save'])){
                 });
               </script>";    
     } else {
-        ?>
-        <script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'There was an error creating the resolution.',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    window.location.href = 'files-resolution.php';
+        echo "<script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'There was an error creating the resolution.',
+                        confirmButtonText: 'OK'
+                    });
                 });
               </script>";
-        <?php
-    }    
+        header("Location: files-resolution.php");
+        exit;    
+    }
+
+    $stmt->close();
+    $conn->close();
 }   
  
 ?>
