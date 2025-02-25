@@ -66,22 +66,21 @@ session_start();
                                                 while ($row = mysqli_fetch_assoc($result)) {
                                                     ?>
                                                     <tr>
-                                                            <td><?php echo $row["reso_no"] ?></td>
-                                                            <td><?php echo $row["title"] ?></td>
-                                                            <td><?php echo $row["author_sponsor"] ?></td>
-                                                            <td><?php echo $row["co_author"] ?></td>
-                                                            <td><?php echo $row["remarks"] ?></td>
-                                                            <td><?php echo $row["d_approved"] ?></td>
-                                                            <td  class='text-center d-flex justify-content-center gap-2'>
-                                                                <a href="viewresolution.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' aria-hidden='true'></i></a>
-                                                                <a href="editresolution.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' aria-hidden='true'></i></a>
-                                                                <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1' ><i class='fa fa-trash' aria-hidden='true'></i></a>
-                                                            </td>
-                                                        </tr>
-                                                        <?php
-                                                        }
-                                                        ?>
-                                            
+                                                        <td><?php echo $row["reso_no"] ?></td>
+                                                        <td><?php echo $row["title"] ?></td>
+                                                        <td><?php echo $row["author_sponsor"] ?></td>
+                                                        <td><?php echo $row["co_author"] ?></td>
+                                                        <td><?php echo $row["remarks"] ?></td>
+                                                        <td><?php echo $row["d_approved"] ?></td>
+                                                        <td  class='text-center d-flex justify-content-center gap-2'>
+                                                            <a href="viewresolution.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' aria-hidden='true' style="color: #FFFFFF;"></i></a>
+                                                            <a href="editresolution.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' aria-hidden='true' style="color: #FFFFFF;"></i></a>
+                                                            <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1' ><i class='fa fa-trash' aria-hidden='true' style="color: #FFFFFF"></i></a>
+                                                        </td>
+                                                    </tr>
+                                            <?php
+                                            }
+                                            ?>
                                         </tbody>
                                     </table>
                                 </div>

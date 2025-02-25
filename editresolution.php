@@ -17,23 +17,19 @@ if(isset($_POST['save'])){
     $coAuthor = $_POST['coAuthor'];
     $remarks = $_POST['remarks'];
     $dateApproved = $_POST['dateApproved'];
-    $attachment = '';
+    
+    $attachment = $_FILES['attachment']['name'];
+    $uploadDir = "uploads/";  // Define upload directory
 
-    if (!empty($_FILES['attachment']['name'])) {
-        $type = $_FILES['attachment']['type'];
-        if ($type == 'application/pdf' || $type == 'application/msword'|| $type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-            $attachment = $_FILES['attachment']['name'];
-            if ($attachment != '') {
-                move_uploaded_file($_FILES['attachment']['tmp_name'], 'files/'.$attachment);
-            }
-        } else {
-            echo '
-            <div class="form-group row" style="display: block;">
-                <div class="col-sm-9">
-                    <div class="alert alert-danger"><strong>Error: </strong> Only Supported Files (PDF and DOCX).</div>
-                </div>
-            </div>';
-        }
+    if (!empty($attachment)) {
+        $attachmentPath = $uploadDir . basename($attachment);
+        move_uploaded_file($_FILES["attachment"]["tmp_name"], $attachmentPath);
+    } else {
+        // Keep the old file if no new file is uploaded
+        $attachmentQuery = "SELECT attachment FROM resolution WHERE id = $id";
+        $result = mysqli_query($conn, $attachmentQuery);
+        $row = mysqli_fetch_assoc($result);
+        $attachment = $row['attachment'];
     }
 
     $sql = "UPDATE `resolution` SET 
@@ -43,15 +39,10 @@ if(isset($_POST['save'])){
     `author_sponsor`='$authorSponsor', 
     `co_author`='$coAuthor', 
     `remarks`='$remarks', 
-    `d_approved`='$dateApproved'";
+    `d_approved`='$dateApproved',
+    `attachment` = '$attachment' WHERE `id` = $id";
 
-    if (!empty($attachment)) {
-        $sql .= ", `attachment`='$attachment'";
-    }
-
-    $sql .= " WHERE id = $id";
-
-    $query = mysqli_query($conn, $sql);    
+    $query = mysqli_query($conn, $sql);
 
     if($query) {
         echo "<script>
