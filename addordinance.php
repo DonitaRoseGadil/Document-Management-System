@@ -9,12 +9,19 @@ if(isset($_POST['save'])){
     $title = $_POST['title'];
     $dateAdopted = $_POST['dateAdopted'];
     $authorSponsor = $_POST['authorSponsor'];
-    $coAuthor = $_POST['coAuthor'];
-    $remarks = $_POST['remarks'];
-    $dateApproved = $_POST['dateApproved'];
+    $dateFwd = $_POST['dateFwd'];
+    $dateSigned = $_POST['dateSigned'];
+    $spApproval = $_POST['spApproval'];
 
-    $sql = "INSERT INTO `ordinance`(`mo_no`, `title`, `d_adopted`, `author_sponsor`, `co_author`, `remarks`, `d_approved`) 
-            VALUES ('$moNo', '$title', '$dateAdopted', '$authorSponsor', '$coAuthor', '$remarks', '$dateApproved')";
+    // Upload file
+    $attachmentPath = "";
+    if (!empty($_FILES['attachment']['name'])) {
+        $attachmentPath = "uploads/" . basename($_FILES['attachment']['name']);
+        move_uploaded_file($_FILES['attachment']['tmp_name'], $attachmentPath);
+    }
+
+    $sql = "INSERT INTO `ordinance`(`mo_no`, `title`, `date_adopted`, `author_sponsor`, `date_fwd`, `date_signed`, `sp_approval`, `attachment`) 
+            VALUES ('$moNo', '$title', '$dateAdopted', '$authorSponsor', '$dateFwd', '$dateSigned', '$spApproval', '$attachmentPath')";
 
     $query = mysqli_query($conn, $sql);
     
@@ -155,9 +162,9 @@ if(isset($_POST['save'])){
                             </div>
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form action="addordinance.php" method="post">
+                                    <form action="addordinance.php" method="post" enctype="multipart/form-data">
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color: #000000">Municipal Ordinance No.:</label>
+                                            <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No. / MO No.:</label>
                                             <div class="col-sm-9">
                                                 <input type="text" class="form-control" placeholder="Please type here..." id="moNo" name="moNo">
                                             </div>
@@ -186,28 +193,28 @@ if(isset($_POST['save'])){
                                                 <input type="text" class="form-control" placeholder="Please type here..." id="authorSponsor" name="authorSponsor">
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        <!--<div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Co-Author:</label>
                                             <div class="col-sm-9">
                                                 <input type="text" class="form-control" placeholder="Please type here..." id="coAuthor" name="coAuthor">
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Approved:</label>
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Forwarded to LCE: </label>
                                             <div class="col-sm-9">
-                                                <input type="date" class="form-control" placeholder="Please type here..." id="dateApproved" name="dateApproved">
+                                                <input type="date" class="form-control" placeholder="Please type here..." id="dateFwd" name="dateFwd">
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color: #000000">Remarks:</label>
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Signed by LCE: </label>
                                             <div class="col-sm-9">
-                                                <select id="remarks" name="remarks" class="form-control">
-                                                    <option selected>Choose...</option>
-                                                    <option>Draft</option>
-                                                    <option>Information</option>
-                                                    <option>Referred to Committee</option>
-                                                    <option>Approved</option>
-                                                </select>
+                                                <input type="date" class="form-control" placeholder="Please type here..." id="dateSigned" name="dateSigned">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">SP Approval: </label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" placeholder="Please type here..." id="spApproval" name="spApproval">
                                             </div>
                                         </div>
                                         <div class="input-group mb-3">
@@ -215,7 +222,7 @@ if(isset($_POST['save'])){
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
                                             </div>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="attachment" name="attachment" name="attachment" onchange="updateFileName()">
+                                                <input type="file" class="custom-file-input" id="attachment" name="attachment" onchange="updateFileName(this)">
                                                 <label class="custom-file-label" for="attachment">Choose file</label>
                                             </div>
                                         </div>
@@ -250,11 +257,12 @@ if(isset($_POST['save'])){
     <script src="./js/custom.min.js"></script>
 
     <script>
-        function updateFileName() {
-            const fileInput = document.getElementById('attachment');
-            const fileName = fileInput.files[0].name;
-            const label = document.querySelector('.custom-file-label');
-            label.textContent = fileName;
+        function updateFileName(input) {
+            if (input.files.length > 0) {
+                let fileName = input.files[0].name;
+                let label = input.nextElementSibling; 
+                label.innerText = fileName;
+            }
         }
     </script>
     

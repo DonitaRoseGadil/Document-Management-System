@@ -5,18 +5,40 @@ if(isset($_POST['save'])){
     error_reporting(0);
     session_start();
 
-    $mo_no = $_GET['mo_no'];
-
     $id = intval($_POST['id']);
     $moNo = $_POST['moNo'];
     $title = $_POST['title'];
     $dateAdopted = $_POST['dateAdopted'];
     $authorSponsor = $_POST['authorSponsor'];
-    $coAuthor = $_POST['coAuthor'];
-    $remarks = $_POST['remarks'];
-    $dateApproved = $_POST['dateApproved'];
+    $dateFwd = $_POST['dateFwd'];
+    $dateSigned = $_POST['dateSigned'];
+    $spApproval = $_POST['spApproval'];
 
-    $sql = "UPDATE `ordinance` SET `mo_no`='$moNo', `title`='$title', `d_Adopted`='$dateAdopted', `author_sponsor`='$authorSponsor', `co_author`='$coAuthor', `remarks`='$remarks', `d_approved`='$dateApproved' WHERE id = $id";
+    // Handle file uploads
+    $attachment = $_FILES['attachment']['name'];
+
+    $uploadDir = "uploads/";  // Define upload directory
+
+    if (!empty($attachment)) {
+        $attachmentPath = $uploadDir . basename($attachment);
+        move_uploaded_file($_FILES["attachment"]["tmp_name"], $attachmentPath);
+    } else {
+        // Keep the old file if no new file is uploaded
+        $attachmentQuery = "SELECT attachment FROM ordinance WHERE id = $id";
+        $result = mysqli_query($conn, $attachmentQuery);
+        $row = mysqli_fetch_assoc($result);
+        $attachment = $row['attachment'];
+    }
+
+    $sql = "UPDATE `ordinance` SET 
+                    `mo_no`='$moNo', 
+                    `title`='$title', 
+                    `date_adopted`='$dateAdopted', 
+                    `author_sponsor`='$authorSponsor', 
+                    `date_fwd`='$dateFwd',
+                    `date_signed`='$dateSigned',
+                    `sp_approval`='$spApproval', 
+                    `attachment`='$attachmentPath' WHERE id = $id";
 
     $query = mysqli_query($conn, $sql);
     
@@ -29,8 +51,8 @@ if(isset($_POST['save'])){
                 document.addEventListener('DOMContentLoaded', function() {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Ordinance Created',
-                        text: 'The ordinance has been successfully Updated.',
+                        title: 'Ordinance Updated',
+                        text: 'The ordinance has been successfully updated.',
                         confirmButtonText: 'OK'
                     }).then((result) => {
                         if (result.isConfirmed) {
@@ -164,28 +186,28 @@ if(isset($_POST['save'])){
                             ?>
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form action="" method="post">
+                                    <form action="" method="post" enctype="multipart/form-data">
                                     <div class="form-group row">
                                             <div class="col-sm-9">
                                                 <input type="hidden" class="form-control" value="<?php echo $row['id']?>" id="id" name="id">
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color: #000000">MO No.:</label>
+                                            <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No. / MO No.: </label>
                                             <div class="col-sm-9">
                                                 <input type="text" class="form-control" value="<?php echo $row['mo_no']?>" id="moNo" name="moNo">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Adopted:</label>
-                                            <div class="col-sm-9">
-                                                <input type="date" class="form-control" value="<?php echo $row['d_adopted']?>" id="dateAdopted" name="dateAdopted">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
                                             <div class="col-sm-9">
                                                 <input type="text" class="form-control" value="<?php echo $row['title']?>" id="title" name="title">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Adopted:</label>
+                                            <div class="col-sm-9">
+                                                <input type="date" class="form-control" value="<?php echo $row['date_adopted']?>" id="dateAdopted" name="dateAdopted">
                                             </div>
                                         </div>
                                         <!-- <div class="form-group row">
@@ -201,26 +223,21 @@ if(isset($_POST['save'])){
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color: #000000">Co-Author:</label>
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Forwarded to LCE: </label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." value="<?php echo $row['co_author']?>" id="coAuthor" name="coAuthor">
+                                                <input type="date" class="form-control" value="<?php echo $row['date_fwd']?>" id="dateFwd" name="dateFwd">
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Signed by LCE: </label>
                                             <div class="col-sm-9">
-                                            <select id="remarks" name="remarks" class="form-control">
-                                                <option value="Draft" <?php if ($row['remarks'] == "Draft") echo "selected"; ?>>Draft</option>
-                                                <option value="Information" <?php if ($row['remarks'] == "Information") echo "selected"; ?>>Information</option>
-                                                <option value="Referred to Committee" <?php if ($row['remarks'] == "Referred to Committee") echo "selected"; ?>>Referred to Committee</option>
-                                                <option value="Approved" <?php if ($row['remarks'] == "Approved") echo "selected"; ?>>Approved</option>
-                                            </select>
+                                                <input type="date" class="form-control" value="<?php echo $row['date_signed']?>" id="dateSigned" name="dateSigned">
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Approved:</label>
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">SP Approval: </label>
                                             <div class="col-sm-9">
-                                                <input type="date" class="form-control" value="<?php echo $row['d_approved']?>" id="dateApproved" name="dateApproved">
+                                                <input type="text" class="form-control" value="<?php echo $row['sp_approval']?>" id="spApproval" name="spApproval">
                                             </div>
                                         </div>
                                         <div class="input-group mb-3">
@@ -228,8 +245,10 @@ if(isset($_POST['save'])){
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
                                             </div>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="attachment" name="attachment" name="attachment" onchange="updateFileName()">
-                                                <label class="custom-file-label" for="attachment">Choose file</label>
+                                                <input type="file" class="custom-file-input" id="attachment" name="attachment" onchange="updateFileName('attachmentLabel')">
+                                                <label class="custom-file-label" id="attachmentLabel"> 
+                                                    <?php echo !empty($row['attachment']) ? $row['attachment'] : "Choose file"; ?>
+                                                </label>
                                             </div>
                                         </div>
                                         <div class="form-group row d-flex justify-content-center">
@@ -262,11 +281,10 @@ if(isset($_POST['save'])){
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
     <script>
-        function updateFileName() {
-            const fileInput = document.getElementById('attachment');
-            const fileName = fileInput.files[0].name;
-            const label = document.querySelector('.custom-file-label');
-            label.textContent = fileName;
+        function updateFileName(labelId) {
+            const fileInput = document.getElementById(labelId.replace("Label", ""));
+            const fileName = fileInput.files.length > 0 ? fileInput.files[0].name : "Choose file";
+            document.getElementById(labelId).textContent = fileName;
         }
     </script>
     

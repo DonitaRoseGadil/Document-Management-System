@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<?php include "header.php"; ?>
+<?php 
+    include "header.php"; 
+    include "connect.php";
+
+?>
 
 <head>
     <!-- Include SweetAlert CSS and JS -->
@@ -27,158 +31,102 @@
         <div class="content-body">
             <div class="container-fluid" >
                 <!-- row -->
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center p-3 mt-4">
-                        <h5 class="card-title flex-grow-1 fs-4 fw-bold text-dark text-center" style="color: #000000">VIEW RESOLUTION</h5>
-                    </div>
-                    <?php 
-                        include "connect.php";
-                        $id = $_GET['id'];
-                        $sql = "SELECT * FROM resolution WHERE id = $id LIMIT 1";
-                        $result= mysqli_query($conn, $sql);   
-                        $row = mysqli_fetch_assoc($result); 
-                    ?>
-                      <div class="card-body">
-                            <div class="basic-form">
-                                <form action="" method="post">
-                                    <div class="form-group row">
-                                        <div class="col-sm-9">
-                                            <input type="hidden" class="form-control" value="<?php echo $row['id']?>" id="id" name="id">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-xl-8 col-xxl-12 items-center">                        
+                        <div class="card" style="align-self: center;">
+                            <div class="card-header d-flex justify-content-center">
+                                <h4 class="card-title flex-grow-1 fs-4 fw-bold text-dark text-center" style="color: #000000">VIEW RESOLUTION</h4>
+                            </div>
+                            <?php
+                                include("connect.php");
+                                $id = $_GET['id'];
+                                $sql = "SELECT * FROM `resolution` WHERE id = $id LIMIT 1";
+                                $result = mysqli_query($conn, $sql);
+                                $row = mysqli_fetch_assoc($result);
+                            ?>
+                            <div class="card-body">
+                                <div class="basic-form">
+                                    <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post">
+                                        <div class="form-group row">
+                                            <div class="col-sm-9">
+                                                <input type="hidden" class="form-control" value="<?php echo $row['id']?>" id="id" name="id">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No.:</label>
-                                        <div class="col-sm-9">
-                                            <input type="text" readonly class="form-control-plaintext" value="<?php echo $row['reso_no']?>" id="resoNo" name="resoNo">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No.:</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" value="<?php echo $row['reso_no']?>" id="resoNo" name="resoNo" disabled>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label" style="color:#000000">Date Approved:</label>
-                                        <div class="col-sm-9">
-                                            <input type="date" readonly class="form-control-plaintext" value="<?php echo $row['d_approved']?>" id="dateApproved" name="dateApproved">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Approved:</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" value="<?php echo $row['d_approved']?>" id="dateApproved" name="dateApproved" disabled>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
-                                        <div class="col-sm-9">
-                                            <textarea readonly class="form-control-plaintext" id="title" name="title" rows="3" style="resize: none; overflow: hidden;"><?php echo $row['title']; ?></textarea>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
+                                            <div class="col-sm-9">
+                                                <textarea class="form-control" id="title" name="title" rows="3" style="resize: none; overflow: hidden;" disabled><?php echo $row['title']; ?></textarea>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label" style="color:#000000">Description:</label>
-                                        <div class="col-sm-9">
-                                            <textarea readonly class="form-control-plaintext" id="descrip" name="descrip" rows="3" style="resize: none; overflow: hidden;"><?php echo $row['descrip']; ?></textarea>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">Description:</label>
+                                            <div class="col-sm-9">
+                                                <textarea class="form-control" id="descrip" name="descrip" rows="3" style="resize: none; overflow: hidden;" disabled><?php echo $row['descrip']; ?></textarea>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label" style="color: #000000">Author / Sponsor:</label>
-                                        <div class="col-sm-9">
-                                            <input type="text" readonly class="form-control-plaintext" value="<?php echo $row['author_sponsor']?>" id="authorSponsor" name="authorSponsor">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label" style="color: #000000">Author / Sponsor:</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" value="<?php echo $row['author_sponsor']?>" id="authorSponsor" name="authorSponsor" disabled>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label" style="color: #000000">Co-Author:</label>
-                                        <div class="col-sm-9">
-                                            <input type="text" readonly class="form-control-plaintext" value="<?php echo $row['co_author']?>" id="coAuthor" name="coAuthor">
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label" style="color: #000000">Co-Author:</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control"  value="<?php echo $row['co_author']?>" id="coAuthor" name="coAuthor" disabled>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <?php 
-                                        include "connect.php";
-                                        $id = $_GET['id'];
-                                        $sql = "SELECT * FROM resolution WHERE id = $id LIMIT 1";
-                                        $result= mysqli_query($conn, $sql);   
-                                        $row = mysqli_fetch_assoc($result); 
-
-                                        $sql2 = "SELECT remarks FROM resolution WHERE id = '$id'";
-                                        $result2 = mysqli_query($conn, $sql2);
-                                        $row2 = mysqli_fetch_assoc($result2);
-                                        $selectedRemarks = $row2['remarks']; 
-                                    ?>
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
-                                        <div class="col-sm-9">
-                                            <input type="text" readonly class="form-control-plaintext" value="<?php echo $row['remarks']?>" id="remarks" name="remarks">
+                                        <div class="form-group row">
+                                            <label for="status" class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
+                                            <div class="col-sm-9">
+                                                <select id="remarks" value="<?php echo $row['remarks']?>" name="status" class="form-control" disabled>
+                                                    <option value="" selected>Choose...</option>
+                                                    <option value="Draft" <?php if ($row['remarks'] == "Draft") echo "selected"; ?>>Draft</option>
+                                                    <option value="Information" <?php if ($row['remarks'] == "Information") echo "selected"; ?>>Information</option>
+                                                    <option value="Referred to Committee" <?php if ($row['remarks'] == "Referred to Committee") echo "selected"; ?>>Referred to Committee</option>
+                                                    <option value="Approved" <?php if ($row['remarks'] == "Approved") echo "selected"; ?>>Approved</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <!-- <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control" value="<?php echo $row['attachment']; ?>" id="attachment" name="attachment" disabled>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" style="background-color: #098209; border: none; outline: none;" type="button" onclick="viewFile('<?php echo $row['id']; ?>', 'attachment')">View File</button>
+                                            </div>
                                         </div>
-                                        <?php
-                                            include "connect.php";
-                                            $filePath = $row['attachment']; 
-                                            $fileName = basename($filePath); 
-                                        ?>
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="attachment" name="attachment" name="attachment" onchange="updateFileName()" disabled>
-                                            <label class="custom-file-label" for="attachment"><?php echo $fileName ? $fileName : "Choose file"; ?></label>
+                                        <div class="form-group row d-flex justify-content-center">
+                                            <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;">Update</button>
+                                            <a href="files-resolution.php" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
                                         </div>
-                                    </div> -->
-                                    <div class="form-group row d-flex justify-content-center">
-                                        <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;">Update</button>
-                                        <a href="files-resolution.php" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="card-footer d-sm-flex justify-content-between">
+                                <div class="card-footer-link mb-4 mb-sm-0">
+                                    <p class="card-text text-dark d-inline">Last updated 3 mins ago</p>
+                                </div>
                             </div>
                         </div>
-                    <div class="card-footer d-sm-flex justify-content-between">
-                        <div class="card-footer-link mb-4 mb-sm-0">
-                            <p class="card-text text-dark d-inline">Last updated 3 mins ago</p>
-                        </div>
-
-                        <a href="viewfile.php?id=<?php echo $row['id']; ?>" class="btn btn-primary">View File</a>
                     </div>
-                </div> 
-                <!-- <div class="card">
-                    <div class="card-body">
-                        <?php
-                        include("connect.php"); // Include database connection
-
-                        if (isset($_GET['id'])) {
-                            $id = intval($_GET['id']); // Prevent SQL injection
-
-                            // Fetch file path from the database
-                            $sql = "SELECT attachment FROM resolution WHERE id = ?";
-                            $stmt = $conn->prepare($sql);
-                            $stmt->bind_param("i", $id);
-                            $stmt->execute();
-                            $stmt->bind_result($file);
-                            $stmt->fetch();
-                            $stmt->close();
-
-                            if ($file) {
-                                $filePath = "files/" . $file;
-
-                                if (file_exists($filePath)) {
-                                    $fileExt = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
-
-                                    if ($fileExt == "pdf") {
-                                        echo "<embed src='$filePath' type='application/pdf' width='100%' height='600px' />";
-                                    } else {
-                                        echo "Unsupported file format.";
-                                    }
-                                } else {
-                                    echo "File not found.";
-                                }
-                            } else {
-                                echo "No file associated with this record.";
-                            }
-
-                            $conn->close();
-                        } else {
-                            echo "Invalid request.";
-                        }
-                        ?>
-                    </div>
-                </div> -->
-
+                </div>
             </div>
         </div>
         <!--**********************************
             Content body end
         ***********************************-->
-
-        
+  
     </div>
     <!--**********************************
         Main wrapper end
@@ -191,6 +139,24 @@
     <script src="./vendor/global/global.min.js"></script>
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
+
+    <script>
+        function viewFile(id, field) {
+        let filePath = document.getElementById(field).value;
+        
+        if (!filePath) {
+            alert("No file available to view.");
+            return;
+        }
+
+        // Check if filePath is a direct URL or stored in the database
+        if (filePath.startsWith("http") || filePath.endsWith(".pdf")) {
+            window.open(filePath, '_blank');  // Open direct URL
+        } else {
+            window.open(`fetch_pdf.php?id=${id}&field=${field}`, '_blank'); // Fetch from database
+        }
+    }
+    </script>
     
 </body>
 
