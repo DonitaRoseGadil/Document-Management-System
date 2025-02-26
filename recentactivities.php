@@ -1,44 +1,26 @@
 <?php
 header('Content-Type: application/json');
-
 $conn = new mysqli("localhost", "root", "", "lgu_dms");
 
-// Check connection
 if ($conn->connect_error) {
-    die(json_encode(["error" => "Connection failed: " . $conn->connect_error]));
+    die(json_encode(["error" => "Database connection failed"]));
 }
 
-// Fetch recent activities
-$query = "
-    (SELECT 'Resolution' AS type, title, updated_at AS date FROM resolution ORDER BY updated_at DESC LIMIT 4)
-    UNION
-    (SELECT 'Ordinance' AS type, title, updated_at AS date FROM ordinance ORDER BY updated_at DESC LIMIT 4)
-    UNION
-    (SELECT 'Minutes' AS type, title, updated_at AS date FROM minutes ORDER BY updated_at DESC LIMIT 4)
-    ORDER BY date DESC LIMIT 4
-";
-
-$result = $conn->query($query);
-
-if (!$result) {
-    die(json_encode(["error" => "SQL Error: " . $conn->error]));
-}
+// Fetch recent activities from resolution, ordinance, and minutes
+$sql = "SELECT * FROM history_log ORDER BY timestamp DESC";
+$result = $conn->query($sql);
 
 $activities = [];
-
 while ($row = $result->fetch_assoc()) {
     $activities[] = [
-        "title" => $row["type"] . " - " . $row["title"],
-        "date" => date("F d, Y h:i A", strtotime($row["date"]))
+        "action" => $row["action"],
+        "file_type" => $row["file_type"],
+        "title" => $row["title"],
+        "timestamp" => $row["timestamp"]
     ];
 }
 
-$response = [
-    "activities" => $activities,
-    "last_update" => count($activities) > 0 ? date("F d, Y h:i A") : "No updates yet"
-];
+echo json_encode(["activities" => $activities]);
 
-echo json_encode($response);
+$conn->close();
 ?>
-
-

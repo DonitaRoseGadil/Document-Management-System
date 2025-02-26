@@ -34,7 +34,14 @@ if(isset($_POST['save'])){
     $sql = "INSERT INTO resolution(reso_no, title, descrip, d_adopted, author_sponsor, co_author, remarks, d_approved, attachment, updated_at) 
         VALUES ('$resoNo', '$title', '$description', '$dateAdopted', '$authorSponsor', '$coAuthor', '$remarks', '$dateApproved', '$attachment', NOW())";
     
-    $query = mysqli_query($conn, $sql);    
+    $query = mysqli_query($conn, $sql);
+
+
+    $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
+            VALUES ('Created', 'Resolution', LAST_INSERT_ID(), '$title')";
+        
+    $conn->query($log_sql);
+
 
     if($query) {
         echo "<script>

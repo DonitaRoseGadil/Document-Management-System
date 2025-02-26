@@ -37,6 +37,12 @@
                 $stmt = $conn->prepare($sql);
                 $stmt->bind_param("ssssssss", $no_regSession, $date, $genAttachmentPath, $resNo, $title, $type, $status, $attachmentPath);
                 $stmt->execute();
+
+                $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
+                VALUES ('Created', 'Minutes', LAST_INSERT_ID(), '$title')";
+            
+                $conn->query($log_sql);
+    
             }
         }       
 

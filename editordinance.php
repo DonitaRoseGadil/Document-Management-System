@@ -18,7 +18,11 @@ if(isset($_POST['save'])){
 
     $sql = "UPDATE `ordinance` SET `mo_no`='$moNo', `title`='$title', `d_Adopted`='$dateAdopted', `author_sponsor`='$authorSponsor', `co_author`='$coAuthor', `remarks`='$remarks', `d_approved`='$dateApproved' WHERE id = $id";
 
-    $query = mysqli_query($conn, $sql);    
+    $query = mysqli_query($conn, $sql);
+    
+    $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
+    VALUES ('Edited', 'Ordinance', $id, '$title')";
+    $conn->query($log_sql);
 
     if($query) {
         echo "<script>

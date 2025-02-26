@@ -16,7 +16,14 @@ if(isset($_POST['save'])){
     $sql = "INSERT INTO `ordinance`(`mo_no`, `title`, `d_adopted`, `author_sponsor`, `co_author`, `remarks`, `d_approved`) 
             VALUES ('$moNo', '$title', '$dateAdopted', '$authorSponsor', '$coAuthor', '$remarks', '$dateApproved')";
 
-    $query = mysqli_query($conn, $sql);    
+    $query = mysqli_query($conn, $sql);
+    
+    $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
+    VALUES ('Created', 'Ordinance', LAST_INSERT_ID(), '$title')";
+
+    $conn->query($log_sql);
+
+
 
     if($query) {
         echo "<script>

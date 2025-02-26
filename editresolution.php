@@ -51,7 +51,12 @@ if(isset($_POST['save'])){
 
     $sql .= " WHERE id = $id";
 
-    $query = mysqli_query($conn, $sql);    
+    $query = mysqli_query($conn, $sql);  
+    
+    $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
+            VALUES ('Edited', 'Resolution', $id, '$title')";
+    $conn->query($log_sql);
+
 
     if($query) {
         echo "<script>

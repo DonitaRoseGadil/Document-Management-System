@@ -45,14 +45,19 @@
         $sql = "UPDATE `minutes` SET 
                 `no_regSession` = '$no_regSession',
                 `date` = '$date',
-                `genAttachment` = '$genAttachment',
+                `genAttachment` = '$genAttachmentPath',
                 `resNo` = '$resNo',
                 `title` = '$title',
                 `type` = '$type',
                 `status` = '$status',
-                `attachment` = '$attachment' WHERE `id` = $id";
+                `attachment` = '$attachmentPath' WHERE `id` = $id";
 
         $query = mysqli_query($conn, $sql);
+
+
+        $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
+        VALUES ('Edited', 'Minutes', $id, '$title')";
+        $conn->query($log_sql);
 
         if ($query) {
             echo "<script>
