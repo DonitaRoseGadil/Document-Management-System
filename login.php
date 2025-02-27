@@ -16,7 +16,7 @@
                 $stmt->fetch();
                 // Account exists, now we verify the password.
 
-                if (password_verify($_POST['password'], $password)) {
+                if ($_POST['password'] === $password) {
                     // Verification success! Uset has logged-in!
                     session_regenerate_id();
                     $_SESSION['loggedin'] = TRUE;
@@ -24,10 +24,22 @@
                     $_SESSION['id'] = $id;
                     echo 'Welcome back, ' . htmlspecialchars($_SESSION['name'], ENT_QUOTES) . '!';
                 } else {
-                    echo 'Incorrect username and/or password!';
+                    echo "<script>
+                    Swal.fire({
+                        title: 'Wrong Credentials',
+                        icon: 'error',
+                        confirmButtonText: 'Try Again'
+                    });
+                    </script>";
                 }
             } else {
-                echo 'Incorrect username and/or password!';
+                echo "<script>
+                    Swal.fire({
+                        title: 'Wrong Credentials',
+                        icon: 'error',
+                        confirmButtonText: 'Try Again'
+                    });
+                </script>";
             }
 
             $stmt->close();
@@ -105,7 +117,7 @@
                                             </div>
                                         </div>
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-primary btn-block" name="save" style="background-color: #098209; border-color:#098209;">Sign me in</button>
+                                            <button type="submit" class="btn btn-primary btn-block" name="login" style="background-color: #098209; border-color:#098209;">Sign me in</button>
                                         </div>
                                     </form> 
                                 </div>
