@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 25, 2025 at 08:09 AM
+-- Generation Time: Feb 26, 2025 at 02:10 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,21 @@ SET time_zone = "+00:00";
 --
 -- Database: `lgu_dms`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `history_log`
+--
+
+CREATE TABLE `history_log` (
+  `id` int(11) NOT NULL,
+  `action` varchar(50) DEFAULT NULL,
+  `file_type` varchar(50) DEFAULT NULL,
+  `file_id` int(11) DEFAULT NULL,
+  `title` text DEFAULT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -96,9 +111,21 @@ CREATE TABLE `resolution` (
 --
 
 --
+-- Indexes for table `history_log`
+--
+ALTER TABLE `history_log`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `minutes`
 --
 ALTER TABLE `minutes`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `ordinance`
+--
+ALTER TABLE `ordinance`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -116,6 +143,12 @@ ALTER TABLE `resolution`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `history_log`
+--
+ALTER TABLE `history_log`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `minutes`

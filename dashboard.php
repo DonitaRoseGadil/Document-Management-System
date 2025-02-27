@@ -4,11 +4,8 @@
 <?php include "header.php"; ?>
 
 <body>
-    <!--**********************************
-        Main wrapper start
-    ***********************************-->
+    <!-- Main Wrapper Start -->
     <div id="main-wrapper">
-
         <?php include "navheader.php"; ?>
         <?php include "sidebar.php"; ?>
 
@@ -28,9 +25,7 @@
         $minutes_count = $conn->query("SELECT COUNT(*) as count FROM minutes")->fetch_assoc()['count'];
         ?>
 
-        <!--**********************************
-            Content body start
-        ***********************************-->
+        <!-- Content Body Start -->
         <div class="content-body">
             <div class="container-fluid">
                 <div class="row page-titles mx-0">
@@ -43,6 +38,7 @@
                 </div>
 
                 <div class="row">
+                    <!-- Stats Section -->
                     <div class="col-lg-4 col-sm-6">
                         <div class="card">
                             <div class="stat-widget-one card-body">
@@ -83,30 +79,104 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Activities and Shortcuts Section -->
+                <div class="row">
+                    <!-- Recent Activities Section -->
+                    <div class="col-lg-6">
+                        <h4 class="mt-4 ml-4" style="color: #098209;">RECENT ACTIVITIES</h4>
+                        <div class="row flex-column ml-2" id="recentActivities" style="gap: 2px;">
+                            <p id="lastUpdated" style="color: gray; margin-left: 10px;"></p>
+                        </div>
+                    </div>
+
+
+                    <!-- Shortcuts Section -->
+                    <div class="col-lg-6">
+                        <h4 class="mt-4 ml-4" style="color: #098209;">SHORTCUTS</h4>
+                        <div class="row flex-column ml-2" style="gap: 2px;">
+                            <div class="col-lg-12">
+                                <div class="card p-2 d-flex align-items-center"
+                                    style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209; 
+                                            display: flex; flex-direction: row; justify-content: space-between;">
+                                    <span style="color: black; font-weight: bold;">Add new file resolution</span>
+                                    <button class="btn btn-success btn-sm" onclick="window.location.href='addresolution.php';">+</button>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="card p-2 d-flex align-items-center"
+                                    style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209; 
+                                            display: flex; flex-direction: row; justify-content: space-between;">
+                                    <span style="color: black; font-weight: bold;">Add new file ordinances</span>
+                                    <button class="btn btn-success btn-sm" onclick="window.location.href='addordinance.php';">+</button>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="card p-2 d-flex align-items-center"
+                                    style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209; 
+                                            display: flex; flex-direction: row; justify-content: space-between;">
+                                    <span style="color: black; font-weight: bold;">Add new meeting minutes</span>
+                                    <button class="btn btn-success btn-sm" onclick="window.location.href='addmeetingminutes.php';">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!--**********************************
-            Footer start
-        ***********************************-->
+        <!-- Footer -->
         <div class="footer">
             <div class="copyright"></div>
         </div>
-        <!--**********************************
-            Footer end
-        ***********************************-->
 
     </div>
-    <!--**********************************
-        Main wrapper end
-    ***********************************-->
 
-    <!--**********************************
-        Scripts
-    ***********************************-->
+    <!-- Scripts -->
     <script src="./vendor/global/global.min.js"></script>
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
-</body>
 
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        fetchRecentActivities();
+    });
+
+    function fetchRecentActivities() {
+    fetch("recentactivities.php?timestamp=" + new Date().getTime())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("HTTP error! Status: " + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            let activitiesContainer = document.getElementById("recentActivities");
+            activitiesContainer.innerHTML = ""; 
+
+            if (data.activities.length > 0) {
+                data.activities.forEach(activity => {
+                    let activityHTML = `
+                        <div class="col-lg-12">
+                            <div class="card p-2" style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209;">
+                                <div style="color: black;"><strong>${activity.file_type}: ${activity.title}</strong></div>
+                                <div style="color: gray; font-size: 0.8rem;">${activity.action} on ${activity.timestamp}</div>
+                            </div>
+                        </div>
+                    `;
+                    activitiesContainer.insertAdjacentHTML("beforeend", activityHTML);
+                });
+            } else {
+                activitiesContainer.innerHTML = '<p style="color: gray; margin-left: 10px;">No recent activities.</p>';
+            }
+        })
+        .catch(error => console.error("Error fetching activities:", error));
+}
+
+</script>
+
+
+</body>
 </html>

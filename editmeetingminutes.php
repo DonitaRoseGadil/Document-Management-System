@@ -52,6 +52,11 @@
 
         $query = mysqli_query($conn, $sql);
 
+
+        $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
+        VALUES ('Edited', 'Minutes', $id, '$title')";
+        $conn->query($log_sql);
+
         if ($query) {
             echo "<script>
                     document.addEventListener('DOMContentLoaded', function() {
