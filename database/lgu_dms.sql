@@ -129,12 +129,6 @@ ALTER TABLE `ordinance`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `ordinance`
---
-ALTER TABLE `ordinance`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `resolution`
 --
 ALTER TABLE `resolution`
