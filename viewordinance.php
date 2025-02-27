@@ -50,43 +50,43 @@
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No. / MO No.: </label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" value="<?php echo $row['mo_no']?>" id="moNo" name="moNo">
+                                                <input type="text" class="form-control" value="<?php echo $row['mo_no']?>" id="moNo" name="moNo" disabled>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" value="<?php echo $row['title']?>" id="title" name="title">
+                                                <input type="text" class="form-control" value="<?php echo $row['title']?>" id="title" name="title" disabled>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Date Adopted:</label>
                                             <div class="col-sm-9">
-                                                <input type="date" class="form-control" value="<?php echo $row['date_adopted']?>" id="dateAdopted" name="dateAdopted">
+                                                <input type="date" class="form-control" value="<?php echo $row['date_adopted']?>" id="dateAdopted" name="dateAdopted" disabled>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Author / Sponsor:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" value="<?php echo $row['author_sponsor']?>" id="authorSponsor" name="authorSponsor">
+                                                <input type="text" class="form-control" value="<?php echo $row['author_sponsor']?>" id="authorSponsor" name="authorSponsor" disabled>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Date Forwarded to LCE: </label>
                                             <div class="col-sm-9">
-                                                <input type="date" class="form-control" value="<?php echo $row['date_fwd']?>" id="dateFwd" name="dateFwd">
+                                                <input type="date" class="form-control" value="<?php echo $row['date_fwd']?>" id="dateFwd" name="dateFwd" disabled>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Date Signed by LCE: </label>
                                             <div class="col-sm-9">
-                                                <input type="date" class="form-control" value="<?php echo $row['date_signed']?>" id="dateSigned" name="dateSigned">
+                                                <input type="date" class="form-control" value="<?php echo $row['date_signed']?>" id="dateSigned" name="dateSigned" disabled>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">SP Approval: </label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" value="<?php echo $row['sp_approval']?>" id="spApproval" name="spApproval">
+                                                <input type="text" class="form-control" value="<?php echo $row['sp_approval']?>" id="spApproval" name="spApproval" disabled>
                                             </div>
                                         </div>
                                         <div class="input-group mb-3">

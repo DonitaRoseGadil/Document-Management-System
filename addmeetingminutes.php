@@ -18,7 +18,6 @@
         if (isset($_FILES['attachment']) && is_array($_FILES['attachment']['name'])) {
             foreach ($_POST['resNo'] as $key => $resNo) {
                 $title = $_POST['title'][$key];
-                $type = $_POST['type'][$key];
                 $status = $_POST['status'][$key];
 
                 // Handle attachment for each resolution
@@ -31,11 +30,11 @@
                 }
 
                 // Insert into database
-                $sql = "INSERT INTO `minutes` (`no_regSession`, `date`, `genAttachment`, `resNo`, `title`, `type`, `status`, `attachment`) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO `minutes` (`no_regSession`, `date`, `genAttachment`, `resNo`, `title`, `status`, `attachment`) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?)";
                 
                 $stmt = $conn->prepare($sql);
-                $stmt->bind_param("ssssssss", $no_regSession, $date, $genAttachmentPath, $resNo, $title, $type, $status, $attachmentPath);
+                $stmt->bind_param("sssssss", $no_regSession, $date, $genAttachmentPath, $resNo, $title, $status, $attachmentPath);
                 $stmt->execute();
 
                 $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
@@ -286,18 +285,6 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="type" class="col-sm-3 col-form-label" style="color: #000000">Type:</label>
-                            <div class="col-sm-9">
-                                <select id="type" name="type[]" class="form-control">
-                                    <option value="" selected>Choose...</option>
-                                    <option value="Draft">Draft</option>
-                                    <option value="Information">Information</option>
-                                    <option value="Referred to Committee">Referred to Committee</option>
-                                    <option value="Approved">Approved</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
                             <label for="status" class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
                             <div class="col-sm-9">
                                 <select id="status" name="status[]" class="form-control">
@@ -319,7 +306,7 @@
                             </div>
                         </div>
                         <div class="form-group row d-flex justify-content-center">
-                            <button type="button" class="btn btn-danger delete-btn ml-2 flex"><i class='fa fa-trash' aria-hidden='true'> Delete</i></button>
+                            <button type="button" class="btn btn-danger delete-btn flex"><i class='fa fa-trash' aria-hidden='true'> Delete</i></button>
                         </div>
                     </div>
                 </div>

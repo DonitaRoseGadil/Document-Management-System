@@ -72,18 +72,6 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="type" class="col-sm-3 col-form-label" style="color: #000000">Type:</label>
-                                            <div class="col-sm-9">
-                                                <select id="type" value="<?php echo $row['type']?>" name="type" class="form-control" disabled>
-                                                    <option value="" selected>Choose...</option>
-                                                    <option value="Draft" <?php if ($row['type'] == "Draft") echo "selected"; ?>>Draft</option>
-                                                    <option value="Information" <?php if ($row['type'] == "Information") echo "selected"; ?>>Information</option>
-                                                    <option value="Referred to Committee" <?php if ($row['type'] == "Referred to Committee") echo "selected"; ?>>Referred to Committee</option>
-                                                    <option value="Approved" <?php if ($row['type'] == "Approved") echo "selected"; ?>>Approved</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
                                             <label for="status" class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
                                             <div class="col-sm-9">
                                                 <select id="status" value="<?php echo $row['status']?>" name="status" class="form-control" disabled>

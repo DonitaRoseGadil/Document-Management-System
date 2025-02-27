@@ -1,23 +1,72 @@
 <?php
-include("connect.php");
-session_start();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = mysqli_real_escape_string($check, $_POST['email']);
-    $password = mysqli_real_escape_string($check, $_POST['password']);
+    if(isset($_POST['login'])) {
+        session_start();
+        include("connect.php");
 
-    $data = mysqli_query($check, "SELECT * FROM admin WHERE email='$email' AND password='$password'");
+        if ($stmt = $conn->prepare('SELECT id, password FROM accounts WHERE email = ?')) {
+            // Bind parameters (s = string, i = int, b = blob, etc)
+            $stmt->bind_param('s', $_POST['email']);
+            $stmt->execute();
+            // Store the result so we can check if the account exxists in the db.
+            $stmt->store_result();
 
-    if (mysqli_num_rows($data) == 1) {
-        $_SESSION['message'] = "success";
-        header("Location: login.php"); // Redirect to prevent form resubmission
-        exit();
-    } else {
-        $_SESSION['message'] = "error";
-        header("Location: login.php");
-        exit();
+            if ($stmt->num_rows > 0) {
+                $stmt->bind_result($id, $password);
+                $stmt->fetch();
+                // Account exists, now we verify the password.
+
+                if ($_POST['password'] === $password) {
+                    // Verification success! Uset has logged-in!
+                    session_regenerate_id();
+                    $_SESSION['loggedin'] = TRUE;
+                    $_SESSION['name'] = $_POST['email'];
+                    $_SESSION['id'] = $id;
+                    echo 'Welcome back, ' . htmlspecialchars($_SESSION['name'], ENT_QUOTES) . '!';
+                } else {
+                    echo "<script>
+                    Swal.fire({
+                        title: 'Wrong Credentials',
+                        icon: 'error',
+                        confirmButtonText: 'Try Again'
+                    });
+                    </script>";
+                }
+            } else {
+                echo "<script>
+                    Swal.fire({
+                        title: 'Wrong Credentials',
+                        icon: 'error',
+                        confirmButtonText: 'Try Again'
+                    });
+                </script>";
+            }
+
+            $stmt->close();
+        }
     }
-}
+
+    
+
+    /* include("connect.php");
+    session_start();
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $email = mysqli_real_escape_string($check, $_POST['email']);
+        $password = mysqli_real_escape_string($check, $_POST['password']);
+
+        $data = mysqli_query($check, "SELECT * FROM admin WHERE email='$email' AND password='$password'");
+
+        if (mysqli_num_rows($data) == 1) {
+            $_SESSION['message'] = "success";
+            header("Location: login.php"); // Redirect to prevent form resubmission
+            exit();
+        } else {
+            $_SESSION['message'] = "error";
+            header("Location: login.php");
+            exit();
+        }
+    }*/
 ?>
 
 <!DOCTYPE html>
@@ -47,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="auth-form">
                                     <h1 class="text-center" style="color:#098209">Log in<h1>
                                     <h4 class="text-center mb-4" style="color:#000000">Sign in your account</h4>
-                                    <form id="loginForm" action="dashboard.php" method="POST">
+                                    <form id="loginForm" action="" method="post">
                                         <div class="form-group">
                                             <!-- <label ><strong>Email</strong></label> -->
                                             <input type="email" class="form-control" placeholder="Email" name="email" id="email">
@@ -68,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             </div>
                                         </div>
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-primary btn-block" style="background-color: #098209; border-color:#098209;">Sign me in</button>
+                                            <button type="submit" class="btn btn-primary btn-block" name="login" style="background-color: #098209; border-color:#098209;">Sign me in</button>
                                         </div>
                                     </form> 
                                 </div>
@@ -91,6 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <?php
+        /*
         if (isset($_SESSION['message'])) {
             if ($_SESSION['message'] == "success") {
                 echo "<script>
@@ -111,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </script>";
             }
             unset($_SESSION['message']); // Clear session message after showing alert
-        }
+        } */
     ?>
 
 </body>
