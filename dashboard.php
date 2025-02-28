@@ -1,3 +1,13 @@
+<?php
+
+    session_start();
+    if (!isset($_SESSION['loggedin'])) {
+        header('location: login.php');
+        exit;
+    }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,7 +36,7 @@
         ?>
 
         <!-- Content Body Start -->
-        <div class="content-body">
+        <div class="content-body" style="background-color: #C5EBAA;">
             <div class="container-fluid">
                 <div class="row page-titles mx-0">
                     <div class="col-sm-6 p-md-0">
@@ -38,46 +48,51 @@
                 </div>
 
                 <div class="row">
-                    <!-- Stats Section -->
-                    <div class="col-lg-4 col-sm-6">
-                        <div class="card">
-                            <div class="stat-widget-one card-body">
-                                <div class="stat-icon d-inline-block">
-                                    <i class="ti-file text-success border-success"></i>
-                                </div>
-                                <div class="stat-content d-inline-block">
-                                    <div class="stat-text">Resolution</div>
-                                    <div class="stat-digit"><?php echo $resolution_count; ?></div>
-                                </div>
-                            </div>
+                <!-- Resolution -->
+                <div class="col-lg-4 col-sm-6">
+                    <div class="card d-flex flex-row align-items-center shadow-sm" style="border-radius: 10px; overflow: hidden; border: 1px solid #E0E0E0;">
+                        <!-- Left section with icon -->
+                        <div class="d-flex justify-content-center align-items-center" style="width: 100px; background-color: #A3D9A5; padding: 30px;">
+                            <i class="ti-file" style="font-size: 2rem; color: #166534;"></i>
+                        </div>
+                        <!-- Right section with text -->
+                        <div class="p-3 flex-grow-1 bg-white">
+                            <div style="color: gray; font-size: 0.9rem;">Resolution</div>
+                            <div style="color: black; font-size: 1.5rem; font-weight: bold;"><?php echo $resolution_count; ?></div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-sm-6">
-                        <div class="card">
-                            <div class="stat-widget-one card-body">
-                                <div class="stat-icon d-inline-block">
-                                    <i class="ti-folder text-primary border-primary"></i>
-                                </div>
-                                <div class="stat-content d-inline-block">
-                                    <div class="stat-text">Ordinances</div>
-                                    <div class="stat-digit"><?php echo $ordinance_count; ?></div>
-                                </div>
-                            </div>
+                </div>
+
+                <!-- Ordinance -->
+                <div class="col-lg-4 col-sm-6">
+                    <div class="card d-flex flex-row align-items-center shadow-sm" style="border-radius: 10px; overflow: hidden; border: 1px solid #E0E0E0;">
+                        <!-- Left Section: Icon -->
+                        <div class="d-flex justify-content-center align-items-center" style="width: 100px; background-color: #66D2CE; padding: 30px;">
+                            <i class="ti-folder" style="font-size: 2rem; color: #003092;"></i>
+                        </div>
+                        <!-- Right Section: Text and Number -->
+                        <div class="p-3 flex-grow-1 bg-white">
+                            <div style="color: gray; font-size: 0.9rem;">Ordinances</div>
+                            <div style="color: black; font-size: 1.5rem; font-weight: bold;"><?php echo $ordinance_count; ?></div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-sm-6">
-                        <div class="card">
-                            <div class="stat-widget-one card-body">
-                                <div class="stat-icon d-inline-block">
-                                    <i class="ti-agenda text-danger border-danger"></i>
-                                </div>
-                                <div class="stat-content d-inline-block">
-                                    <div class="stat-text">Meeting Minutes</div>
-                                    <div class="stat-digit"><?php echo $minutes_count; ?></div>
-                                </div>
-                            </div>
+                </div>
+
+                <!-- Minutes -->
+                <div class="col-lg-4 col-sm-6">
+                    <div class="card d-flex flex-row align-items-center shadow-sm" style="border-radius: 10px; overflow: hidden; border: 1px solid #E0E0E0;">
+                        <!-- Left Section: Icon -->
+                        <div class="d-flex justify-content-center align-items-center" style="width: 100px; background-color: #F8D7DA; padding: 30px;">
+                            <i class="ti-agenda" style="font-size: 2rem; color: #B71C1C;"></i>
+                        </div>
+                        <!-- Right Section: Text and Number -->
+                        <div class="p-3 flex-grow-1 bg-white">
+                            <div style="color: gray; font-size: 0.9rem;">Meeting Minutes</div>
+                            <div style="color: black; font-size: 1.5rem; font-weight: bold;"><?php echo $minutes_count; ?></div>
                         </div>
                     </div>
+                </div>
+
                 </div>
 
                 <!-- Activities and Shortcuts Section -->
@@ -160,9 +175,20 @@
                 data.activities.forEach(activity => {
                     let activityHTML = `
                         <div class="col-lg-12">
-                            <div class="card p-2" style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209;">
-                                <div style="color: black;"><strong>${activity.file_type}: ${activity.title}</strong></div>
-                                <div style="color: gray; font-size: 0.8rem;">${activity.action} on ${activity.timestamp}</div>
+                            <div class="card p-2" 
+                                style="margin-bottom: 10px; 
+                                    border-left: 4px solid 
+                                    ${activity.action === 'Edited' ? '#007BFF' : 
+                                        activity.action === 'Created' ? '#098209' : 
+                                        activity.action === 'Deleted' ? '#DC3545' : '#E0E0E0'}; 
+                                    background: #f9f9f9; 
+                                    padding: 10px;">
+                                <div style="color: #333; font-weight: bold; font-size: 1rem;">
+                                    ${activity.file_type}: ${activity.title}
+                                </div>
+                                <div style="color: gray; font-size: 0.85rem;">
+                                    ${activity.action} on ${activity.timestamp}
+                                </div>
                             </div>
                         </div>
                     `;

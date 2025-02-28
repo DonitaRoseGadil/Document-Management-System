@@ -22,7 +22,7 @@ session_start();
         <!--**********************************
             Content body start
         ***********************************-->
-        <div class="content-body">
+        <div class="content-body" style="background-color: #C5EBAA;">
             <div class="container-fluid">
                 <!-- row -->
                 <div class="row">
@@ -41,12 +41,11 @@ session_start();
                                     <table id="example" class="display" style="min-width: 845px">
                                         <thead class="text-center" style="background-color: #098209; color: #FFFFFF;">
                                             <tr>
-                                                <th style="color: #FFFFFF;">RESOLUTION NO./ MO NO.</th>
+                                                <th style="color: #FFFFFF;">RESO NO./MO NO.</th>
                                                 <th style="color: #FFFFFF;">TITLE</th>
                                                 <th style="color: #FFFFFF;">AUTHOR/SPONSOR</th>
                                                 <th style="color: #FFFFFF;">CO-AUTHOR</th>
                                                 <th style="color: #FFFFFF;">REMARKS</th>
-                                                <th style="color: #FFFFFF;">DATE APPROVED</th>
                                                 <th style="color: #FFFFFF;">ACTION</th>
                                             </tr>
                                         </thead>
@@ -71,7 +70,7 @@ session_start();
                                                         <td style="border-bottom: 1px solid #098209;"><?php echo $row["author_sponsor"] ?></td>
                                                         <td style="border-bottom: 1px solid #098209;"><?php echo $row["co_author"] ?></td>
                                                         <td style="border-bottom: 1px solid #098209;"><?php echo $row["remarks"] ?></td>
-                                                        <td style="border-bottom: 1px solid #098209;"><?php echo $row["d_approved"] ?></td>
+                                                        <!-- <td style="border-bottom: 1px solid #098209;"><?php echo $row["d_approved"] ?></td> -->
                                                         <td style="border-right: 1px solid #098209; border-bottom: 1px solid #098209;" class='text-center d-flex justify-content-center gap-2'>
                                                             <a href="viewresolution.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1 mt-2'><i class='fa fa-eye' aria-hidden='true' style="color: #FFFFFF;"></i></a>
                                                             <a href="editresolution.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1 mt-2'><i class='fa fa-edit' aria-hidden='true' style="color: #FFFFFF;"></i></a>

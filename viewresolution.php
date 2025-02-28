@@ -101,12 +101,6 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Approved:</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" value="<?php echo $row['d_approved']?>" id="dateApproved" name="dateApproved" disabled>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
                                             <div class="col-sm-9">
                                                 <textarea class="form-control" id="title" name="title" rows="3" style="resize: none; overflow: hidden;" disabled><?php echo $row['title']; ?></textarea>
@@ -142,24 +136,76 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Forwarded to LCE:</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" value="<?php echo $row['d_approved']?>" id="dateApproved" name="dateApproved" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Signed by LCE:</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" value="<?php echo $row['d_approved']?>" id="dateApproved" name="dateApproved" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">SB Approval:</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" value="<?php echo $row['d_approved']?>" id="dateApproved" name="dateApproved" disabled>
+                                            </div>
+                                        </div>
                                         <div class="input-group mb-3">
                                             <input type="text" class="form-control" value="<?php echo $row['attachment']; ?>" id="attachment" name="attachment" disabled>
                                             <div class="input-group-append">
                                                 <button class="btn btn-primary" style="background-color: #098209; border: none; outline: none;" type="button" onclick="viewFile('<?php echo $row['id']; ?>', 'attachment')">View File</button>
                                             </div>
                                         </div>
-                                        <div class="form-group row d-flex justify-content-center">
+                                        <!-- <div class="form-group row d-flex justify-content-center">
                                             <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;">Update</button>
                                             <a href="files-resolution.php" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
-                                        </div>
+                                        </div> -->
                                     </form>
                                 </div>
                             </div>
+                            <!-- View History Button -->
                             <div class="card-footer d-sm-flex justify-content-between">
                                 <div class="card-footer-link mb-4 mb-sm-0">
                                     <p class="card-text text-dark d-inline"><?php echo $lastUpdatedText; ?></p>
                                 </div>
+                                <button type="button" class="btn text-white" style="background-color: #098209;" data-toggle="modal" data-target="#historyModal">View History</button>
                             </div>
+
+                            <!-- Modal for Viewing History -->
+                            <div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalLabel" aria-hidden="true d-flex justify-content center">
+                                <div class="modal-dialog modal-l modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="historyModalLabel">File History</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body d-flex justify-content-center">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="color: #000000; font-weight:bold; text-align: center;">Title</th>
+                                                        <th style="color: #000000; font-weight:bold; text-align: center;">Action</th>
+                                                        <th style="color: #000000; font-weight:bold; text-align: center;">Timestamp</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="historyTableBody">
+                                                    <tr><td colspan="3">Loading history...</td></tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger text-white" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -198,6 +244,41 @@
             window.open(`fetch_pdf.php?id=${id}&field=${field}`, '_blank'); // Fetch from database
         }
     }
+    </script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        $('#historyModal').on('show.bs.modal', function() {
+            let resolutionId = "<?php echo $resolution_id; ?>";
+
+            if (!resolutionId) {
+                $('#historyTableBody').html("<tr><td colspan='3'>No history available.</td></tr>");
+                return;
+            }
+
+            fetch(`fetch_history.php?id=${resolutionId}`)
+                .then(response => response.json())
+                .then(data => {
+                    let historyHtml = "";
+                    if (data.length > 0) {
+                        data.forEach(log => {
+                            historyHtml += `<tr>
+                                                <td style="color: #000000;">${log.title}</td>
+                                                <td style="color: #000000;">${log.action}</td>
+                                                <td style="color: #000000;">${log.timestamp}</td>
+                                            </tr>`;
+                        });
+                    } else {
+                        historyHtml = "<tr><td colspan='3'>No history found.</td></tr>";
+                    }
+                    document.getElementById("historyTableBody").innerHTML = historyHtml;
+                })
+                .catch(error => {
+                    console.error("Error fetching history:", error);
+                    document.getElementById("historyTableBody").innerHTML = "<tr><td colspan='3'>Error loading history.</td></tr>";
+                });
+        });
+    });
     </script>
     
 </body>

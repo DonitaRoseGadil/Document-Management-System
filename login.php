@@ -1,12 +1,14 @@
 <?php
+     session_start();
 
     if(isset($_POST['login'])) {
-        session_start();
         include("connect.php");
 
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+
         if ($stmt = $conn->prepare('SELECT id, password FROM accounts WHERE email = ?')) {
-            // Bind parameters (s = string, i = int, b = blob, etc)
-            $stmt->bind_param('s', $_POST['email']);
+            $stmt->bind_param('s', $email);
             $stmt->execute();
             // Store the result so we can check if the account exxists in the db.
             $stmt->store_result();
@@ -14,64 +16,65 @@
             if ($stmt->num_rows > 0) {
                 $stmt->bind_result($id, $password);
                 $stmt->fetch();
-                // Account exists, now we verify the password.
+                // Account exits, now we verify the password.
 
                 if ($_POST['password'] === $password) {
-                    // Verification success! Uset has logged-in!
+                    // Verification success! User has logged-in!
                     session_regenerate_id();
                     $_SESSION['loggedin'] = TRUE;
-                    $_SESSION['name'] = $_POST['email'];
+                    $_SESSION['name'] = $email;
                     $_SESSION['id'] = $id;
-                    echo 'Welcome back, ' . htmlspecialchars($_SESSION['name'], ENT_QUOTES) . '!';
+                    echo "<script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Login successfully',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                }).then(() => {
+                                    window.location.href = 'dashboard.php'; // Redirect after alert
+                                    exit();
+                                });
+                            });
+                        </script>";
                 } else {
                     echo "<script>
-                    Swal.fire({
-                        title: 'Wrong Credentials',
-                        icon: 'error',
-                        confirmButtonText: 'Try Again'
-                    });
-                    </script>";
+                            document.addEventListener('DOMContentLoaded', function() {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Invalid Login',
+                                    text: 'Incorrect password or email. Please try again.',
+                                    confirmButtonText: 'OK'
+                                }).then(() => {
+                                    window.location.href = 'login.php';
+                                    exit();
+                                });
+                            });
+                        </script>";
                 }
             } else {
                 echo "<script>
-                    Swal.fire({
-                        title: 'Wrong Credentials',
-                        icon: 'error',
-                        confirmButtonText: 'Try Again'
-                    });
-                </script>";
+                        document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Invalid Login',
+                                text: 'Incorrect password or email. Please try again.',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                window.location.href = 'login.php';
+                                exit();
+                            });
+                        });
+                    </script>";
             }
-
             $stmt->close();
         }
     }
-
     
-
-    /* include("connect.php");
-    session_start();
-
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $email = mysqli_real_escape_string($check, $_POST['email']);
-        $password = mysqli_real_escape_string($check, $_POST['password']);
-
-        $data = mysqli_query($check, "SELECT * FROM admin WHERE email='$email' AND password='$password'");
-
-        if (mysqli_num_rows($data) == 1) {
-            $_SESSION['message'] = "success";
-            header("Location: login.php"); // Redirect to prevent form resubmission
-            exit();
-        } else {
-            $_SESSION['message'] = "error";
-            header("Location: login.php");
-            exit();
-        }
-    }*/
 ?>
 
 <!DOCTYPE html>
 <html lang="en" class="h-100">
-
 
 <?php include "header.php"; ?>
 
@@ -138,31 +141,6 @@
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <?php
-        /*
-        if (isset($_SESSION['message'])) {
-            if ($_SESSION['message'] == "success") {
-                echo "<script>
-                    Swal.fire({
-                        title: 'Login Successful!',
-                        icon: 'success'
-                    }).then(() => {
-                        window.location.href = 'dashboard.php';
-                    });
-                </script>";
-            } elseif ($_SESSION['message'] == "error") {
-                echo "<script>
-                    Swal.fire({
-                        title: 'Wrong Credentials',
-                        icon: 'error',
-                        confirmButtonText: 'Try Again'
-                    });
-                </script>";
-            }
-            unset($_SESSION['message']); // Clear session message after showing alert
-        } */
-    ?>
 
 </body>
 

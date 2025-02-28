@@ -22,7 +22,7 @@
         <!--**********************************
             Content body start
         ***********************************-->
-        <div class="content-body" style="color: #098209;">
+        <div class="content-body" style="color: #098209; background-color: #C5EBAA;">
             <div class="container-fluid">
                 <!-- row -->
                 <div class="row">
@@ -137,17 +137,23 @@
     <!-- Sweetalert for deletion-->
     <script>
         function confirmDelete(id) {
+
             Swal.fire({
-                icon: 'warning',
-                title: 'Are you sure?',
+                title: "Are you sure?",
                 text: "You won't be able to revert this!",
+                icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Confirm'
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Confirm!"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = 'deletemeetingminutes.php?id=' + id;
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your file has been deleted.",
+                        icon: "success"
+                    });
+                    window.location.href = 'deletemeetingminutes.php?id=' + id; 
                 }
             });
         }

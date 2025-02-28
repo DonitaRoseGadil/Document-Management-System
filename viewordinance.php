@@ -139,11 +139,46 @@
                                     </form>
                                 </div>
                             </div>
+
+                            <!-- View History Button -->
                             <div class="card-footer d-sm-flex justify-content-between">
                                 <div class="card-footer-link mb-4 mb-sm-0">
                                     <p class="card-text text-dark d-inline"><?php echo $lastUpdatedText; ?></p>
                                 </div>
+                                <button type="button" class="btn text-white" style="background-color: #098209;" data-toggle="modal" data-target="#historyModal">View History</button>
                             </div>
+
+                            <!-- Modal for Viewing History -->
+                            <div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalLabel" aria-hidden="true d-flex justify-content center">
+                                <div class="modal-dialog modal-l modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="historyModalLabel">File History</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body d-flex justify-content-center">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="color: #000000; font-weight:bold; text-align: center;">Title</th>
+                                                        <th style="color: #000000; font-weight:bold; text-align: center;">Action</th>
+                                                        <th style="color: #000000; font-weight:bold; text-align: center;">Timestamp</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="historyTableBody">
+                                                    <tr><td colspan="3">Loading history...</td></tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger text-white" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -184,7 +219,42 @@
             }
         }
     </script>
-    
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            $('#historyModal').on('show.bs.modal', function() {
+                let resolutionId = "<?php echo $resolution_id; ?>";
+
+                if (!resolutionId) {
+                    $('#historyTableBody').html("<tr><td colspan='3'>No history available.</td></tr>");
+                    return;
+                }
+
+                fetch(`fetch_history.php?id=${resolutionId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        let historyHtml = "";
+                        if (data.length > 0) {
+                            data.forEach(log => {
+                                historyHtml += `<tr>
+                                                    <td style="color: #000000;">${log.title}</td>
+                                                    <td style="color: #000000;">${log.action}</td>
+                                                    <td style="color: #000000;">${log.timestamp}</td>
+                                                </tr>`;
+                            });
+                        } else {
+                            historyHtml = "<tr><td colspan='3'>No history found.</td></tr>";
+                        }
+                        document.getElementById("historyTableBody").innerHTML = historyHtml;
+                    })
+                    .catch(error => {
+                        console.error("Error fetching history:", error);
+                        document.getElementById("historyTableBody").innerHTML = "<tr><td colspan='3'>Error loading history.</td></tr>";
+                    });
+            });
+        });
+        </script>
+        
     
 </body>
 
