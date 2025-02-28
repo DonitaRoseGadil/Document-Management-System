@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 27, 2025 at 03:08 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Generation Time: Feb 28, 2025 at 06:19 AM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.0.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -38,7 +38,8 @@ CREATE TABLE `accounts` (
 --
 
 INSERT INTO `accounts` (`id`, `email`, `password`) VALUES
-(2, 'test@test.com', '$2y$10$SfhYIDtn.iOuCW7zfoFLuuZHX6lja4lF4XA4JqNmpiH/.P3zB8JCa');
+(2, 'test@test.com', '$2y$10$SfhYIDtn.iOuCW7zfoFLuuZHX6lja4lF4XA4JqNmpiH/.P3zB8JCa'),
+(3, 'admin@gmail.com', 'admin123');
 
 -- --------------------------------------------------------
 
@@ -60,7 +61,17 @@ CREATE TABLE `history_log` (
 --
 
 INSERT INTO `history_log` (`id`, `action`, `file_type`, `file_id`, `title`, `timestamp`) VALUES
-(1, 'Created', 'Minutes', 3, 'dd', '2025-02-27 01:34:45');
+(1, 'Created', 'Minutes', 3, 'dd', '2025-02-27 01:34:45'),
+(2, 'Created', 'Resolution', 0, 'TEST 1', '2025-02-28 01:51:45'),
+(3, 'Created', 'Ordinance', 6, 'TEST 1', '2025-02-28 02:27:05'),
+(4, 'Created', 'Ordinance', 7, 'TEST 2', '2025-02-28 02:50:36'),
+(5, 'Created', 'Ordinance', 8, 'TEST 3', '2025-02-28 03:04:01'),
+(6, 'Created', 'Resolution', 9, 'TEST 4', '2025-02-28 03:09:45'),
+(7, 'Deleted', 'Resolution', 6, '', '2025-02-28 04:36:19'),
+(8, 'Deleted', 'Resolution', 7, '', '2025-02-28 04:36:32'),
+(9, 'Deleted', 'Minutes', 3, '', '2025-02-28 04:36:46'),
+(10, 'Deleted', 'Resolution', 8, '', '2025-02-28 04:37:15'),
+(11, 'Created', 'Resolution', 10, 'TEST 5', '2025-02-28 04:37:55');
 
 -- --------------------------------------------------------
 
@@ -85,8 +96,7 @@ CREATE TABLE `minutes` (
 --
 
 INSERT INTO `minutes` (`id`, `no_regSession`, `date`, `genAttachment`, `resNo`, `title`, `type`, `status`, `attachment`) VALUES
-(2, '9th Regular Session', '2025-02-24', '', 'Test1', 'Test1', 'Draft', 'Draft', 0x75706c6f6164732f32323830352d41727469636c652d3237373832312d312d31302d32303231313132372e706466),
-(3, '', '0000-00-00', '', 'dd', 'dd', '', '', '');
+(2, '9th Regular Session', '2025-02-24', '', 'Test1', 'Test1', 'Draft', 'Draft', 0x75706c6f6164732f32323830352d41727469636c652d3237373832312d312d31302d32303231313132372e706466);
 
 -- --------------------------------------------------------
 
@@ -129,9 +139,19 @@ CREATE TABLE `resolution` (
   `author_sponsor` varchar(100) NOT NULL,
   `co_author` varchar(255) NOT NULL,
   `remarks` varchar(20) NOT NULL,
+  `d_forward` date NOT NULL,
+  `d_signed` date NOT NULL,
   `d_approved` date NOT NULL,
   `attachment` longblob DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `resolution`
+--
+
+INSERT INTO `resolution` (`id`, `reso_no`, `title`, `descrip`, `d_adopted`, `author_sponsor`, `co_author`, `remarks`, `d_forward`, `d_signed`, `d_approved`, `attachment`) VALUES
+(9, '050', 'TEST 4', 'eyyyyyyyy', '0000-00-00', 'Councilor: Angelo L. Calimlim & Dionnie P. Zabala', 'Josie', 'Forwarded to LCE', '2025-02-24', '0000-00-00', '0000-00-00', 0x75706c6f6164732f4c65747465725f6f665f456e646f7273656d656e742e706466),
+(10, '055', 'TEST 5', 'eyyyyyyyyyyyy', '0000-00-00', 'Councilor: Angelo L. Calimlim & Dionnie P. Zabala', 'Josie', 'Signed by LCE', '2025-02-24', '2025-02-28', '0000-00-00', 0x75706c6f6164732f53686f72742d46696c6d2d44414c55594f4e472e706466);
 
 --
 -- Indexes for dumped tables
@@ -175,13 +195,13 @@ ALTER TABLE `resolution`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `history_log`
 --
 ALTER TABLE `history_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `minutes`
@@ -199,7 +219,7 @@ ALTER TABLE `ordinance`
 -- AUTO_INCREMENT for table `resolution`
 --
 ALTER TABLE `resolution`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
