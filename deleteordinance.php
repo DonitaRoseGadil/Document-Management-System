@@ -9,6 +9,11 @@
         $sql = "DELETE FROM `ordinance` WHERE id = ?";
         $stmt = mysqli_prepare($conn, $sql);
 
+
+        $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
+        VALUES ('Deleted', 'Ordinance', $id, '$title')";
+        $conn->query($log_sql);
+
         if ($stmt) {
             mysqli_stmt_bind_param($stmt, "i", $id);
             mysqli_stmt_execute($stmt);

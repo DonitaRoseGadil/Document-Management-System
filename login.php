@@ -1,28 +1,80 @@
 <?php
-include("connect.php");
-session_start();
+     session_start();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = mysqli_real_escape_string($check, $_POST['email']);
-    $password = mysqli_real_escape_string($check, $_POST['password']);
+    if(isset($_POST['login'])) {
+        include("connect.php");
 
-    $data = mysqli_query($check, "SELECT * FROM admin WHERE email='$email' AND password='$password'");
+        $email = $_POST['email'];
+        $password = $_POST['password'];
 
-    if (mysqli_num_rows($data) == 1) {
-        $_SESSION['message'] = "success";
-        header("Location: login.php"); // Redirect to prevent form resubmission
-        exit();
-    } else {
-        $_SESSION['message'] = "error";
-        header("Location: login.php");
-        exit();
+        if ($stmt = $conn->prepare('SELECT id, password FROM accounts WHERE email = ?')) {
+            $stmt->bind_param('s', $email);
+            $stmt->execute();
+            // Store the result so we can check if the account exxists in the db.
+            $stmt->store_result();
+
+            if ($stmt->num_rows > 0) {
+                $stmt->bind_result($id, $password);
+                $stmt->fetch();
+                // Account exits, now we verify the password.
+
+                if ($_POST['password'] === $password) {
+                    // Verification success! User has logged-in!
+                    session_regenerate_id();
+                    $_SESSION['loggedin'] = TRUE;
+                    $_SESSION['name'] = $email;
+                    $_SESSION['id'] = $id;
+                    echo "<script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Login successfully',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                }).then(() => {
+                                    window.location.href = 'dashboard.php'; // Redirect after alert
+                                    exit();
+                                });
+                            });
+                        </script>";
+                } else {
+                    echo "<script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Invalid Login',
+                                    text: 'Incorrect password or email. Please try again.',
+                                    confirmButtonText: 'OK'
+                                }).then(() => {
+                                    window.location.href = 'login.php';
+                                    exit();
+                                });
+                            });
+                        </script>";
+                }
+            } else {
+                echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Invalid Login',
+                                text: 'Incorrect password or email. Please try again.',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                window.location.href = 'login.php';
+                                exit();
+                            });
+                        });
+                    </script>";
+            }
+            $stmt->close();
+        }
     }
-}
+    
 ?>
 
 <!DOCTYPE html>
 <html lang="en" class="h-100">
-
 
 <?php include "header.php"; ?>
 
@@ -47,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="auth-form">
                                     <h1 class="text-center" style="color:#098209">Log in<h1>
                                     <h4 class="text-center mb-4" style="color:#000000">Sign in your account</h4>
-                                    <form id="loginForm" action="dashboard.php" method="POST">
+                                    <form id="loginForm" action="" method="post">
                                         <div class="form-group">
                                             <!-- <label ><strong>Email</strong></label> -->
                                             <input type="email" class="form-control" placeholder="Email" name="email" id="email">
@@ -68,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             </div>
                                         </div>
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-primary btn-block" style="background-color: #098209; border-color:#098209;">Sign me in</button>
+                                            <button type="submit" class="btn btn-primary btn-block" name="login" style="background-color: #098209; border-color:#098209;">Sign me in</button>
                                         </div>
                                     </form> 
                                 </div>
@@ -89,30 +141,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <?php
-        if (isset($_SESSION['message'])) {
-            if ($_SESSION['message'] == "success") {
-                echo "<script>
-                    Swal.fire({
-                        title: 'Login Successful!',
-                        icon: 'success'
-                    }).then(() => {
-                        window.location.href = 'dashboard.php';
-                    });
-                </script>";
-            } elseif ($_SESSION['message'] == "error") {
-                echo "<script>
-                    Swal.fire({
-                        title: 'Wrong Credentials',
-                        icon: 'error',
-                        confirmButtonText: 'Try Again'
-                    });
-                </script>";
-            }
-            unset($_SESSION['message']); // Clear session message after showing alert
-        }
-    ?>
 
 </body>
 

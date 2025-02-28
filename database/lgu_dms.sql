@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 25, 2025 at 08:09 AM
+-- Generation Time: Feb 27, 2025 at 03:08 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,47 @@ SET time_zone = "+00:00";
 --
 -- Database: `lgu_dms`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accounts`
+--
+
+CREATE TABLE `accounts` (
+  `id` int(11) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `accounts`
+--
+
+INSERT INTO `accounts` (`id`, `email`, `password`) VALUES
+(2, 'test@test.com', '$2y$10$SfhYIDtn.iOuCW7zfoFLuuZHX6lja4lF4XA4JqNmpiH/.P3zB8JCa');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `history_log`
+--
+
+CREATE TABLE `history_log` (
+  `id` int(11) NOT NULL,
+  `action` varchar(50) DEFAULT NULL,
+  `file_type` varchar(50) DEFAULT NULL,
+  `file_id` int(11) DEFAULT NULL,
+  `title` text DEFAULT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `history_log`
+--
+
+INSERT INTO `history_log` (`id`, `action`, `file_type`, `file_id`, `title`, `timestamp`) VALUES
+(1, 'Created', 'Minutes', 3, 'dd', '2025-02-27 01:34:45');
 
 -- --------------------------------------------------------
 
@@ -44,7 +85,8 @@ CREATE TABLE `minutes` (
 --
 
 INSERT INTO `minutes` (`id`, `no_regSession`, `date`, `genAttachment`, `resNo`, `title`, `type`, `status`, `attachment`) VALUES
-(2, '9th Regular Session', '2025-02-24', '', 'Test1', 'Test1', 'Draft', 'Draft', 0x75706c6f6164732f32323830352d41727469636c652d3237373832312d312d31302d32303231313132372e706466);
+(2, '9th Regular Session', '2025-02-24', '', 'Test1', 'Test1', 'Draft', 'Draft', 0x75706c6f6164732f32323830352d41727469636c652d3237373832312d312d31302d32303231313132372e706466),
+(3, '', '0000-00-00', '', 'dd', 'dd', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -96,6 +138,18 @@ CREATE TABLE `resolution` (
 --
 
 --
+-- Indexes for table `accounts`
+--
+ALTER TABLE `accounts`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `history_log`
+--
+ALTER TABLE `history_log`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `minutes`
 --
 ALTER TABLE `minutes`
@@ -118,10 +172,22 @@ ALTER TABLE `resolution`
 --
 
 --
+-- AUTO_INCREMENT for table `accounts`
+--
+ALTER TABLE `accounts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `history_log`
+--
+ALTER TABLE `history_log`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `minutes`
 --
 ALTER TABLE `minutes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `ordinance`

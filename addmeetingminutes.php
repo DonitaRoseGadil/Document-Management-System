@@ -18,7 +18,6 @@
         if (isset($_FILES['attachment']) && is_array($_FILES['attachment']['name'])) {
             foreach ($_POST['resNo'] as $key => $resNo) {
                 $title = $_POST['title'][$key];
-                $type = $_POST['type'][$key];
                 $status = $_POST['status'][$key];
 
                 // Handle attachment for each resolution
@@ -31,12 +30,18 @@
                 }
 
                 // Insert into database
-                $sql = "INSERT INTO `minutes` (`no_regSession`, `date`, `genAttachment`, `resNo`, `title`, `type`, `status`, `attachment`) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO `minutes` (`no_regSession`, `date`, `genAttachment`, `resNo`, `title`, `status`, `attachment`) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?)";
                 
                 $stmt = $conn->prepare($sql);
-                $stmt->bind_param("ssssssss", $no_regSession, $date, $genAttachmentPath, $resNo, $title, $type, $status, $attachmentPath);
+                $stmt->bind_param("sssssss", $no_regSession, $date, $genAttachmentPath, $resNo, $title, $status, $attachmentPath);
                 $stmt->execute();
+
+                $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
+                VALUES ('Created', 'Minutes', LAST_INSERT_ID(), '$title')";
+            
+                $conn->query($log_sql);
+    
             }
         }       
 
@@ -96,6 +101,72 @@
 
 
 </head>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const requiredFields = ["no_regSession", "date", "genAttachment", "title", "type", "status", "attachment"];
+
+        function validateField(field) {
+            let inputElement = document.getElementById(field);
+            let errorElement = document.getElementById(field + "-error");
+
+            if (!inputElement.value.trim() || (field === "remarks" && inputElement.value === "Choose...")) {
+                if (!errorElement) {
+                    let errorMsg = document.createElement("div");
+                    errorMsg.id = field + "-error";
+                    errorMsg.className = "text-danger mt-1";
+                    errorMsg.textContent = "Required missing field.";
+                    inputElement.parentNode.appendChild(errorMsg);
+                }
+            } else {
+                if (errorElement) {
+                    errorElement.remove();
+                }
+            }
+        }
+
+        // Add event listeners for real-time validation
+        requiredFields.forEach(function (field) {
+            let inputElement = document.getElementById(field);
+
+            if (inputElement) {
+                // "input" event - Hide error while typing
+                inputElement.addEventListener("input", function () {
+                    validateField(field);
+                });
+
+                // "change" event for dropdown validation
+                if (field === "remarks") {
+                    inputElement.addEventListener("change", function () {
+                        validateField(field);
+                    });
+                }
+
+                // "focusout" event - Show error if empty when user leaves field
+                inputElement.addEventListener("focusout", function () {
+                    validateField(field);
+                });
+            }
+        });
+
+        // Form submit validation
+        document.querySelector("form").addEventListener("submit", function (event) {
+            let isValid = true;
+            requiredFields.forEach(function (field) {
+                validateField(field);
+                if (!document.getElementById(field).value.trim() || 
+                    (field === "remarks" && document.getElementById(field).value === "Choose...")) {
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
+
 
 <body>
 
@@ -214,18 +285,6 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="type" class="col-sm-3 col-form-label" style="color: #000000">Type:</label>
-                            <div class="col-sm-9">
-                                <select id="type" name="type[]" class="form-control">
-                                    <option value="" selected>Choose...</option>
-                                    <option value="Draft">Draft</option>
-                                    <option value="Information">Information</option>
-                                    <option value="Referred to Committee">Referred to Committee</option>
-                                    <option value="Approved">Approved</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
                             <label for="status" class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
                             <div class="col-sm-9">
                                 <select id="status" name="status[]" class="form-control">
@@ -247,7 +306,7 @@
                             </div>
                         </div>
                         <div class="form-group row d-flex justify-content-center">
-                            <button type="button" class="btn btn-danger delete-btn ml-2 flex"><i class='fa fa-trash' aria-hidden='true'> Delete</i></button>
+                            <button type="button" class="btn btn-danger delete-btn flex"><i class='fa fa-trash' aria-hidden='true'> Delete</i></button>
                         </div>
                     </div>
                 </div>

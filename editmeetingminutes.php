@@ -10,7 +10,6 @@
         $date = mysqli_real_escape_string($conn, $_POST['date']);
         $resNo = mysqli_real_escape_string($conn, $_POST['resNo']);
         $title = mysqli_real_escape_string($conn, $_POST['title']);
-        $type = mysqli_real_escape_string($conn, $_POST['type']);
         $status = mysqli_real_escape_string($conn, $_POST['status']);
 
         // Handle file uploads
@@ -27,7 +26,7 @@
             $genAttachmentQuery = "SELECT genAttachment FROM minutes WHERE id = $id";
             $result = mysqli_query($conn, $genAttachmentQuery);
             $row = mysqli_fetch_assoc($result);
-            $genAttachment = $row['genAttachment'];
+            $genAttachmentPath = $row['genAttachment'];
         }
 
         if (!empty($attachment)) {
@@ -38,7 +37,7 @@
             $attachmentQuery = "SELECT attachment FROM minutes WHERE id = $id";
             $result = mysqli_query($conn, $attachmentQuery);
             $row = mysqli_fetch_assoc($result);
-            $attachment = $row['attachment'];
+            $attachmentPath = $row['attachment'];
         }
 
         // Update query
@@ -48,11 +47,15 @@
                 `genAttachment` = '$genAttachmentPath',
                 `resNo` = '$resNo',
                 `title` = '$title',
-                `type` = '$type',
                 `status` = '$status',
                 `attachment` = '$attachmentPath' WHERE `id` = $id";
 
         $query = mysqli_query($conn, $sql);
+
+
+        $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
+        VALUES ('Edited', 'Minutes', $id, '$title')";
+        $conn->query($log_sql);
 
         if ($query) {
             echo "<script>
@@ -157,7 +160,7 @@
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
                                             </div>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="genAttachment" name="genAttachment" onchange="updateFileName('genAttachmentLabel')">
+                                                <input type="file" class="custom-file-input" value="genAttachment" id="genAttachment" name="genAttachment" onchange="updateFileName('genAttachmentLabel')">
                                                 <label class="custom-file-label" id="genAttachmentLabel"> 
                                                     <?php echo !empty($row['genAttachment']) ? $row['genAttachment'] : "Choose file"; ?>
                                                 </label>
@@ -173,18 +176,6 @@
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Title:</label>
                                             <div class="col-sm-9">
                                                 <input type="text" class="form-control" value="<?php echo $row['title']?>" name="title" required>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="type" class="col-sm-3 col-form-label" style="color: #000000">Type:</label>
-                                            <div class="col-sm-9">
-                                                <select id="type" value="<?php echo $row['type']?>" name="type" class="form-control">
-                                                    <option value="" selected>Choose...</option>
-                                                    <option value="Draft" <?php if ($row['type'] == "Draft") echo "selected"; ?>>Draft</option>
-                                                    <option value="Information" <?php if ($row['type'] == "Information") echo "selected"; ?>>Information</option>
-                                                    <option value="Referred to Committee" <?php if ($row['type'] == "Referred to Committee") echo "selected"; ?>>Referred to Committee</option>
-                                                    <option value="Approved" <?php if ($row['type'] == "Approved") echo "selected"; ?>>Approved</option>
-                                                </select>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -204,7 +195,7 @@
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
                                             </div>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="attachment" name="attachment" onchange="updateFileName('attachmentLabel')">
+                                                <input type="file" class="custom-file-input" id="attachment" value="attachment" name="attachment" onchange="updateFileName('attachmentLabel')">
                                                 <label class="custom-file-label" id="attachmentLabel"> 
                                                     <?php echo !empty($row['attachment']) ? $row['attachment'] : "Choose file"; ?>
                                                 </label>
