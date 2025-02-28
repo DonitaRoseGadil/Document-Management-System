@@ -59,12 +59,6 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Approved:</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" value="<?php echo $row['d_approved']?>" id="dateApproved" name="dateApproved" disabled>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
                                             <div class="col-sm-9">
                                                 <textarea class="form-control" id="title" name="title" rows="3" style="resize: none; overflow: hidden;" disabled><?php echo $row['title']; ?></textarea>
@@ -98,6 +92,24 @@
                                                     <option value="Referred to Committee" <?php if ($row['remarks'] == "Referred to Committee") echo "selected"; ?>>Referred to Committee</option>
                                                     <option value="Approved" <?php if ($row['remarks'] == "Approved") echo "selected"; ?>>Approved</option>
                                                 </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Forwarded to LCE:</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" value="<?php echo $row['d_approved']?>" id="dateApproved" name="dateApproved" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Signed by LCE:</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" value="<?php echo $row['d_approved']?>" id="dateApproved" name="dateApproved" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">SB Approval:</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" value="<?php echo $row['d_approved']?>" id="dateApproved" name="dateApproved" disabled>
                                             </div>
                                         </div>
                                         <div class="input-group mb-3">
