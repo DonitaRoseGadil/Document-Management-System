@@ -1,7 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<?php include "header.php"; ?>
+<?php include "header.php"; 
+
+    $conn = new mysqli("localhost", "root", "", "lgu_dms");
+
+    if ($conn->connect_error) {
+        die("Database connection failed");
+    }
+
+    // Set timezone for consistency
+    date_default_timezone_set('Asia/Manila');
+
+    $resolution_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+    $lastUpdatedText = "No updates yet";
+
+    if ($resolution_id > 0) {
+        // Fetch the last updated timestamp
+        $sql = "SELECT timestamp FROM history_log WHERE file_id = ? ORDER BY timestamp DESC LIMIT 1";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $resolution_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $lastUpdated = strtotime($row["timestamp"]); // Convert to Unix timestamp
+            $currentDate = date("Y-m-d"); // Get today's date
+            $updatedDate = date("Y-m-d", $lastUpdated); // Get last updated date
+
+            if ($currentDate === $updatedDate) {
+                // If updated today, show "Today at [time]"
+                $lastUpdatedText = "Last updated today at " . date("g:i A", $lastUpdated);
+            } else {
+                // Show full date and time if not today
+                $lastUpdatedText = "Last updated on " . date("F j, Y \\a\\t g:i A", $lastUpdated);
+            }
+        }
+
+        $stmt->close();
+    }
+
+    $conn->close();
+?>
 
 <head>
     <!-- Include SweetAlert CSS and JS -->
@@ -96,6 +137,11 @@
                                             </div>
                                         </div>
                                     </form>
+                                </div>
+                            </div>
+                            <div class="card-footer d-sm-flex justify-content-between">
+                                <div class="card-footer-link mb-4 mb-sm-0">
+                                    <p class="card-text text-dark d-inline"><?php echo $lastUpdatedText; ?></p>
                                 </div>
                             </div>
                         </div>
