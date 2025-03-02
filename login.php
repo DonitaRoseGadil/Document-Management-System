@@ -1,77 +1,76 @@
 <?php
-     session_start();
+    include("session.php");
+    include("connect.php");
 
-    if(isset($_POST['login'])) {
-        include("connect.php");
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $email = htmlspecialchars(trim($_POST['email']));
+        $password = htmlspecialchars(trim($_POST['password']));
 
-        $email = $_POST['email'];
-        $password = $_POST['password'];
+        $query = $conn->prepare("SELECT * FROM accounts WHERE email = ?");
+        $query->bind_param("s", $email);
+        $query->execute();
+        $result = $query->get_result();
 
-        if ($stmt = $conn->prepare('SELECT id, password FROM accounts WHERE email = ?')) {
-            $stmt->bind_param('s', $email);
-            $stmt->execute();
-            // Store the result so we can check if the account exxists in the db.
-            $stmt->store_result();
+        if ($result->num_rows == 1) {
+            $user = $result->fetch_assoc();
 
-            if ($stmt->num_rows > 0) {
-                $stmt->bind_result($id, $password);
-                $stmt->fetch();
-                // Account exits, now we verify the password.
+            if (password_verify($password, $user['password'])) {
+                $_SESSION['email'] = $user['email'];
+                $_SESSION['user_id'] = $user['id'];
 
-                if ($_POST['password'] === $password) {
-                    // Verification success! User has logged-in!
-                    session_regenerate_id();
-                    $_SESSION['loggedin'] = TRUE;
-                    $_SESSION['name'] = $email;
-                    $_SESSION['id'] = $id;
-                    echo "<script>
-                            document.addEventListener('DOMContentLoaded', function() {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Login successfully',
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                }).then(() => {
-                                    window.location.href = 'dashboard.php'; // Redirect after alert
-                                    exit();
-                                });
+                // Generate Token
+                $token = bin2hex(random_bytes(32));
+                $_SESSION['token'] = $token;
+
+                // Save Token in Database
+                $updateToken = $conn->prepare("UPDATE accounts SET token=? WHERE id=?");
+                $updateToken->bind_param("si", $token, $user['id']);
+                $updateToken->execute();
+
+                echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
+                echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Login successfully',
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(() => {
+                                window.location.href = 'dashboard.php';
                             });
-                        </script>";
-                } else {
-                    echo "<script>
-                            document.addEventListener('DOMContentLoaded', function() {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Invalid Login',
-                                    text: 'Incorrect password or email. Please try again.',
-                                    confirmButtonText: 'OK'
-                                }).then(() => {
-                                    window.location.href = 'login.php';
-                                    exit();
-                                });
-                            });
-                        </script>";
-                }
+                        });
+                    </script>";
             } else {
                 echo "<script>
                         document.addEventListener('DOMContentLoaded', function() {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Invalid Login',
-                                text: 'Incorrect password or email. Please try again.',
+                                text: 'Invalid credentials. Please try again.',
                                 confirmButtonText: 'OK'
                             }).then(() => {
                                 window.location.href = 'login.php';
-                                exit();
                             });
                         });
                     </script>";
             }
-            $stmt->close();
+        } else {
+            echo "<script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Invalid Login',
+                            text: 'User not found. Please try again.',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            window.location.href = 'login.php';
+                        });
+                    });
+                </script>";
         }
     }
-    
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en" class="h-100">
@@ -99,7 +98,7 @@
                                 <div class="auth-form">
                                     <h1 class="text-center" style="color:#098209">Log in<h1>
                                     <h4 class="text-center mb-4" style="color:#000000">Sign in your account</h4>
-                                    <form id="loginForm" action="" method="post">
+                                    <form id="loginForm" action="<?php htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                                         <div class="form-group">
                                             <!-- <label ><strong>Email</strong></label> -->
                                             <input type="email" class="form-control" placeholder="Email" name="email" id="email">
@@ -120,7 +119,7 @@
                                             </div>
                                         </div>
                                         <div class="text-center">
-                                            <button type="submit" class="btn btn-primary btn-block" name="login" style="background-color: #098209; border-color:#098209;">Sign me in</button>
+                                            <button type="submit" class="btn btn-primary btn-block" style="background-color: #098209; border-color:#098209;">Sign me in</button>
                                         </div>
                                     </form> 
                                 </div>

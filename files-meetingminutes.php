@@ -1,7 +1,6 @@
 <?php 
     error_reporting(E_ALL); // Enable error reporting for development
     ini_set('display_errors', 1);
-    session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,7 +21,7 @@
         <!--**********************************
             Content body start
         ***********************************-->
-        <div class="content-body" style="color: #098209; background-color: #C5EBAA;">
+        <div class="content-body" style="color: #098209; background-color: #f1f9f1;">
             <div class="container-fluid">
                 <!-- row -->
                 <div class="row">
@@ -151,7 +150,9 @@
                     Swal.fire({
                         title: "Deleted!",
                         text: "Your file has been deleted.",
-                        icon: "success"
+                        icon: "success",
+                        showConfirmButton: false,
+                        timer: 5000
                     });
                     window.location.href = 'deletemeetingminutes.php?id=' + id; 
                 }

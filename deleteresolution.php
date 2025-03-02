@@ -1,6 +1,5 @@
 <?php
 include "connect.php";
-session_start();
 
 if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
     $id = intval($_GET["id"]); // Ensure it's an integer

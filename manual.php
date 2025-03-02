@@ -18,7 +18,7 @@
         <!--**********************************
             Content body start
         ***********************************-->
-        <div class="content-body">
+        <div class="content-body" style="background-color: #f1f9f1">
             <!-- row -->
             <div class="container-fluid">
                 <div class="row">

@@ -1,13 +1,3 @@
-<?php
-
-    session_start();
-    if (!isset($_SESSION['loggedin'])) {
-        header('location: login.php');
-        exit;
-    }
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -36,7 +26,7 @@
         ?>
 
         <!-- Content Body Start -->
-        <div class="content-body" style="background-color: #C5EBAA;">
+        <div class="content-body" style="background-color: #f1f9f1">
             <div class="container-fluid">
                 <div class="row page-titles mx-0">
                     <div class="col-sm-6 p-md-0">

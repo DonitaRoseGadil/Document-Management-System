@@ -64,7 +64,7 @@
         <!--**********************************
             Content body start
         ***********************************-->
-        <div class="content-body">
+        <div class="content-body" style="background-color: #f1f9f1">
             <div class="container-fluid" >
                 <!-- row -->
                 <div class="row d-flex justify-content-center">

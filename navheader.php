@@ -1,17 +1,8 @@
-<?php 
-    session_start();
-    if (isset($_GET['logout'])) {
-        session_destroy();
-        // Redirect to the login page
-        header('Location: login.php');
-        exit(); // Stop further script execution
-    }
-?>
 <!--**********************************
     Nav header start
 ***********************************-->
 <div class="nav-header" style="background-color: #098209; display: flex; align-items: center;">
-    <a href="index.html" class="brand-logo" style="display: flex; align-items: center;">
+    <a href="dashboard.php" class="brand-logo" style="display: flex; align-items: center;">
         <img class="logo-abbr" src="./images/logo.png" alt="">
         <span id="brandText" class="brand-text" style="color: white; font-size: 14px; font-weight: bold; white-space: nowrap; margin-left: 5px;">
             SANGGUNIANG BAYAN OFFICE
@@ -58,7 +49,7 @@
                             <i class="mdi mdi-account"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a href="./login.php?logout=true" class="dropdown-item">
+                            <a href="logout.php" class="dropdown-item">
                                 <i class="icon-key"></i>
                                 <span class="ml-2">Logout </span>
                             </a>
