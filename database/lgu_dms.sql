@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 28, 2025 at 06:19 AM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.0.28
+-- Generation Time: Mar 03, 2025 at 10:45 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,18 +28,18 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `accounts` (
-  `id` int(11) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `password` varchar(255) NOT NULL
+  `id` int(10) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `accounts`
 --
 
-INSERT INTO `accounts` (`id`, `email`, `password`) VALUES
-(2, 'test@test.com', '$2y$10$SfhYIDtn.iOuCW7zfoFLuuZHX6lja4lF4XA4JqNmpiH/.P3zB8JCa'),
-(3, 'admin@gmail.com', 'admin123');
+INSERT INTO `accounts` (`id`, `email`, `password`, `token`) VALUES
+(1, 'admin@gmail.com', '$2y$10$.3eKSzDL6g.6DyXQezsldOYUZi9ae76NWfwyb4CAFljUd.tNr0SjO', '');
 
 -- --------------------------------------------------------
 
@@ -71,7 +71,21 @@ INSERT INTO `history_log` (`id`, `action`, `file_type`, `file_id`, `title`, `tim
 (8, 'Deleted', 'Resolution', 7, '', '2025-02-28 04:36:32'),
 (9, 'Deleted', 'Minutes', 3, '', '2025-02-28 04:36:46'),
 (10, 'Deleted', 'Resolution', 8, '', '2025-02-28 04:37:15'),
-(11, 'Created', 'Resolution', 10, 'TEST 5', '2025-02-28 04:37:55');
+(11, 'Created', 'Resolution', 10, 'TEST 5', '2025-02-28 04:37:55'),
+(12, 'Edited', 'Minutes', 2, 'Test1', '2025-03-01 13:01:29'),
+(13, 'Deleted', 'Minutes', 2, 'Test1', '2025-03-01 13:01:47'),
+(14, 'Created', 'Minutes', 4, 'd', '2025-03-01 13:19:08'),
+(15, 'Deleted', 'Minutes', 4, 'd', '2025-03-01 13:20:01'),
+(16, 'Created', 'Minutes', 5, 's', '2025-03-01 13:20:34'),
+(17, 'Deleted', 'Minutes', 5, 's', '2025-03-01 13:20:41'),
+(18, 'Created', 'Minutes', 6, 's', '2025-03-01 13:21:07'),
+(19, 'Deleted', 'Minutes', 6, 's', '2025-03-01 13:21:15'),
+(20, 'Created', 'Minutes', 7, 'c', '2025-03-01 13:21:39'),
+(21, 'Deleted', 'Minutes', 7, 'c', '2025-03-01 13:21:43'),
+(22, 'Created', 'Minutes', 8, 'd', '2025-03-01 13:22:03'),
+(23, 'Deleted', 'Minutes', 8, 'd', '2025-03-01 13:22:08'),
+(24, 'Created', 'Minutes', 9, 's', '2025-03-01 13:23:02'),
+(25, 'Deleted', 'Minutes', 9, 's', '2025-03-01 13:23:10');
 
 -- --------------------------------------------------------
 
@@ -90,13 +104,6 @@ CREATE TABLE `minutes` (
   `status` varchar(255) NOT NULL,
   `attachment` longblob NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `minutes`
---
-
-INSERT INTO `minutes` (`id`, `no_regSession`, `date`, `genAttachment`, `resNo`, `title`, `type`, `status`, `attachment`) VALUES
-(2, '9th Regular Session', '2025-02-24', '', 'Test1', 'Test1', 'Draft', 'Draft', 0x75706c6f6164732f32323830352d41727469636c652d3237373832312d312d31302d32303231313132372e706466);
 
 -- --------------------------------------------------------
 
@@ -195,19 +202,19 @@ ALTER TABLE `resolution`
 -- AUTO_INCREMENT for table `accounts`
 --
 ALTER TABLE `accounts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `history_log`
 --
 ALTER TABLE `history_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `minutes`
 --
 ALTER TABLE `minutes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `ordinance`
