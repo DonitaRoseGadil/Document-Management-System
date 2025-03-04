@@ -2,35 +2,32 @@
 <html lang="en">
 
 <?php 
-    include "header.php"; 
-    include "connect.php";
+include "header.php"; 
+include "connect.php"; 
 
-    $conn = new mysqli("localhost", "root", "", "lgu_dms");
-    
-    if ($conn->connect_error) {
-        die("Database connection failed");
-    }
-    
-    // Set timezone for consistency
-    date_default_timezone_set('Asia/Manila');
-    
-    $resolution_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-    $lastUpdatedText = "No updates yet";
-    
+
+date_default_timezone_set('Asia/Manila');
+
+$lastUpdatedText = "No updates yet";
+
+
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $resolution_id = intval($_GET['id']);
+
     if ($resolution_id > 0) {
-        // Fetch the last updated timestamp
+        // Fetch the last updated timestamp for the specific file
         $sql = "SELECT timestamp FROM history_log WHERE file_id = ? ORDER BY timestamp DESC LIMIT 1";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $resolution_id);
         $stmt->execute();
         $result = $stmt->get_result();
-    
+
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             $lastUpdated = strtotime($row["timestamp"]); // Convert to Unix timestamp
             $currentDate = date("Y-m-d"); // Get today's date
             $updatedDate = date("Y-m-d", $lastUpdated); // Get last updated date
-    
+
             if ($currentDate === $updatedDate) {
                 // If updated today, show "Today at [time]"
                 $lastUpdatedText = "Last updated today at " . date("g:i A", $lastUpdated);
@@ -39,15 +36,13 @@
                 $lastUpdatedText = "Last updated on " . date("F j, Y \\a\\t g:i A", $lastUpdated);
             }
         }
-    
+
         $stmt->close();
     }
-    
-    $conn->close();
-    
-    ?>
+}
 
-
+$conn->close();
+?>
 
 <head>
     <!-- Include SweetAlert CSS and JS -->
@@ -199,9 +194,9 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <div class="modal-footer">
+                                        <!-- <div class="modal-footer">
                                             <button type="button" class="btn btn-danger text-white" data-dismiss="modal">Close</button>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>

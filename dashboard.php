@@ -36,7 +36,7 @@
         ?>
 
         <!-- Content Body Start -->
-        <div class="content-body" style="background-color: #C5EBAA;">
+        <div class="content-body" style="background-color: #f1f9f1;">
             <div class="container-fluid">
                 <div class="row page-titles mx-0">
                     <div class="col-sm-6 p-md-0">
@@ -99,8 +99,8 @@
                 <div class="row">
                     <!-- Recent Activities Section -->
                     <div class="col-lg-6">
-                        <h4 class="mt-4 ml-4" style="color: #098209;">RECENT ACTIVITIES</h4>
-                        <div class="row flex-column ml-2" id="recentActivities" style="gap: 2px;">
+                        <h4 class="mt-4 mr-2" style="color: #098209;">RECENT ACTIVITIES</h4>
+                        <div class="row flex-column mr-2" id="recentActivities">
                             <p id="lastUpdated" style="color: gray; margin-left: 10px;"></p>
                         </div>
                     </div>
@@ -108,8 +108,8 @@
 
                     <!-- Shortcuts Section -->
                     <div class="col-lg-6">
-                        <h4 class="mt-4 ml-4" style="color: #098209;">SHORTCUTS</h4>
-                        <div class="row flex-column ml-2" style="gap: 2px;">
+                        <h4 class="mt-4" style="color: #098209;">SHORTCUTS</h4>
+                        <div class="row flex-column" style="gap: 2px;">
                             <div class="col-lg-12">
                                 <div class="card p-2 d-flex align-items-center"
                                     style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209; 
@@ -174,7 +174,7 @@
             if (data.activities.length > 0) {
                 data.activities.forEach(activity => {
                     let activityHTML = `
-                        <div class="col-lg-12">
+                        <div class="col-lg-12" style="overflow: visible;">
                             <div class="card p-2" 
                                 style="margin-bottom: 10px; 
                                     border-left: 4px solid 
@@ -182,7 +182,8 @@
                                         activity.action === 'Created' ? '#098209' : 
                                         activity.action === 'Deleted' ? '#DC3545' : '#E0E0E0'}; 
                                     background: #f9f9f9; 
-                                    padding: 10px;">
+                                    padding: 10px;
+                                    box-shadow: 5px 5px 10px rgba(0.1, 0, 0, 0.1);">
                                 <div style="color: #333; font-weight: bold; font-size: 1rem;">
                                     ${activity.file_type}: ${activity.title}
                                 </div>
