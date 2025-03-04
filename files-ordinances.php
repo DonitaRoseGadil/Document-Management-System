@@ -1,7 +1,6 @@
 <?php 
     error_reporting(E_ALL); // Enable error reporting for development
     ini_set('display_errors', 1);
-    session_start();
 ?>
 
 <!DOCTYPE html>
@@ -23,7 +22,7 @@
         <!--**********************************
             Content body start
         ***********************************-->
-        <div class="content-body" style="background-color: #C5EBAA;">
+        <div class="content-body" style="background-color: #f1f9f1">
             <div class="container-fluid">
                 <!-- row -->
                 <div class="row">
