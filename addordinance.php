@@ -8,9 +8,10 @@ if(isset($_POST['save'])){
     $title = $_POST['title'];
     $dateAdopted = $_POST['dateAdopted'];
     $authorSponsor = $_POST['authorSponsor'];
-    $dateFwd = $_POST['dateFwd'];
+    $remarks = $_POST['remarks'];
+    $dateFowarded = $_POST['dateFowarded'];
     $dateSigned = $_POST['dateSigned'];
-    $spApproval = $_POST['spApproval'];
+    $dateApproved = $_POST['dateApproved'];
 
     // Upload file
     $attachmentPath = "";
@@ -19,50 +20,45 @@ if(isset($_POST['save'])){
         move_uploaded_file($_FILES['attachment']['tmp_name'], $attachmentPath);
     }
 
-    $sql = "INSERT INTO `ordinance`(`mo_no`, `title`, `date_adopted`, `author_sponsor`, `date_fwd`, `date_signed`, `sp_approval`, `attachment`) 
-            VALUES ('$moNo', '$title', '$dateAdopted', '$authorSponsor', '$dateFwd', '$dateSigned', '$spApproval', '$attachmentPath')";
+    $sql = "INSERT INTO `ordinance`(`mo_no`, `title`, `date_adopted`, `author_sponsor`, `remarks`, `date_fwd`, `date_signed`, `sp_approval`, `attachment`) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    $query = mysqli_query($conn, $sql);
-    
-    $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
-    VALUES ('Created', 'Ordinance', LAST_INSERT_ID(), '$title')";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sssssssss", $moNo, $title, $dateAdopted, $authorSponsor, $remarks, $dateFowarded, $dateSigned, $dateApproved, $attachmentPath);
 
-    $conn->query($log_sql);
+    if ($stmt->execute()) {
+        $last_id = $conn->insert_id;
 
+        // Insert into History Log
+        $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
+                    VALUES ('Created', 'Ordinance', ?, ?)";
+        $log_stmt = $conn->prepare($log_sql);
+        $log_stmt->bind_param("is", $last_id, $title);
+        $log_stmt->execute();
+        $log_stmt->close();
 
-
-    if($query) {
         echo "<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Ordinance Created',
-                        text: 'The ordinance has been successfully Created.',
-                        confirmButtonText: 'OK'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = 'files-ordinances.php';
-                        }
-                    });
-                });
-              </script>";    
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Ordinance Created',
+                    text: 'The ordinance have been successfully created.'
+                }).then(() => { window.location.href = 'files-ordinance.php'; });
+            </script>";
     } else {
         echo "<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'There was an error creating the ordinance.',
-                        confirmButtonText: 'OK'
-                    });
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'There was an error creating the ordinance.',
+                    confirmButtonText: 'OK'
                 });
-              </script>";
-        header("Location: files-ordinances.php");
-        exit;    
+            </script>";
     }
-}    
-?>
 
+    $stmt->close();
+    $conn->close();
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -214,13 +210,13 @@ if(isset($_POST['save'])){
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="forwardedDateField">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000;">Date Forwarded to LCE:</label>
                                                 <div class="col-sm-9">
-                                                    <input type="date" class="form-control" id="dateApproved" name="dateApproved">
+                                                    <input type="date" class="form-control" id="dateFowarded" name="dateFowarded">
                                                 </div>
                                             </div>
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="signedDateField">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000">Date Signed by LCE:</label>
                                                 <div class="col-sm-9">
-                                                    <input type="date" class="form-control" id="dateApproved" name="dateApproved">
+                                                    <input type="date" class="form-control" id="dateSigned" name="dateSigned">
                                                 </div>
                                             </div>
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="sbApprovalDateField">
@@ -270,12 +266,11 @@ if(isset($_POST['save'])){
     <script src="./js/custom.min.js"></script>
 
     <script>
-        function updateFileName(input) {
-            if (input.files.length > 0) {
-                let fileName = input.files[0].name;
-                let label = input.nextElementSibling; 
-                label.innerText = fileName;
-            }
+        function updateFileName() {
+            const fileInput = document.getElementById('attachment');
+            const fileName = fileInput.files[0].name;
+            const label = document.querySelector('.custom-file-label');
+            label.textContent = fileName;
         }
 
         function toggleDateFields() {

@@ -60,7 +60,7 @@
                                         <tbody style="color: #000000;">
                                             <?php
                                                 include "connect.php";
-                                                $sql = "SELECT id, mo_no, title, date_adopted, author_sponsor FROM ordinance";
+                                                $sql = "SELECT id, mo_no, title, date_adopted, author_sponsor, remarks FROM ordinance";
                                                 $stmt = $conn->prepare($sql);
                                                 $stmt->execute();
                                                 $result = $stmt->get_result();

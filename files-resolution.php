@@ -28,16 +28,24 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center p-3 mt-4">
-                                <h1 class="card-title flex-grow-1 fs-4 fw-bold text-dark text-center" style="color: #000000">LIST OF RESOLUTION</h1>
+                                <h1 class="card-title flex-grow-1 fs-4 fw-bold text-dark text-center" style="color: #000000">LIST OF RESOLUTIONS</h1>
                                 <div class="button-container d-flex justify-content-end">
-                                    <a href="addresolution.php">
-                                        <button type="button" class="btn btn-primary" style="background-color: #098209; color:#FFFFFF; border: none;"><i class="fa fa-plus"></i>&nbsp;Add New Resolution</button>
+                                    <a href="addordinance.php">
+                                        <button type="button" class="btn btn-primary" style="background-color: #098209; color:#FFFFFF; border: none;"><i class="fa fa-plus"></i>&nbsp;New Resolution</button>
                                     </a>
                                 </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table id="example" class="display" style="min-width: 845px">
+                                        <colgroup>
+                                            <col style="width: 15%;">
+                                            <col style="width: 25%;">
+                                            <col style="width: 15%;">
+                                            <col style="width: 15%;">
+                                            <col style="width: 15%;">
+                                            <col style="width: 15%;">
+                                        </colgroup>
                                         <thead class="text-center" style="background-color: #098209; color: #FFFFFF;">
                                             <tr>
                                                 <th style="color: #FFFFFF;">RESO NO./MO NO.</th>
@@ -66,14 +74,16 @@
                                                     <tr>
                                                         <td><?php echo $row["reso_no"] ?></td>
                                                         <td><?php echo $row["title"] ?></td>
-                                                        <td><?php echo $row["author_sponsor"] ?></td>
+                                                        <td><?php echo $row["author_sponsor"] ?></td>     
                                                         <td><?php echo $row["co_author"] ?></td>
-                                                        <td><?php echo $row["remarks"] ?></td>
-                                                        <!-- <td style="border-bottom: 1px solid #098209;"><?php echo $row["d_approved"] ?></td> -->
-                                                        <td class='text-center d-flex justify-content-center gap-2'>
-                                                            <a href="viewresolution.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1 mt-2'><i class='fa fa-eye' aria-hidden='true' style="color: #FFFFFF;"></i></a>
-                                                            <a href="editresolution.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1 mt-2'><i class='fa fa-edit' aria-hidden='true' style="color: #FFFFFF;"></i></a>
-                                                            <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1 mt-2'><i class='fa fa-trash' aria-hidden='true' style="color: #FFFFFF"></i></a>
+                                                        <td data-toggle="modal" data-target="#dateModal" class="remarks-cell" data-id="<?php echo $row['id']; ?>">
+                                                            <?php echo $row["remarks"] ?>
+                                                        </td>
+
+                                                        <td  class='text-center d-flex justify-content-center gap-2'>
+                                                            <a href="viewresolution.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' aria-hidden='true' style="color: #FFFFFF;"></i></a>
+                                                            <a href="editresolution.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' aria-hidden='true' style="color: #FFFFFF;"></i></a>
+                                                            <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1' ><i class='fa fa-trash' aria-hidden='true' style="color: #FFFFFF"></i></a>
                                                         </td>
                                                     </tr>
                                             <?php
@@ -81,6 +91,52 @@
                                             ?>
                                         </tbody>
                                     </table>
+                                    <div class="modal fade" id="dateModal">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" style="color: #098209;">REMARKS</h5>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <table id="example" class="display" style="min-width: 450px;">
+                                                        <thead class="text-center" style="background-color: #098209; color: #FFFFFF;">
+                                                            <tr>
+                                                                <th class="text-center" data-toggle="tooltip" style="color: #FFFFFF;" >Forwarded to LCE</th>
+                                                                <th class="text-center" style="color: #FFFFFF;">Signed by LCE</th>
+                                                                <th class="text-center" style="color: #FFFFFF;">SB Approval</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody style="color: #000000;">
+                                                            <?php
+                                                                include "connect.php";
+
+                                                                $sql = "SELECT d_forward, d_signed, d_approved FROM resolution limit 1";
+                                                                $stmt = $conn->prepare($sql);
+                                                                $stmt->execute();
+                                                                $result = $stmt->get_result();
+
+                                                                if (!$result) {
+                                                                    die("SQL Error: " . $conn->error);
+                                                                }
+
+                                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                                    ?>
+                                                                    <tr>
+                                                                        <td><?php echo $row["d_forward"] ?></td>
+                                                                        <td><?php echo $row["d_signed"] ?></td>
+                                                                        <td><?php echo $row["d_approved"] ?></td>     
+                                                                        </td>
+                                                                    </tr>
+                                                            <?php
+                                                            }
+                                                            ?>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -147,6 +203,22 @@
                 }
             });
         }
+        document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".remarks-cell").forEach(function (cell) {
+        cell.addEventListener("click", function () {
+            // Get data from the clicked row
+            var forwardDate = this.getAttribute("data-forward");
+            var signedDate = this.getAttribute("data-signed");
+            var approvedDate = this.getAttribute("data-approved");
+
+            // Update modal content
+            document.getElementById("modalForward").textContent = forwardDate || "N/A";
+            document.getElementById("modalSigned").textContent = signedDate || "N/A";
+            document.getElementById("modalApproved").textContent = approvedDate || "N/A";
+        });
+    });
+});
+
     </script>
 
 </body>

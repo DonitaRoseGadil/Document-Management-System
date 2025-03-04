@@ -10,7 +10,10 @@ if(isset($_POST['save'])){
     $authorSponsor = $_POST['authorSponsor'];
     $coAuthor = $_POST['coAuthor'];
     $remarks = $_POST['remarks'];
+    $dateFowarded = $_POST['dateFowarded'];
+    $dateSigned = $_POST['dateSigned'];
     $dateApproved = $_POST['dateApproved'];
+    $attachmentPath = "";
     $attachmentPath = "";
 
     if (!empty($_FILES['attachment']['name'])) {
@@ -18,53 +21,45 @@ if(isset($_POST['save'])){
         move_uploaded_file($_FILES['attachment']['tmp_name'], $attachmentPath);
     }
     
-     // Insert into database
-     $sql = "INSERT INTO resolution (reso_no, title, descrip, author_sponsor, co_author, remarks, d_approved, attachment) 
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
+    $sql = "INSERT INTO resolution (reso_no, title, descrip, author_sponsor, co_author, remarks, d_forward, d_signed, d_approved, attachment) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssssss", $resoNo, $title, $description, $authorSponsor, $coAuthor, $remarks, $dateApproved, $attachmentPath);
-    $stmt->execute();
+    $stmt->bind_param("ssssssssss", $resoNo, $title, $description, $authorSponsor, $coAuthor, $remarks, $dateFowarded, $dateSigned, $dateApproved, $attachmentPath);
 
-    $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
-    VALUES ('Created', 'Resolution', LAST_INSERT_ID(), '$title')";
+    if ($stmt->execute()) {
+        $last_id = $conn->insert_id;
 
-    $conn->query($log_sql);
+        // Insert into History Log
+        $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
+                    VALUES ('Created', 'Resolution', ?, ?)";
+        $log_stmt = $conn->prepare($log_sql);
+        $log_stmt->bind_param("is", $last_id, $title);
+        $log_stmt->execute();
+        $log_stmt->close();
 
-
-    if ($stmt) {
         echo "<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Resolution Created',
-                        text: 'The minutes have been successfully created.',
-                        confirmButtonText: 'OK'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = 'files-resolution.php';
-                        }
-                    });
-                });
-              </script>";    
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Resolution Created',
+                    text: 'The resolution have been successfully created.',
+                    confirmButtonText: 'OK'
+                }).then(() => { window.location.href = 'files-resolution.php'; });
+              </script>";
     } else {
         echo "<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'There was an error creating the resolution.',
-                        confirmButtonText: 'OK'
-                    });
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'There was an error creating the resolution.',
+                    confirmButtonText: 'OK'
                 });
               </script>";
-        header("Location: files-resolution.php");
-        exit;    
     }
 
     $stmt->close();
     $conn->close();
-}   
+}
  
 ?>
 
@@ -78,6 +73,71 @@ if(isset($_POST['save'])){
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 </head>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const requiredFields = ["resoNo", "title", "description", "authorSponsor", "coAuthor", "dateApproved", "remarks"];
+
+        function validateField(field) {
+            let inputElement = document.getElementById(field);
+            let errorElement = document.getElementById(field + "-error");
+
+            if (!inputElement.value.trim() || (field === "remarks" && inputElement.value === "Choose...")) {
+                if (!errorElement) {
+                    let errorMsg = document.createElement("div");
+                    errorMsg.id = field + "-error";
+                    errorMsg.className = "text-danger mt-1";
+                    errorMsg.textContent = "Required missing field.";
+                    inputElement.parentNode.appendChild(errorMsg);
+                }
+            } else {
+                if (errorElement) {
+                    errorElement.remove();
+                }
+            }
+        }
+
+        // Add event listeners for real-time validation
+        requiredFields.forEach(function (field) {
+            let inputElement = document.getElementById(field);
+
+            if (inputElement) {
+                // "input" event - Hide error while typing
+                inputElement.addEventListener("input", function () {
+                    validateField(field);
+                });
+
+                // "change" event for dropdown validation
+                if (field === "remarks") {
+                    inputElement.addEventListener("change", function () {
+                        validateField(field);
+                    });
+                }
+
+                // "focusout" event - Show error if empty when user leaves field
+                inputElement.addEventListener("focusout", function () {
+                    validateField(field);
+                });
+            }
+        });
+
+        // Form submit validation
+        document.querySelector("form").addEventListener("submit", function (event) {
+            let isValid = true;
+            requiredFields.forEach(function (field) {
+                validateField(field);
+                if (!document.getElementById(field).value.trim() || 
+                    (field === "remarks" && document.getElementById(field).value === "Choose...")) {
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    });
+</script>
 
 <body>
 
@@ -153,13 +213,13 @@ if(isset($_POST['save'])){
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="forwardedDateField">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000;">Date Forwarded to LCE:</label>
                                                 <div class="col-sm-9">
-                                                    <input type="date" class="form-control" id="dateApproved" name="dateApproved">
+                                                    <input type="date" class="form-control" id="dateFowarded" name="dateFowarded">
                                                 </div>
                                             </div>
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="signedDateField">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000">Date Signed by LCE:</label>
                                                 <div class="col-sm-9">
-                                                    <input type="date" class="form-control" id="dateApproved" name="dateApproved">
+                                                    <input type="date" class="form-control" id="dateSigned" name="dateSigned">
                                                 </div>
                                             </div>
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="sbApprovalDateField">
@@ -207,6 +267,7 @@ if(isset($_POST['save'])){
     <script src="./vendor/global/global.min.js"></script>
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
     <script>
         function updateFileName() {

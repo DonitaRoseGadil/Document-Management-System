@@ -15,6 +15,8 @@ if(isset($_POST['save'])){
     $authorSponsor = $_POST['authorSponsor'];
     $coAuthor = $_POST['coAuthor'];
     $remarks = $_POST['remarks'];
+    $dateFowarded = $_POST['dateFowarded'];
+    $dateSigned = $_POST['dateSigned'];
     $dateApproved = $_POST['dateApproved'];
     
     $attachment = $_FILES['attachment']['name'];
@@ -38,6 +40,8 @@ if(isset($_POST['save'])){
     `author_sponsor`='$authorSponsor', 
     `co_author`='$coAuthor', 
     `remarks`='$remarks', 
+    `d_forward`='$dateForwarded',
+    `d_signed`='$dateSigned',
     `d_approved`='$dateApproved',
     `attachment` = '$attachment' WHERE `id` = $id";
 
@@ -208,12 +212,6 @@ if(isset($_POST['save'])){
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Approved:</label>
-                                            <div class="col-sm-9">
-                                                <input type="date" class="form-control" value="<?php echo $row['d_approved']?>" id="dateApproved" name="dateApproved">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
                                             <div class="col-sm-9">
                                                 <input type="text" class="form-control" value="<?php echo $row['title']?>" id="title" name="title">
@@ -237,28 +235,44 @@ if(isset($_POST['save'])){
                                                 <input type="text" class="form-control" placeholder="Please type here..." value="<?php echo $row['co_author']?>" id="coAuthor" name="coAuthor">
                                             </div>
                                         </div>
-                                        <?php 
-                                            include "connect.php";
-                                            $id = $_GET['id'];
-                                            $sql = "SELECT * FROM resolution WHERE id = $id LIMIT 1";
-                                            $result= mysqli_query($conn, $sql);   
-                                            $row = mysqli_fetch_assoc($result); 
-
-                                            $sql2 = "SELECT remarks FROM resolution WHERE id = '$id'";
-                                            $result2 = mysqli_query($conn, $sql2);
-                                            $row2 = mysqli_fetch_assoc($result2);
-                                            $selectedRemarks = $row2['remarks']; 
-                                        ?>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
                                             <div class="col-sm-9">
-                                                <select id="remarks" name="remarks" class="form-control">
+                                                <select id="remarks" name="remarks" class="form-control" onchange="toggleDateFields()">
                                                     <option value="" <?php echo ($selectedRemarks == '') ? 'selected' : ''; ?>>Choose...</option>
-                                                    <option value="Draft" <?php echo ($selectedRemarks == 'Draft') ? 'selected' : ''; ?>>Draft</option>
-                                                    <option value="Information" <?php echo ($selectedRemarks == 'Information') ? 'selected' : ''; ?>>Information</option>
-                                                    <option value="Referred to Committee" <?php echo ($selectedRemarks == 'Referred to Committee') ? 'selected' : ''; ?>>Referred to Committee</option>
-                                                    <option value="Approved" <?php echo ($selectedRemarks == 'Approved') ? 'selected' : ''; ?>>Approved</option>
-                                                  </select>
+                                                    <option value="Forwarded to LCE" <?php echo ($selectedRemarks == 'Forwarded to LCE') ? 'selected' : ''; ?>
+                                                        <?php echo ($selectedRemarks == 'Signed by LCE' || $selectedRemarks == 'SB Approval') ? 'disabled' : ''; ?>>
+                                                        Forwarded to LCE
+                                                    </option>
+                                                    <option value="Signed by LCE" <?php echo ($selectedRemarks == 'Signed by LCE') ? 'selected' : ''; ?>
+                                                        <?php echo ($selectedRemarks == 'SB Approval') ? 'disabled' : ''; ?>>
+                                                        Signed by LCE
+                                                    </option>
+                                                    <option value="SB Approval" <?php echo ($selectedRemarks == 'SB Approval') ? 'selected' : ''; ?>>
+                                                        SB Approval
+                                                    </option>
+                                                    <option value="Disapprove" <?php echo ($selectedRemarks == 'Disapprove') ? 'selected' : ''; ?>>Disapprove</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div id="dateFields">
+                                            <div class="form-group row" id="forwardedDateField" style="display: none;">
+                                                <label class="col-sm-3 col-form-label" style="color:#000000;">Date Forwarded to LCE:</label>
+                                                <div class="col-sm-9">
+                                                    <input type="date" class="form-control" value="<?php echo $row['d_forward']?>" id="dateFowarded" name="dateFowarded">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row" id="signedDateField" style="display: none;">
+                                                <label class="col-sm-3 col-form-label" style="color:#000000">Date Signed by LCE:</label>
+                                                <div class="col-sm-9">
+                                                    <input type="date" class="form-control" value="<?php echo $row['d_signed']?>" id="dateSigned" name="dateSigned">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row" id="sbApprovalDateField" style="display: none;">
+                                                <label class="col-sm-3 col-form-label" style="color:#000000">SB Approval:</label>
+                                                <div class="col-sm-9">
+                                                    <input type="date" class="form-control" value="<?php echo $row['d_approved']?>" id="dateApproved" name="dateApproved">
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="input-group mb-3">
@@ -311,6 +325,58 @@ if(isset($_POST['save'])){
             const label = document.querySelector('.custom-file-label');
             label.textContent = fileName;
         }
+        document.addEventListener("DOMContentLoaded", function () {
+        restrictStatusSelection(); 
+        toggleDateFields(); 
+    });
+
+    function restrictStatusSelection() {
+        var statusDropdown = document.getElementById("remarks");
+        var currentStatus = statusDropdown.value;
+
+        var options = statusDropdown.options;
+
+        for (var i = 0; i < options.length; i++) {
+            options[i].disabled = false;
+        }
+
+        if (currentStatus === "Forwarded to LCE") {
+            options[0].disabled = true;
+        } else if (currentStatus === "Signed by LCE") {
+            options[0].disabled = true;
+            options[1].disabled = true;
+        } else if (currentStatus === "SB Approval") {
+            options[0].disabled = true;
+            options[1].disabled = true;
+            options[2].disabled = true;
+        } else if (currentStatus === "Disapprove") {
+            for (var i = 0; i < options.length; i++) {
+                options[i].disabled = true;
+            }
+            options[4].disabled = false;
+        }
+    }
+
+    function toggleDateFields() {
+        var status = document.getElementById("remarks").value;
+
+        document.getElementById("forwardedDateField").style.display = "none";
+        document.getElementById("signedDateField").style.display = "none";
+        document.getElementById("sbApprovalDateField").style.display = "none";
+
+        if (status === "Forwarded to LCE") {
+            document.getElementById("forwardedDateField").style.display = "flex";
+        } else if (status === "Signed by LCE") {
+            document.getElementById("forwardedDateField").style.display = "flex";
+            document.getElementById("signedDateField").style.display = "flex";
+        } else if (status === "SB Approval") {
+            document.getElementById("forwardedDateField").style.display = "flex";
+            document.getElementById("signedDateField").style.display = "flex";
+            document.getElementById("sbApprovalDateField").style.display = "flex";
+        }
+
+        restrictStatusSelection(); 
+    }
     </script>
     
 </body>
