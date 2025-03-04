@@ -10,7 +10,11 @@ $response = [];
 if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
     $resolution_id = intval($_GET["id"]);
 
-    $sql = "SELECT timestamp, title, action FROM history_log WHERE file_id = ? ORDER BY timestamp DESC";
+    $sql = "SELECT id, file_id, file_type, timestamp, title, action 
+            FROM history_log 
+            WHERE file_id = ? 
+            ORDER BY timestamp DESC";
+
     $stmt = $conn->prepare($sql);
 
     if ($stmt) {
@@ -19,13 +23,16 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
         $result = $stmt->get_result();
 
         while ($row = $result->fetch_assoc()) {
-            // Convert timestamp to a formatted date
+            // Convert timestamp to a readable format
             $formattedDate = date("F j, Y \\a\\t g:i A", strtotime($row["timestamp"]));
             
             $response[] = [
+                "id" => $row["id"],
+                "file_id" => $row["file_id"],
+                "file_type" => $row["file_type"],
                 "title" => $row["title"],
                 "action" => $row["action"],
-                "timestamp" => $formattedDate // Use formatted date
+                "timestamp" => $formattedDate
             ];
         }        
 
