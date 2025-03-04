@@ -2,7 +2,6 @@
     if(isset($_POST['save'])){
         include "connect.php";
         error_reporting(0);
-        session_start();
 
         $no_regSession = $_POST['no_regSession'];
         $date = $_POST['date'];
@@ -50,7 +49,7 @@
                     document.addEventListener('DOMContentLoaded', function() {
                         Swal.fire({
                             icon: 'success',
-                            title: 'Resolution Created',
+                            title: 'Minutes Created',
                             text: 'The minutes have been successfully created.',
                             confirmButtonText: 'OK'
                         }).then((result) => {
@@ -66,7 +65,7 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: 'There was an error creating the resolution.',
+                            text: 'There was an error creating the minutes.',
                             confirmButtonText: 'OK'
                         });
                     });
@@ -102,71 +101,6 @@
 
 </head>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const requiredFields = ["no_regSession", "date", "genAttachment", "title", "type", "status", "attachment"];
-
-        function validateField(field) {
-            let inputElement = document.getElementById(field);
-            let errorElement = document.getElementById(field + "-error");
-
-            if (!inputElement.value.trim() || (field === "remarks" && inputElement.value === "Choose...")) {
-                if (!errorElement) {
-                    let errorMsg = document.createElement("div");
-                    errorMsg.id = field + "-error";
-                    errorMsg.className = "text-danger mt-1";
-                    errorMsg.textContent = "Required missing field.";
-                    inputElement.parentNode.appendChild(errorMsg);
-                }
-            } else {
-                if (errorElement) {
-                    errorElement.remove();
-                }
-            }
-        }
-
-        // Add event listeners for real-time validation
-        requiredFields.forEach(function (field) {
-            let inputElement = document.getElementById(field);
-
-            if (inputElement) {
-                // "input" event - Hide error while typing
-                inputElement.addEventListener("input", function () {
-                    validateField(field);
-                });
-
-                // "change" event for dropdown validation
-                if (field === "remarks") {
-                    inputElement.addEventListener("change", function () {
-                        validateField(field);
-                    });
-                }
-
-                // "focusout" event - Show error if empty when user leaves field
-                inputElement.addEventListener("focusout", function () {
-                    validateField(field);
-                });
-            }
-        });
-
-        // Form submit validation
-        document.querySelector("form").addEventListener("submit", function (event) {
-            let isValid = true;
-            requiredFields.forEach(function (field) {
-                validateField(field);
-                if (!document.getElementById(field).value.trim() || 
-                    (field === "remarks" && document.getElementById(field).value === "Choose...")) {
-                    isValid = false;
-                }
-            });
-
-            if (!isValid) {
-                event.preventDefault();
-            }
-        });
-    });
-</script>
-
 
 <body>
 
@@ -183,7 +117,7 @@
         <!--**********************************
             Content body start
         ***********************************-->
-        <div class="content-body">
+        <div class="content-body" style="background-color: #f1f9f1">
             <div class="container-fluid" >
                 <!-- row -->
                 <div class="row d-flex justify-content-center">
@@ -328,7 +262,72 @@
         }
 
     </script>
-    
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const requiredFields = ["no_regSession", "date", "genAttachment", "title", "type", "status", "attachment"];
+
+            function validateField(field) {
+                let inputElement = document.getElementById(field);
+                let errorElement = document.getElementById(field + "-error");
+
+                if (!inputElement.value.trim() || (field === "remarks" && inputElement.value === "Choose...")) {
+                    if (!errorElement) {
+                        let errorMsg = document.createElement("div");
+                        errorMsg.id = field + "-error";
+                        errorMsg.className = "text-danger mt-1";
+                        errorMsg.textContent = "Required missing field.";
+                        inputElement.parentNode.appendChild(errorMsg);
+                    }
+                } else {
+                    if (errorElement) {
+                        errorElement.remove();
+                    }
+                }
+            }
+
+            // Add event listeners for real-time validation
+            requiredFields.forEach(function (field) {
+                let inputElement = document.getElementById(field);
+
+                if (inputElement) {
+                    // "input" event - Hide error while typing
+                    inputElement.addEventListener("input", function () {
+                        validateField(field);
+                    });
+
+                    // "change" event for dropdown validation
+                    if (field === "remarks") {
+                        inputElement.addEventListener("change", function () {
+                            validateField(field);
+                        });
+                    }
+
+                    // "focusout" event - Show error if empty when user leaves field
+                    inputElement.addEventListener("focusout", function () {
+                        validateField(field);
+                    });
+                }
+            });
+
+            // Form submit validation
+            document.querySelector("form").addEventListener("submit", function (event) {
+                let isValid = true;
+                requiredFields.forEach(function (field) {
+                    validateField(field);
+                    if (!document.getElementById(field).value.trim() || 
+                        (field === "remarks" && document.getElementById(field).value === "Choose...")) {
+                        isValid = false;
+                    }
+                });
+
+                if (!isValid) {
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>

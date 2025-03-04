@@ -3,7 +3,6 @@
 if(isset($_POST['save'])){
     include("connect.php");
     error_reporting(0);
-    session_start();
 
     $moNo = $_POST['moNo'];
     $title = $_POST['title'];
@@ -147,7 +146,7 @@ if(isset($_POST['save'])){
         <!--**********************************
             Content body start
         ***********************************-->
-        <div class="content-body">
+        <div class="content-body" style="background-color: #f1f9f1">
             <div class="container-fluid" >
                 <!-- row -->
                 <div class="row d-flex justify-content-center">

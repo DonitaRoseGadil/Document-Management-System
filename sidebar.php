@@ -1,7 +1,70 @@
 <!--**********************************
     Sidebar start
 ***********************************-->
-<div class="quixnav" style="background-color: #098209; ">
+    <div class="quixnav" style="background-color: #098209; ">
+        <style>
+            .quixnav {
+                background-color: #098209 !important;
+            }
+
+            .quixnav.open {
+                background-color: #0b5e0b !important;
+            }
+            
+            .quixnav a {
+                color: #FFFFFF !important; 
+                text-decoration: none; 
+                background-color: transparent !important;
+            }
+
+            /* Hover effect */
+            .quixnav a:hover {
+                background-color: #0b5e0b !important;
+                color: #FFFFFF !important;
+            }
+
+            .quixnav a.active {
+                background-color: #0b5e0b !important;
+                color: #FFFFFF !important;
+            }
+
+            .quixnav ul[aria-expanded="true"] li a.active {
+                background-color: #0b5e0b !important; 
+                color: #FFFFFF !important;
+            }
+
+            .quixnav ul[aria-expanded="true"] li a:hover {
+                background-color: #157f15 !important;
+                color: #FFFFFF !important;
+            }
+
+            .quixnav ul[aria-expanded="true"] li a:hover {
+                background-color: #157f15 !important;
+            }
+
+            .quixnav li:has(.has-arrow) ul {
+                background-color: #0b5e0b !important;
+            }
+
+            .quixnav li:has(.has-arrow) ul[aria-expanded="true"] {
+                background-color: #0b5e0b !important;
+            }
+
+            .quixnav li:has(.has-arrow) ul li a {
+                color: #FFFFFF !important;
+            }
+
+            .quixnav li:has(.has-arrow) ul li a:hover {
+                background-color: #157f15 !important;
+            }
+
+            .quixnav .has-arrow i {
+                color: #FFFFFF !important;
+            }
+
+        </style>
+
+
     <div class="quixnav-scroll">
         <ul class="metismenu" id="menu">
             <!--DASHBOARD-->
@@ -33,6 +96,49 @@
 
 
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get all menu links
+        let menuLinks = document.querySelectorAll('.quixnav a');
+
+        // Check local storage for the active link
+        let activeLink = localStorage.getItem('activeMenu');
+        if (activeLink) {
+            document.querySelectorAll('.quixnav a').forEach(el => {
+                if (el.href === activeLink) {
+                    el.classList.add('active');
+                }
+            });
+        }
+
+        // Add click event listener
+        menuLinks.forEach(link => {
+            link.addEventListener('click', function () {
+                // Remove active class from all links
+                menuLinks.forEach(el => el.classList.remove('active'));
+
+                // Add active class to clicked link
+                this.classList.add('active');
+
+                // Store the active menu in local storage
+                localStorage.setItem('activeMenu', this.href);
+            });
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let menuToggle = document.querySelector('.hamburger-menu'); // Adjust selector based on your actual menu button
+        let sidebar = document.querySelector('.quixnav');
+
+        if (menuToggle) {
+            menuToggle.addEventListener('click', function () {
+                sidebar.classList.toggle('open');
+            });
+        }
+    });
+</script>
+
 <!--**********************************
     Sidebar end
 ***********************************-->

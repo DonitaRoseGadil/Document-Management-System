@@ -7,7 +7,7 @@ if ($conn->connect_error) {
 }
 
 // Fetch recent activities from resolution, ordinance, and minutes
-$sql = "SELECT * FROM history_log ORDER BY timestamp DESC";
+$sql = "SELECT * FROM history_log ORDER BY timestamp DESC LIMIT 5";
 $result = $conn->query($sql);
 
 $activities = [];
