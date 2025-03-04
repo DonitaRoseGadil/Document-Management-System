@@ -11,68 +11,55 @@ if(isset($_POST['save'])){
     $authorSponsor = $_POST['authorSponsor'];
     $coAuthor = $_POST['coAuthor'];
     $remarks = $_POST['remarks'];
+    $dateFowarded = $_POST['dateFowarded'];
+    $dateSigned = $_POST['dateSigned'];
     $dateApproved = $_POST['dateApproved'];
-    $attachment = '';
+    $attachmentPath = "";
 
-    if (!empty($_FILES['attachment'])) {
-        $type = $_FILES['attachment']['type'];
-        if ($type == 'application/pdf' || $type == 'application/msword'|| $type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-            $attachment = $_FILES['attachment']['name'];
-            if ($attachment != '') {
-                move_uploaded_file($_FILES['attachment']['tmp_name'], 'files/'.$attachment);
-            }
-        } else {
-            echo '
-            <div class="form-group row" style="display: block;">
-                <div class="col-sm-9">
-                    <div class="alert alert-danger"><strong>Error: </strong> Only Supported Files (PDF and DOCX).</div>
-                </div>
-            </div>';
-        }
+    if (!empty($_FILES['attachment']['name'])) {
+        $attachmentPath = "uploads/" . basename($_FILES['attachment']['name']);
+        move_uploaded_file($_FILES['attachment']['tmp_name'], $attachmentPath);
     }
-
-    $sql = "INSERT INTO resolution(reso_no, title, descrip, d_adopted, author_sponsor, co_author, remarks, d_approved, attachment, updated_at) 
-        VALUES ('$resoNo', '$title', '$description', '$dateAdopted', '$authorSponsor', '$coAuthor', '$remarks', '$dateApproved', '$attachment', NOW())";
     
-    $query = mysqli_query($conn, $sql);
+    $sql = "INSERT INTO resolution (reso_no, title, descrip, author_sponsor, co_author, remarks, d_forward, d_signed, d_approved, attachment) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssssssssss", $resoNo, $title, $description, $authorSponsor, $coAuthor, $remarks, $dateFowarded, $dateSigned, $dateApproved, $attachmentPath);
 
+    if ($stmt->execute()) {
+        $last_id = $conn->insert_id;
 
-    $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
-            VALUES ('Created', 'Resolution', LAST_INSERT_ID(), '$title')";
-        
-    $conn->query($log_sql);
+        // Insert into History Log
+        $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
+                    VALUES ('Created', 'Resolution', ?, ?)";
+        $log_stmt = $conn->prepare($log_sql);
+        $log_stmt->bind_param("is", $last_id, $title);
+        $log_stmt->execute();
+        $log_stmt->close();
 
-
-    if($query) {
         echo "<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Resolution Created',
-                        text: 'The resolution has been successfully Created.',
-                        confirmButtonText: 'OK'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = 'files-resolution.php';
-                        }
-                    });
-                });
-              </script>";    
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Resolution Created',
+                    text: 'The resolution have been successfully created.',
+                    confirmButtonText: 'OK'
+                }).then(() => { window.location.href = 'files-resolution.php'; });
+              </script>";
     } else {
-        ?>
-        <script>
+        echo "<script>
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
                     text: 'There was an error creating the resolution.',
                     confirmButtonText: 'OK'
-                }).then(() => {
-                    window.location.href = 'files-resolution.php';
                 });
               </script>";
-        <?php
-    }    
-}   
+    }
+
+    $stmt->close();
+    $conn->close();
+}
  
 ?>
 
@@ -152,8 +139,6 @@ if(isset($_POST['save'])){
     });
 </script>
 
-
-
 <body>
 
     <!--**********************************
@@ -228,13 +213,13 @@ if(isset($_POST['save'])){
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="forwardedDateField">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000;">Date Forwarded to LCE:</label>
                                                 <div class="col-sm-9">
-                                                    <input type="date" class="form-control" id="dateApproved" name="dateApproved">
+                                                    <input type="date" class="form-control" id="dateFowarded" name="dateFowarded">
                                                 </div>
                                             </div>
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="signedDateField">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000">Date Signed by LCE:</label>
                                                 <div class="col-sm-9">
-                                                    <input type="date" class="form-control" id="dateApproved" name="dateApproved">
+                                                    <input type="date" class="form-control" id="dateSigned" name="dateSigned">
                                                 </div>
                                             </div>
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="sbApprovalDateField">
@@ -282,6 +267,7 @@ if(isset($_POST['save'])){
     <script src="./vendor/global/global.min.js"></script>
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
     <script>
         function updateFileName() {

@@ -61,7 +61,7 @@
                                         <tbody style="color: #000000;">
                                             <?php
                                                 include "connect.php";
-                                                $sql = "SELECT id, mo_no, title, date_adopted, author_sponsor FROM ordinance";
+                                                $sql = "SELECT id, mo_no, title, date_adopted, author_sponsor, remarks FROM ordinance";
                                                 $stmt = $conn->prepare($sql);
                                                 $stmt->execute();
                                                 $result = $stmt->get_result();
@@ -77,7 +77,7 @@
                                                         <td><?php echo $row["title"] ?></td>
                                                         <td><?php echo $row["date_adopted"] ?></td>
                                                         <td><?php echo $row["author_sponsor"] ?></td>
-                                                        <td>View</td>
+                                                        <td><?php echo $row["remarks"] ?></td>
                                                         <td class='text-center d-flex justify-content-center gap-2'>
                                                             <a href="viewordinance.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' style="color: #FFFFFF;" aria-hidden='true'></i></a>
                                                             <a href="editordinance.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' style="color:#FFFFFF" aria-hidden='true'></i></a>
