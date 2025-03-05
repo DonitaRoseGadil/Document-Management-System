@@ -1,66 +1,4 @@
- <?php
-
-if(isset($_POST['save'])){
-    include("connect.php");
-    error_reporting(0);
-
-    $moNo = $_POST['moNo'];
-    $title = $_POST['title'];
-    $dateAdopted = $_POST['dateAdopted'];
-    $authorSponsor = $_POST['authorSponsor'];
-    $remarks = $_POST['remarks'];
-    $dateFowarded = $_POST['dateFowarded'];
-    $dateSigned = $_POST['dateSigned'];
-    $dateApproved = $_POST['dateApproved'];
-
-    // Upload file
-    $attachmentPath = "";
-    if (!empty($_FILES['attachment']['name'])) {
-        $attachmentPath = "uploads/" . basename($_FILES['attachment']['name']);
-        move_uploaded_file($_FILES['attachment']['tmp_name'], $attachmentPath);
-    }
-
-    $sql = "INSERT INTO `ordinance`(`mo_no`, `title`, `date_adopted`, `author_sponsor`, `remarks`, `date_fwd`, `date_signed`, `sp_approval`, `attachment`) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssssssss", $moNo, $title, $dateAdopted, $authorSponsor, $remarks, $dateFowarded, $dateSigned, $dateApproved, $attachmentPath);
-
-    if ($stmt->execute()) {
-        $last_id = $conn->insert_id;
-
-        // Insert into History Log
-        $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
-                    VALUES ('Created', 'Ordinance', ?, ?)";
-        $log_stmt = $conn->prepare($log_sql);
-        $log_stmt->bind_param("is", $last_id, $title);
-        $log_stmt->execute();
-        $log_stmt->close();
-
-        echo "<script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Ordinance Created',
-                    text: 'The ordinance have been successfully created.'
-                }).then(() => { window.location.href = 'files-ordinance.php'; });
-            </script>";
-    } else {
-        echo "<script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'There was an error creating the ordinance.',
-                    confirmButtonText: 'OK'
-                });
-            </script>";
-    }
-
-    $stmt->close();
-    $conn->close();
-}
-?>
-
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 
 <?php include "header.php"; ?>
@@ -158,6 +96,66 @@ if(isset($_POST['save'])){
                             <div class="card-body">
                                 <div class="basic-form">
                                     <form action="addordinance.php" method="post" enctype="multipart/form-data">
+                                    <?php
+                                        if(isset($_POST['save'])){
+                                            include("connect.php");
+                                            error_reporting(0);
+
+                                            $moNo = $_POST['moNo'];
+                                            $title = $_POST['title'];
+                                            $dateAdopted = $_POST['dateAdopted'];
+                                            $authorSponsor = $_POST['authorSponsor'];
+                                            $remarks = $_POST['remarks'];
+                                            $dateForwarded = $_POST['dateForwarded'];
+                                            $dateSigned = $_POST['dateSigned'];
+                                            $dateApproved = $_POST['dateApproved'];
+
+                                            // Upload file
+                                            $attachmentPath = "";
+                                            if (!empty($_FILES['attachment']['name'])) {
+                                                $attachmentPath = "uploads/" . basename($_FILES['attachment']['name']);
+                                                move_uploaded_file($_FILES['attachment']['tmp_name'], $attachmentPath);
+                                            }
+
+                                            $sql = "INSERT INTO `ordinance`(`mo_no`, `title`, `date_adopted`, `author_sponsor`, `remarks`, `date_fwd`, `date_signed`, `sp_approval`, `attachment`) 
+                                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+                                            $stmt = $conn->prepare($sql);
+                                            $stmt->bind_param("sssssssss", $moNo, $title, $dateAdopted, $authorSponsor, $remarks, $dateForwarded, $dateSigned, $dateApproved, $attachmentPath);
+
+                                            if ($stmt->execute()) {
+                                                $last_id = $conn->insert_id;
+
+                                                // Insert into History Log
+                                                $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
+                                                            VALUES ('Created', 'Ordinance', ?, ?)";
+                                                $log_stmt = $conn->prepare($log_sql);
+                                                $log_stmt->bind_param("is", $last_id, $title);
+                                                $log_stmt->execute();
+                                                $log_stmt->close();
+
+                                                echo "<script>
+                                                        Swal.fire({
+                                                            icon: 'success',
+                                                            title: 'Ordinance Created',
+                                                            text: 'The ordinance have been successfully created.'
+                                                        }).then(() => { window.location.href = 'files-ordinances.php'; });
+                                                    </script>";
+                                            } else {
+                                                echo "<script>
+                                                        Swal.fire({
+                                                            icon: 'error',
+                                                            title: 'Error',
+                                                            text: 'There was an error creating the ordinance.',
+                                                            confirmButtonText: 'OK'
+                                                        });
+                                                    </script>";
+                                            }
+
+                                            $stmt->close();
+                                            $conn->close();
+                                        }
+                                        ?>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No. / MO No.:</label>
                                             <div class="col-sm-9">
@@ -210,7 +208,7 @@ if(isset($_POST['save'])){
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="forwardedDateField">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000;">Date Forwarded to LCE:</label>
                                                 <div class="col-sm-9">
-                                                    <input type="date" class="form-control" id="dateFowarded" name="dateFowarded">
+                                                    <input type="date" class="form-control" id="dateForwarded" name="dateForwarded">
                                                 </div>
                                             </div>
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="signedDateField">

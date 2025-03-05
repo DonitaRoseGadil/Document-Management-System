@@ -1,89 +1,3 @@
-<?php
-
-if(isset($_POST['save'])){
-    include("connect.php");
-    error_reporting(0);
-
-    $reso = $_GET['resoNo'];
-
-    $id = $_GET['id'];
-
-    //$id = intval($_POST['id']);
-    $resoNo = $_POST['resoNo'];
-    $title = $_POST['title'];
-    $description = $_POST['description'];
-    $authorSponsor = $_POST['authorSponsor'];
-    $coAuthor = $_POST['coAuthor'];
-    $remarks = $_POST['remarks'];
-    $dateFowarded = $_POST['dateFowarded'];
-    $dateSigned = $_POST['dateSigned'];
-    $dateApproved = $_POST['dateApproved'];
-    
-    $attachment = $_FILES['attachment']['name'];
-    $uploadDir = "uploads/";  // Define upload directory
-
-    if (!empty($attachment)) {
-        $attachmentPath = $uploadDir . basename($attachment);
-        move_uploaded_file($_FILES["attachment"]["tmp_name"], $attachmentPath);
-    } else {
-        // Keep the old file if no new file is uploaded
-        $attachmentQuery = "SELECT attachment FROM resolution WHERE id = $id";
-        $result = mysqli_query($conn, $attachmentQuery);
-        $row = mysqli_fetch_assoc($result);
-        $attachment = $row['attachment'];
-    }
-
-    $sql = "UPDATE `resolution` SET 
-    `reso_no`='$resoNo', 
-    `title`='$title', 
-    `descrip`='$description', 
-    `author_sponsor`='$authorSponsor', 
-    `co_author`='$coAuthor', 
-    `remarks`='$remarks', 
-    `d_forward`='$dateForwarded',
-    `d_signed`='$dateSigned',
-    `d_approved`='$dateApproved',
-    `attachment` = '$attachment' WHERE `id` = $id";
-
-    $query = mysqli_query($conn, $sql);  
-    
-    $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
-            VALUES ('Edited', 'Resolution', $id, '$title')";
-    $conn->query($log_sql);
-
-
-    if($query) {
-        echo "<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Resolution Updated',
-                        text: 'The resolution has been successfully updated.',
-                        confirmButtonText: 'OK'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = 'files-resolution.php';
-                        }
-                    });
-                });
-              </script>";    
-    } else {
-        echo "<script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'There was an error updating the resolution.',
-                        confirmButtonText: 'OK'
-                    });
-                });
-              </script>";
-        header("Location: files-resolution.php");
-        exit;    
-    }
-}    
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -200,6 +114,91 @@ if(isset($_POST['save'])){
                             <div class="card-body">
                                 <div class="basic-form">
                                     <form action="" method="post" enctype="multipart/form-data">
+                                    <?php
+
+                                        if(isset($_POST['save'])){
+                                            include("connect.php");
+                                            error_reporting(0);
+
+                                            $reso = $_GET['resoNo'];
+
+                                            $id = $_GET['id'];
+
+                                            //$id = intval($_POST['id']);
+                                            $resoNo = $_POST['resoNo'];
+                                            $title = $_POST['title'];
+                                            $description = $_POST['description'];
+                                            $authorSponsor = $_POST['authorSponsor'];
+                                            $coAuthor = $_POST['coAuthor'];
+                                            $remarks = $_POST['remarks'];
+                                            $dateForwarded = $_POST['dateForwarded'];
+                                            $dateSigned = $_POST['dateSigned'];
+                                            $dateApproved = $_POST['dateApproved'];
+                                            
+                                            $attachment = $_FILES['attachment']['name'];
+                                            $uploadDir = "uploads/";  // Define upload directory
+
+                                            if (!empty($attachment)) {
+                                                $attachmentPath = $uploadDir . basename($attachment);
+                                                move_uploaded_file($_FILES["attachment"]["tmp_name"], $attachmentPath);
+                                            } else {
+                                                // Keep the old file if no new file is uploaded
+                                                $attachmentQuery = "SELECT attachment FROM resolution WHERE id = $id";
+                                                $result = mysqli_query($conn, $attachmentQuery);
+                                                $row = mysqli_fetch_assoc($result);
+                                                $attachment = $row['attachment'];
+                                            }
+
+                                            $sql = "UPDATE `resolution` SET 
+                                            `reso_no`='$resoNo', 
+                                            `title`='$title', 
+                                            `descrip`='$description', 
+                                            `author_sponsor`='$authorSponsor', 
+                                            `co_author`='$coAuthor', 
+                                            `remarks`='$remarks', 
+                                            `d_forward`='$dateForwarded',
+                                            `d_signed`='$dateSigned',
+                                            `d_approved`='$dateApproved',
+                                            `attachment` = '$attachment' WHERE `id` = $id";
+
+                                            $query = mysqli_query($conn, $sql);  
+                                            
+                                            $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
+                                                    VALUES ('Edited', 'Resolution', $id, '$title')";
+                                            $conn->query($log_sql);
+
+
+                                            if($query) {
+                                                echo "<script>
+                                                        document.addEventListener('DOMContentLoaded', function() {
+                                                            Swal.fire({
+                                                                icon: 'success',
+                                                                title: 'Resolution Updated',
+                                                                text: 'The resolution has been successfully updated.',
+                                                                confirmButtonText: 'OK'
+                                                            }).then((result) => {
+                                                                if (result.isConfirmed) {
+                                                                    window.location.href = 'files-resolution.php';
+                                                                }
+                                                            });
+                                                        });
+                                                    </script>";    
+                                            } else {
+                                                echo "<script>
+                                                        document.addEventListener('DOMContentLoaded', function() {
+                                                            Swal.fire({
+                                                                icon: 'error',
+                                                                title: 'Error',
+                                                                text: 'There was an error updating the resolution.',
+                                                                confirmButtonText: 'OK'
+                                                            });
+                                                        });
+                                                    </script>";
+                                                header("Location: files-resolution.php");
+                                                exit;    
+                                            }
+                                        }    
+                                        ?>
                                         <div class="form-group row">
                                             <div class="col-sm-9">
                                                 <input type="hidden" class="form-control" value="<?php echo $row['id']?>" id="id" name="id">
@@ -255,11 +254,11 @@ if(isset($_POST['save'])){
                                                 </select>
                                             </div>
                                         </div>
-                                        <div id="dateFields">
+                                        <doiv id="dateFields">
                                             <div class="form-group row" id="forwardedDateField" style="display: none;">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000;">Date Forwarded to LCE:</label>
                                                 <div class="col-sm-9">
-                                                    <input type="date" class="form-control" value="<?php echo $row['d_forward']?>" id="dateFowarded" name="dateFowarded">
+                                                    <input type="date" class="form-control" value="<?php echo $row['d_forward']?>" id="dateForwarded" name="dateForwarded">
                                                 </div>
                                             </div>
                                             <div class="form-group row" id="signedDateField" style="display: none;">
@@ -274,7 +273,7 @@ if(isset($_POST['save'])){
                                                     <input type="date" class="form-control" value="<?php echo $row['d_approved']?>" id="dateApproved" name="dateApproved">
                                                 </div>
                                             </div>
-                                        </div>
+                                        </doiv>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>

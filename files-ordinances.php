@@ -72,12 +72,13 @@
                                                 while ($row = mysqli_fetch_assoc($result)) {
                                                     ?>
                                                     <tr>
-                                                        <td ><?php echo $row["mo_no"]?></td>
-                                                        <td ><?php echo $row["title"] ?></td>
-                                                        <td ><?php echo $row["date_adopted"] ?></td>
-                                                        <td ><?php echo $row["author_sponsor"] ?></td>
-                                                        <td >View</td>
-                                                        <td class='text-center d-flex justify-content-center gap-2'>
+                                                        <td style="border-bottom: 1px solid #098209; border-left: 1px solid #098209;"><?php echo $row["mo_no"]?></td>
+                                                        <td style="border-bottom: 1px solid #098209;"><?php echo $row["title"] ?></td>
+                                                        <td style="border-bottom: 1px solid #098209;"><?php echo $row["date_adopted"] ?></td>
+                                                        <td style="border-bottom: 1px solid #098209;"><?php echo $row["author_sponsor"] ?></td>
+                                                        <td style="border-bottom: 1px solid #098209;" data-toggle="modal" data-target="#dateModal" class="remarks-cell" data-id="<?php echo $row['id']; ?>">
+                                                        <?php echo $row["remarks"] ?></td>
+                                                        <td style="border-right: 1px solid #098209; border-bottom: 1px solid #098209;" class='text-center d-flex justify-content-center gap-2'>
                                                             <a href="viewordinance.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' style="color: #FFFFFF;" aria-hidden='true'></i></a>
                                                             <a href="editordinance.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' style="color:#FFFFFF" aria-hidden='true'></i></a>
                                                             <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-trash' style="color: #FFFFFF;" aria-hidden='true'></i></a>
