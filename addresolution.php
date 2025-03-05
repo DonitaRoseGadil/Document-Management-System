@@ -1,143 +1,7 @@
-<?php
-
-if(isset($_POST['save'])){
-    include("connect.php");
-    error_reporting(0);
-
-    $resoNo = $_POST['resoNo'];
-    $title = $_POST['title'];
-    $description = $_POST['description'];
-    $authorSponsor = $_POST['authorSponsor'];
-    $coAuthor = $_POST['coAuthor'];
-    $remarks = $_POST['remarks'];
-    $dateFowarded = $_POST['dateFowarded'];
-    $dateSigned = $_POST['dateSigned'];
-    $dateApproved = $_POST['dateApproved'];
-    $attachmentPath = "";
-    $attachmentPath = "";
-
-    if (!empty($_FILES['attachment']['name'])) {
-        $attachmentPath = "uploads/" . basename($_FILES['attachment']['name']);
-        move_uploaded_file($_FILES['attachment']['tmp_name'], $attachmentPath);
-    }
-    
-    $sql = "INSERT INTO resolution (reso_no, title, descrip, author_sponsor, co_author, remarks, d_forward, d_signed, d_approved, attachment) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssssssss", $resoNo, $title, $description, $authorSponsor, $coAuthor, $remarks, $dateFowarded, $dateSigned, $dateApproved, $attachmentPath);
-
-    if ($stmt->execute()) {
-        $last_id = $conn->insert_id;
-
-        // Insert into History Log
-        $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
-                    VALUES ('Created', 'Resolution', ?, ?)";
-        $log_stmt = $conn->prepare($log_sql);
-        $log_stmt->bind_param("is", $last_id, $title);
-        $log_stmt->execute();
-        $log_stmt->close();
-
-        echo "<script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Resolution Created',
-                    text: 'The resolution have been successfully created.',
-                    confirmButtonText: 'OK'
-                }).then(() => { window.location.href = 'files-resolution.php'; });
-              </script>";
-    } else {
-        echo "<script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'There was an error creating the resolution.',
-                    confirmButtonText: 'OK'
-                });
-              </script>";
-    }
-
-    $stmt->close();
-    $conn->close();
-}
- 
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <?php include "header.php"; ?>
-
-<head>
-    <!-- Include SweetAlert CSS and JS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
-</head>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const requiredFields = ["resoNo", "title", "description", "authorSponsor", "coAuthor", "dateApproved", "remarks"];
-
-        function validateField(field) {
-            let inputElement = document.getElementById(field);
-            let errorElement = document.getElementById(field + "-error");
-
-            if (!inputElement.value.trim() || (field === "remarks" && inputElement.value === "Choose...")) {
-                if (!errorElement) {
-                    let errorMsg = document.createElement("div");
-                    errorMsg.id = field + "-error";
-                    errorMsg.className = "text-danger mt-1";
-                    errorMsg.textContent = "Required missing field.";
-                    inputElement.parentNode.appendChild(errorMsg);
-                }
-            } else {
-                if (errorElement) {
-                    errorElement.remove();
-                }
-            }
-        }
-
-        // Add event listeners for real-time validation
-        requiredFields.forEach(function (field) {
-            let inputElement = document.getElementById(field);
-
-            if (inputElement) {
-                // "input" event - Hide error while typing
-                inputElement.addEventListener("input", function () {
-                    validateField(field);
-                });
-
-                // "change" event for dropdown validation
-                if (field === "remarks") {
-                    inputElement.addEventListener("change", function () {
-                        validateField(field);
-                    });
-                }
-
-                // "focusout" event - Show error if empty when user leaves field
-                inputElement.addEventListener("focusout", function () {
-                    validateField(field);
-                });
-            }
-        });
-
-        // Form submit validation
-        document.querySelector("form").addEventListener("submit", function (event) {
-            let isValid = true;
-            requiredFields.forEach(function (field) {
-                validateField(field);
-                if (!document.getElementById(field).value.trim() || 
-                    (field === "remarks" && document.getElementById(field).value === "Choose...")) {
-                    isValid = false;
-                }
-            });
-
-            if (!isValid) {
-                event.preventDefault();
-            }
-        });
-    });
-</script>
 
 <body>
 
@@ -154,7 +18,7 @@ if(isset($_POST['save'])){
         <!--**********************************
             Content body start
         ***********************************-->
-        <div class="content-body" style="background-color: #f1f9f1">
+        <div class="content-body">
             <div class="container-fluid" >
                 <!-- row -->
                 <div class="row d-flex justify-content-center">
@@ -167,6 +31,70 @@ if(isset($_POST['save'])){
                             <div class="card-body">
                                 <div class="basic-form">
                                     <form action="addresolution.php" method="post" enctype="multipart/form-data">
+                                    <?php
+                                        if(isset($_POST['save'])){
+                                            include("connect.php");
+                                            error_reporting(0);
+                                            session_start();
+
+                                            $resoNo = $_POST['resoNo'];
+                                            $title = $_POST['title'];
+                                            $description = $_POST['description'];
+                                            $authorSponsor = $_POST['authorSponsor'];
+                                            $coAuthor = $_POST['coAuthor'];
+                                            $remarks = $_POST['remarks'];
+                                            $dateForwarded = $_POST['dateForwarded'];
+                                            $dateSigned = $_POST['dateSigned'];
+                                            $dateApproved = $_POST['dateApproved'];
+                                            $attachmentPath = "";
+
+                                            if (!empty($_FILES['attachment']['name'])) {
+                                                $attachmentPath = "uploads/" . basename($_FILES['attachment']['name']);
+                                                move_uploaded_file($_FILES['attachment']['tmp_name'], $attachmentPath);
+                                            }
+                                            
+                                            $sql = "INSERT INTO resolution (reso_no, title, descrip, author_sponsor, co_author, remarks, d_forward, d_signed, d_approved, attachment) 
+                                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                                            
+                                            $stmt = $conn->prepare($sql);
+                                            $stmt->bind_param("ssssssssss", $resoNo, $title, $description, $authorSponsor, $coAuthor, $remarks, $dateForwarded, $dateSigned, $dateApproved, $attachmentPath);
+
+                                            if ($stmt->execute()) {
+                                                $last_id = $conn->insert_id;
+
+                                                // Insert into History Log
+                                                $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
+                                                            VALUES ('Created', 'Resolution', ?, ?)";
+                                                $log_stmt = $conn->prepare($log_sql);
+                                                $log_stmt->bind_param("is", $last_id, $title);
+                                                $log_stmt->execute();
+                                                $log_stmt->close();
+
+                                                echo "<script>
+                                                        Swal.fire({
+                                                            icon: 'success',
+                                                            title: 'Resolution Created',
+                                                            text: 'The resolution have been successfully created.',
+                                                            confirmButtonText: 'OK'
+                                                        }).then(() => { window.location.href = 'files-resolution.php'; });
+                                                    </script>";
+                                            } else {
+                                                echo "<script>
+                                                        Swal.fire({
+                                                            icon: 'error',
+                                                            title: 'Error',
+                                                            text: 'There was an error creating the resolution.',
+                                                            confirmButtonText: 'OK'
+                                                        });
+                                                    </script>";
+                                            }
+
+                                            $stmt->close();
+                                            $conn->close();
+                                        }
+                                        
+                                        ?>
+
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No.:</label>
                                             <div class="col-sm-9">
@@ -213,7 +141,7 @@ if(isset($_POST['save'])){
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="forwardedDateField">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000;">Date Forwarded to LCE:</label>
                                                 <div class="col-sm-9">
-                                                    <input type="date" class="form-control" id="dateFowarded" name="dateFowarded">
+                                                    <input type="date" class="form-control" id="dateForwarded" name="dateForwarded">
                                                 </div>
                                             </div>
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="signedDateField">
@@ -320,9 +248,70 @@ if(isset($_POST['save'])){
                 document.getElementById("dateFields").style.display = "none";
             }
         }
+        document.addEventListener("DOMContentLoaded", function () {
+        const requiredFields = ["resoNo", "title", "description", "authorSponsor", "coAuthor", "remarks"];
+
+        function validateField(field) {
+            let inputElement = document.getElementById(field);
+            let errorElement = document.getElementById(field + "-error");
+
+            if (!inputElement.value.trim() || (field === "remarks" && inputElement.value === "Choose...")) {
+                if (!errorElement) {
+                    let errorMsg = document.createElement("div");
+                    errorMsg.id = field + "-error";
+                    errorMsg.className = "text-danger mt-1";
+                    errorMsg.textContent = "Required missing field.";
+                    inputElement.parentNode.appendChild(errorMsg);
+                }
+            } else {
+                if (errorElement) {
+                    errorElement.remove();
+                }
+            }
+        }
+
+        // Add event listeners for real-time validation
+        requiredFields.forEach(function (field) {
+            let inputElement = document.getElementById(field);
+
+            if (inputElement) {
+                // "input" event - Hide error while typing
+                inputElement.addEventListener("input", function () {
+                    validateField(field);
+                });
+
+                // "change" event for dropdown validation
+                if (field === "remarks") {
+                    inputElement.addEventListener("change", function () {
+                        validateField(field);
+                    });
+                }
+
+                // "focusout" event - Show error if empty when user leaves field
+                inputElement.addEventListener("focusout", function () {
+                    validateField(field);
+                });
+            }
+        });
+
+        // Form submit validation
+        document.querySelector("form").addEventListener("submit", function (event) {
+            let isValid = true;
+            requiredFields.forEach(function (field) {
+                validateField(field);
+                if (!document.getElementById(field).value.trim() || 
+                    (field === "remarks" && document.getElementById(field).value === "Choose...")) {
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    });
     </script>
     
 </body>
 
 </html>
-cdn.jsdelivr.net

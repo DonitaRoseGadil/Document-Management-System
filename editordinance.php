@@ -182,6 +182,13 @@ if(isset($_POST['save'])){
                                 $sql = "SELECT * FROM ordinance WHERE id = $id LIMIT 1";
                                 $result= mysqli_query($conn, $sql);   
                                 $row = mysqli_fetch_assoc($result); 
+
+                                $sql2 = "SELECT remarks FROM ordinance WHERE id = '$id'";
+                                $result2 = mysqli_query($conn, $sql2);
+                                $row2 = mysqli_fetch_assoc($result2);
+
+
+                                $selectedRemarks = $row2['remarks']; 
                             ?>
                             <div class="card-body">
                                 <div class="basic-form">
@@ -222,21 +229,43 @@ if(isset($_POST['save'])){
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Forwarded to LCE: </label>
+                                            <label class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
                                             <div class="col-sm-9">
-                                                <input type="date" class="form-control" value="<?php echo $row['date_fwd']?>" id="dateFwd" name="dateFwd">
+                                                <select id="remarks" name="remarks" class="form-control" onchange="toggleDateFields()">
+                                                    <option value="" <?php echo ($selectedRemarks == '') ? 'selected' : ''; ?>>Choose...</option>
+                                                    <option value="Forwarded to LCE" <?php echo ($selectedRemarks == 'Forwarded to LCE') ? 'selected' : ''; ?>
+                                                        <?php echo ($selectedRemarks == 'Signed by LCE' || $selectedRemarks == 'SB Approval') ? 'disabled' : ''; ?>>
+                                                        Forwarded to LCE
+                                                    </option>
+                                                    <option value="Signed by LCE" <?php echo ($selectedRemarks == 'Signed by LCE') ? 'selected' : ''; ?>
+                                                        <?php echo ($selectedRemarks == 'SB Approval') ? 'disabled' : ''; ?>>
+                                                        Signed by LCE
+                                                    </option>
+                                                    <option value="SB Approval" <?php echo ($selectedRemarks == 'SB Approval') ? 'selected' : ''; ?>>
+                                                        SB Approval
+                                                    </option>
+                                                    <option value="Disapprove" <?php echo ($selectedRemarks == 'Disapprove') ? 'selected' : ''; ?>>Disapprove</option>
+                                                </select>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Signed by LCE: </label>
-                                            <div class="col-sm-9">
-                                                <input type="date" class="form-control" value="<?php echo $row['date_signed']?>" id="dateSigned" name="dateSigned">
+                                        <div id="dateFields">
+                                            <div class="form-group row" id="forwardedDateField" style="display: none;">
+                                                <label class="col-sm-3 col-form-label" style="color:#000000;">Date Forwarded to LCE:</label>
+                                                <div class="col-sm-9">
+                                                    <input type="date" class="form-control" value="<?php echo $row['date_fwd']?>" id="dateForwarded" name="dateForwarded">
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">SP Approval: </label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" value="<?php echo $row['sp_approval']?>" id="spApproval" name="spApproval">
+                                            <div class="form-group row" id="signedDateField" style="display: none;">
+                                                <label class="col-sm-3 col-form-label" style="color:#000000">Date Signed by LCE:</label>
+                                                <div class="col-sm-9">
+                                                    <input type="date" class="form-control" value="<?php echo $row['date_signed']?>" id="dateSigned" name="dateSigned">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row" id="sbApprovalDateField" style="display: none;">
+                                                <label class="col-sm-3 col-form-label" style="color:#000000">SB Approval:</label>
+                                                <div class="col-sm-9">
+                                                    <input type="date" class="form-control" value="<?php echo $row['sp_approval']?>" id="dateApproved" name="dateApproved">
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="input-group mb-3">
@@ -285,6 +314,60 @@ if(isset($_POST['save'])){
             const fileName = fileInput.files.length > 0 ? fileInput.files[0].name : "Choose file";
             document.getElementById(labelId).textContent = fileName;
         }
+
+        document.addEventListener("DOMContentLoaded", function () {
+        restrictStatusSelection(); 
+        toggleDateFields(); 
+        });
+
+
+        function restrictStatusSelection() {
+        var statusDropdown = document.getElementById("remarks");
+        var currentStatus = statusDropdown.value;
+
+        var options = statusDropdown.options;
+
+        for (var i = 0; i < options.length; i++) {
+            options[i].disabled = false;
+        }
+
+        if (currentStatus === "Forwarded to LCE") {
+            options[0].disabled = true;
+        } else if (currentStatus === "Signed by LCE") {
+            options[0].disabled = true;
+            options[1].disabled = true;
+        } else if (currentStatus === "SB Approval") {
+            options[0].disabled = true;
+            options[1].disabled = true;
+            options[2].disabled = true;
+        } else if (currentStatus === "Disapprove") {
+            for (var i = 0; i < options.length; i++) {
+                options[i].disabled = true;
+            }
+            options[4].disabled = false;
+        }
+    }
+
+    function toggleDateFields() {
+        var status = document.getElementById("remarks").value;
+
+        document.getElementById("forwardedDateField").style.display = "none";
+        document.getElementById("signedDateField").style.display = "none";
+        document.getElementById("sbApprovalDateField").style.display = "none";
+
+        if (status === "Forwarded to LCE") {
+            document.getElementById("forwardedDateField").style.display = "flex";
+        } else if (status === "Signed by LCE") {
+            document.getElementById("forwardedDateField").style.display = "flex";
+            document.getElementById("signedDateField").style.display = "flex";
+        } else if (status === "SB Approval") {
+            document.getElementById("forwardedDateField").style.display = "flex";
+            document.getElementById("signedDateField").style.display = "flex";
+            document.getElementById("sbApprovalDateField").style.display = "flex";
+        }
+
+        restrictStatusSelection(); 
+    }
     </script>
     
 </body>

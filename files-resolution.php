@@ -1,7 +1,8 @@
 <?php 
-    include "header.php"; 
-    error_reporting(E_ALL); // Enable error reporting for development
-    ini_set('display_errors', 1);
+include "header.php"; 
+error_reporting(E_ALL); // Enable error reporting for development
+ini_set('display_errors', 1);
+session_start();
 ?>
 
 <!DOCTYPE html>
@@ -21,17 +22,17 @@
         <!--**********************************
             Content body start
         ***********************************-->
-        <div class="content-body" style="background-color: #f1f9f1">
+        <div class="content-body">
             <div class="container-fluid">
                 <!-- row -->
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center p-3 mt-4">
-                                <h1 class="card-title flex-grow-1 fs-4 fw-bold text-dark text-center" style="color: #000000">LIST OF RESOLUTIONS</h1>
+                                <h1 class="card-title flex-grow-1 fs-4 fw-bold text-dark text-center" style="color: #000000">LIST OF RESOLUTION</h1>
                                 <div class="button-container d-flex justify-content-end">
-                                    <a href="addordinance.php">
-                                        <button type="button" class="btn btn-primary" style="background-color: #098209; color:#FFFFFF; border: none;"><i class="fa fa-plus"></i>&nbsp;New Resolution</button>
+                                    <a href="addresolution.php">
+                                        <button type="button" class="btn btn-primary" style="background-color: #098209; color:#FFFFFF; border: none;"><i class="fa fa-plus"></i>&nbsp;Add New Resolution</button>
                                     </a>
                                 </div>
                             </div>
@@ -72,15 +73,15 @@
                                                 while ($row = mysqli_fetch_assoc($result)) {
                                                     ?>
                                                     <tr>
-                                                        <td><?php echo $row["reso_no"] ?></td>
-                                                        <td><?php echo $row["title"] ?></td>
-                                                        <td><?php echo $row["author_sponsor"] ?></td>     
-                                                        <td><?php echo $row["co_author"] ?></td>
-                                                        <td data-toggle="modal" data-target="#dateModal" class="remarks-cell" data-id="<?php echo $row['id']; ?>">
+                                                        <td style="border-bottom: 1px solid #098209; border-left: 1px solid #098209;"><?php echo $row["reso_no"] ?></td>
+                                                        <td style="border-bottom: 1px solid #098209;"><?php echo $row["title"] ?></td>
+                                                        <td style="border-bottom: 1px solid #098209;"><?php echo $row["author_sponsor"] ?></td>     
+                                                        <td style="border-bottom: 1px solid #098209;"><?php echo $row["co_author"] ?></td>
+                                                        <td style="border-bottom: 1px solid #098209;" data-toggle="modal" data-target="#dateModal" class="remarks-cell" data-id="<?php echo $row['id']; ?>">
                                                             <?php echo $row["remarks"] ?>
                                                         </td>
 
-                                                        <td  class='text-center d-flex justify-content-center gap-2'>
+                                                        <td style="border-bottom: 1px solid #098209; border-right: 1px solid #098209;" class='text-center d-flex justify-content-center gap-2'>
                                                             <a href="viewresolution.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' aria-hidden='true' style="color: #FFFFFF;"></i></a>
                                                             <a href="editresolution.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' aria-hidden='true' style="color: #FFFFFF;"></i></a>
                                                             <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1' ><i class='fa fa-trash' aria-hidden='true' style="color: #FFFFFF"></i></a>
