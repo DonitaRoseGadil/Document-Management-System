@@ -152,7 +152,7 @@
                         text: "Your file has been deleted.",
                         icon: "success",
                         showConfirmButton: false,
-                        timer: 5000
+                        timer: 8000
                     });
                     window.location.href = 'deletemeetingminutes.php?id=' + id; 
                 }
