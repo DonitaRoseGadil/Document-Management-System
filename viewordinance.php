@@ -217,42 +217,25 @@ $conn->close();
     <script src="./vendor/global/global.min.js"></script>
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
-
+   
     <script>
         function viewFile(id, field) {
-            let filePath = document.getElementById(field).value;
-            
-            if (!filePath) {
-                alert("No file available to view.");
-                return;
-            }
-
-            // Check if filePath is a direct URL or stored in the database
-            if (filePath.startsWith("http") || filePath.endsWith(".pdf")) {
-                window.open(filePath, '_blank');  // Open direct URL
-            } else {
-                window.open(`fetch_pdf.php?id=${id}&field=${field}`, '_blank'); // Fetch from database
-            }
+        let filePath = document.getElementById(field).value;
+        
+        if (!filePath) {
+            alert("No file available to view.");
+            return;
         }
+
+        // Check if filePath is a direct URL or stored in the database
+        if (filePath.startsWith("http") || filePath.endsWith(".pdf")) {
+            window.open(filePath, '_blank');  // Open direct URL
+        } else {
+            window.open(`fetch_pdf.php?id=${id}&field=${field}`, '_blank'); // Fetch from database
+        }
+    }
     </script>
-
-<script>
-        function viewFile(id, field) {
-            let filePath = document.getElementById(field).value;
-            
-            if (!filePath) {
-                alert("No file available to view.");
-                return;
-            }
-
-            // Check if filePath is a direct URL or stored in the database
-            if (filePath.startsWith("http") || filePath.endsWith(".pdf")) {
-                window.open(filePath, '_blank');  // Open direct URL
-            } else {
-                window.open(`fetch_pdf.php?id=${id}&field=${field}`, '_blank'); // Fetch from database
-            }
-        }
-
+    <script>
         function toggleViewDateFields() {
             var status = document.getElementById("remarks").value;
 

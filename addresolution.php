@@ -35,11 +35,10 @@
                                         if(isset($_POST['save'])){
                                             include("connect.php");
                                             error_reporting(0);
-                                            session_start();
 
                                             $resoNo = $_POST['resoNo'];
                                             $title = $_POST['title'];
-                                            $description = $_POST['description'];
+                                            $dateAdopted = $_POST['dateAdopted'];
                                             $authorSponsor = $_POST['authorSponsor'];
                                             $coAuthor = $_POST['coAuthor'];
                                             $remarks = $_POST['remarks'];
@@ -53,11 +52,11 @@
                                                 move_uploaded_file($_FILES['attachment']['tmp_name'], $attachmentPath);
                                             }
                                             
-                                            $sql = "INSERT INTO resolution (reso_no, title, descrip, author_sponsor, co_author, remarks, d_forward, d_signed, d_approved, attachment) 
+                                            $sql = "INSERT INTO resolution (reso_no, title, d_adopted, author_sponsor, co_author, remarks, d_forward, d_signed, d_approved, attachment) 
                                                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                                             
                                             $stmt = $conn->prepare($sql);
-                                            $stmt->bind_param("ssssssssss", $resoNo, $title, $description, $authorSponsor, $coAuthor, $remarks, $dateForwarded, $dateSigned, $dateApproved, $attachmentPath);
+                                            $stmt->bind_param("ssssssssss", $resoNo, $title, $dateAdopted, $authorSponsor, $coAuthor, $remarks, $dateForwarded, $dateSigned, $dateApproved, $attachmentPath);
 
                                             if ($stmt->execute()) {
                                                 $last_id = $conn->insert_id;
@@ -94,7 +93,6 @@
                                         }
                                         
                                         ?>
-
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No.:</label>
                                             <div class="col-sm-9">
@@ -108,9 +106,9 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Description:</label>
+                                            <label class="col-sm-3 col-form-label" style="color:#000000;">Date Adopted:</label>
                                             <div class="col-sm-9">
-                                                <textarea class="form-control" style="resize: none;" rows="4" placeholder="Please type here..." id="description" name="description"></textarea>
+                                                <input type="date" class="form-control" id="dateAdopted" name="dateAdopted">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -132,7 +130,7 @@
                                                     <option selected>Choose...</option>
                                                     <option>Forwarded to LCE</option>
                                                     <option>Signed by LCE</option>
-                                                    <option>SB Approval</option>
+                                                    <option>SP Approval</option>
                                                     <option>Disapprove</option>
                                                 </select>
                                             </div>
@@ -151,7 +149,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="sbApprovalDateField">
-                                                <label class="col-sm-3 col-form-label" style="color:#000000">SB Approval:</label>
+                                                <label class="col-sm-3 col-form-label" style="color:#000000">SP Approval:</label>
                                                 <div class="col-sm-9">
                                                     <input type="date" class="form-control" id="dateApproved" name="dateApproved">
                                                 </div>

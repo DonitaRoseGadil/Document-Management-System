@@ -2,7 +2,6 @@
 include "header.php"; 
 error_reporting(E_ALL); // Enable error reporting for development
 ini_set('display_errors', 1);
-session_start();
 ?>
 
 <!DOCTYPE html>
@@ -61,7 +60,7 @@ session_start();
                                             <?php
                                                 include "connect.php";
 
-                                                $sql = "SELECT id, reso_no, title, author_sponsor, co_author, remarks, d_approved FROM resolution";
+                                                $sql = "SELECT id, reso_no, title, author_sponsor, co_author, remarks, d_forward, d_signed, d_approved FROM resolution";
                                                 $stmt = $conn->prepare($sql);
                                                 $stmt->execute();
                                                 $result = $stmt->get_result();
@@ -77,10 +76,12 @@ session_start();
                                                         <td style="border-bottom: 1px solid #098209;"><?php echo $row["title"] ?></td>
                                                         <td style="border-bottom: 1px solid #098209;"><?php echo $row["author_sponsor"] ?></td>     
                                                         <td style="border-bottom: 1px solid #098209;"><?php echo $row["co_author"] ?></td>
-                                                        <td style="border-bottom: 1px solid #098209;" data-toggle="modal" data-target="#dateModal" class="remarks-cell" data-id="<?php echo $row['id']; ?>">
-                                                            <?php echo $row["remarks"] ?>
+                                                        <td style="border-bottom: 1px solid #098209;">
+                                                            <div class="container">
+                                                                <a style="color: #000000" id="popoverData" class="btn" href="#" data-content="Forwarded to LCE: <?php echo $row["d_forward"] ?>" rel="popover" 
+                                                                data-placement="bottom" data-trigger="hover"><?php echo $row["remarks"] ?></a>
+                                                            </div>
                                                         </td>
-
                                                         <td style="border-bottom: 1px solid #098209; border-right: 1px solid #098209;" class='text-center d-flex justify-content-center gap-2'>
                                                             <a href="viewresolution.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' aria-hidden='true' style="color: #FFFFFF;"></i></a>
                                                             <a href="editresolution.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' aria-hidden='true' style="color: #FFFFFF;"></i></a>
@@ -105,7 +106,7 @@ session_start();
                                                             <tr>
                                                                 <th class="text-center" data-toggle="tooltip" style="color: #FFFFFF;" >Forwarded to LCE</th>
                                                                 <th class="text-center" style="color: #FFFFFF;">Signed by LCE</th>
-                                                                <th class="text-center" style="color: #FFFFFF;">SB Approval</th>
+                                                                <th class="text-center" style="color: #FFFFFF;">SP Approval</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody style="color: #000000;">
@@ -189,6 +190,9 @@ session_start();
     <script src="./js/plugins-init/datatables.init.js"></script>
 
     <script>
+        $('#popoverData').popover();
+        $('#popoverOption').popover({ trigger: "hover" });
+
         function confirmDelete(id) {
             Swal.fire({
                 icon: 'warning',

@@ -1,3 +1,84 @@
+<?php
+
+if(isset($_POST['save'])){
+    include("connect.php");
+    error_reporting(0);
+
+    $id = intval($_POST['id']);
+    $resoNo = $_POST['resoNo'];
+    $title = $_POST['title'];
+    $dateAdopted = $_POST['dateAdopted'];
+    $authorSponsor = $_POST['authorSponsor'];
+    $coAuthor = $_POST['coAuthor'];
+    $remarks = $_POST['remarks'];
+    $dateForwarded = $_POST['dateForwarded'];
+    $dateSigned = $_POST['dateSigned'];
+    $dateApproved = $_POST['dateApproved'];
+
+    // Handle file uploads
+    $attachment = $_FILES['attachment']['name'];
+
+    $uploadDir = "uploads/";  // Define upload directory
+    if (!empty($attachment)) {
+        $attachmentPath = $uploadDir . basename($attachment);
+        move_uploaded_file($_FILES["attachment"]["tmp_name"], $attachmentPath);
+    } else {
+        // Keep the old file if no new file is uploaded
+        $attachmentQuery = "SELECT attachment FROM resolution WHERE id = $id";
+        $result = mysqli_query($conn, $attachmentQuery);
+        $row = mysqli_fetch_assoc($result);
+        $attachmentPath = $row['attachment'];
+    }
+    $sql = "UPDATE `resolution` SET 
+                    `reso_no`='$resoNo', 
+                    `title`='$title', 
+                    `d_adopted`='$dateAdopted', 
+                    `author_sponsor`='$authorSponsor', 
+                    `co_author`='$coAuthor', 
+                    `d_forward`='$dateForwarded',
+                    `d_signed`='$dateSigned',
+                    `d_approved`='$dateApproved',
+                    `remarks`='$remarks',
+                    `attachment`='$attachmentPath' WHERE id = $id";
+
+    $query = mysqli_query($conn, $sql);
+    
+    $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
+    VALUES ('Edited', 'Resolution', $id, '$title')";
+    $conn->query($log_sql);
+
+    if($query) {
+        echo "<script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Resolution Updated',
+                        text: 'The resolution has been successfully updated.',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = 'files-resolution.php';
+                        }
+                    });
+                });
+              </script>";    
+    } else {
+        echo "<script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'There was an error updating the resolution.',
+                        confirmButtonText: 'OK'
+                    });
+                });
+              </script>";
+        header("Location: files-resolution.php");
+        exit;    
+    }
+}    
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,7 +91,7 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const requiredFields = ["resoNo", "title", "description", "authorSponsor", "coAuthor", "dateApproved", "remarks"];
+        const requiredFields = ["resoNo", "title", "dateAdopted", "authorSponsor", "coAuthor", "remarks"];
 
         function validateField(field) {
             let inputElement = document.getElementById(field);
@@ -108,104 +189,18 @@
                                 $result2 = mysqli_query($conn, $sql2);
                                 $row2 = mysqli_fetch_assoc($result2);
 
-
                                 $selectedRemarks = $row2['remarks']; 
                             ?>
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form action="" method="post" enctype="multipart/form-data">
-                                    <?php
-
-                                        if(isset($_POST['save'])){
-                                            include("connect.php");
-                                            error_reporting(0);
-
-                                            $reso = $_GET['resoNo'];
-
-                                            $id = $_GET['id'];
-
-                                            //$id = intval($_POST['id']);
-                                            $resoNo = $_POST['resoNo'];
-                                            $title = $_POST['title'];
-                                            $description = $_POST['description'];
-                                            $authorSponsor = $_POST['authorSponsor'];
-                                            $coAuthor = $_POST['coAuthor'];
-                                            $remarks = $_POST['remarks'];
-                                            $dateForwarded = $_POST['dateForwarded'];
-                                            $dateSigned = $_POST['dateSigned'];
-                                            $dateApproved = $_POST['dateApproved'];
-                                            
-                                            $attachment = $_FILES['attachment']['name'];
-                                            $uploadDir = "uploads/";  // Define upload directory
-
-                                            if (!empty($attachment)) {
-                                                $attachmentPath = $uploadDir . basename($attachment);
-                                                move_uploaded_file($_FILES["attachment"]["tmp_name"], $attachmentPath);
-                                            } else {
-                                                // Keep the old file if no new file is uploaded
-                                                $attachmentQuery = "SELECT attachment FROM resolution WHERE id = $id";
-                                                $result = mysqli_query($conn, $attachmentQuery);
-                                                $row = mysqli_fetch_assoc($result);
-                                                $attachment = $row['attachment'];
-                                            }
-
-                                            $sql = "UPDATE `resolution` SET 
-                                            `reso_no`='$resoNo', 
-                                            `title`='$title', 
-                                            `descrip`='$description', 
-                                            `author_sponsor`='$authorSponsor', 
-                                            `co_author`='$coAuthor', 
-                                            `remarks`='$remarks', 
-                                            `d_forward`='$dateForwarded',
-                                            `d_signed`='$dateSigned',
-                                            `d_approved`='$dateApproved',
-                                            `attachment` = '$attachment' WHERE `id` = $id";
-
-                                            $query = mysqli_query($conn, $sql);  
-                                            
-                                            $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
-                                                    VALUES ('Edited', 'Resolution', $id, '$title')";
-                                            $conn->query($log_sql);
-
-
-                                            if($query) {
-                                                echo "<script>
-                                                        document.addEventListener('DOMContentLoaded', function() {
-                                                            Swal.fire({
-                                                                icon: 'success',
-                                                                title: 'Resolution Updated',
-                                                                text: 'The resolution has been successfully updated.',
-                                                                confirmButtonText: 'OK'
-                                                            }).then((result) => {
-                                                                if (result.isConfirmed) {
-                                                                    window.location.href = 'files-resolution.php';
-                                                                }
-                                                            });
-                                                        });
-                                                    </script>";    
-                                            } else {
-                                                echo "<script>
-                                                        document.addEventListener('DOMContentLoaded', function() {
-                                                            Swal.fire({
-                                                                icon: 'error',
-                                                                title: 'Error',
-                                                                text: 'There was an error updating the resolution.',
-                                                                confirmButtonText: 'OK'
-                                                            });
-                                                        });
-                                                    </script>";
-                                                header("Location: files-resolution.php");
-                                                exit;    
-                                            }
-                                        }    
-                                        ?>
-                                        <div class="form-group row">
+                                    <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" enctype="multipart/form-data">
+                                    <div class="form-group row">
                                             <div class="col-sm-9">
                                                 <input type="hidden" class="form-control" value="<?php echo $row['id']?>" id="id" name="id">
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No.:</label>
+                                            <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No: </label>
                                             <div class="col-sm-9">
                                                 <input type="text" class="form-control" value="<?php echo $row['reso_no']?>" id="resoNo" name="resoNo">
                                             </div>
@@ -217,11 +212,17 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Description:</label>
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">Date Adopted:</label>
                                             <div class="col-sm-9">
-                                                <textarea class="form-control" style="resize: none;" rows="4" id="description" name="description"><?php echo htmlspecialchars($row['descrip']); ?></textarea>
+                                                <input type="date" class="form-control" value="<?php echo $row['d_adopted']?>" id="dateAdopted" name="dateAdopted">
                                             </div>
                                         </div>
+                                        <!-- <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">Description:</label>
+                                            <div class="col-sm-9">
+                                                <textarea class="form-control" style="resize: none;" rows="4" value=" id="description" name="description"></textarea>
+                                            </div>
+                                        </div> -->
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Author / Sponsor:</label>
                                             <div class="col-sm-9">
@@ -231,7 +232,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Co-Author:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." value="<?php echo $row['co_author']?>" id="coAuthor" name="coAuthor">
+                                                <input type="text" class="form-control" value="<?php echo $row['co_author']?>" id="coAuthor" name="coAuthor">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -240,21 +241,21 @@
                                                 <select id="remarks" name="remarks" class="form-control" onchange="toggleDateFields()">
                                                     <option value="" <?php echo ($selectedRemarks == '') ? 'selected' : ''; ?>>Choose...</option>
                                                     <option value="Forwarded to LCE" <?php echo ($selectedRemarks == 'Forwarded to LCE') ? 'selected' : ''; ?>
-                                                        <?php echo ($selectedRemarks == 'Signed by LCE' || $selectedRemarks == 'SB Approval') ? 'disabled' : ''; ?>>
+                                                        <?php echo ($selectedRemarks == 'Signed by LCE' || $selectedRemarks == 'SP Approval') ? 'disabled' : ''; ?>>
                                                         Forwarded to LCE
                                                     </option>
                                                     <option value="Signed by LCE" <?php echo ($selectedRemarks == 'Signed by LCE') ? 'selected' : ''; ?>
                                                         <?php echo ($selectedRemarks == 'SB Approval') ? 'disabled' : ''; ?>>
                                                         Signed by LCE
                                                     </option>
-                                                    <option value="SB Approval" <?php echo ($selectedRemarks == 'SB Approval') ? 'selected' : ''; ?>>
-                                                        SB Approval
+                                                    <option value="SP Approval" <?php echo ($selectedRemarks == 'SP Approval') ? 'selected' : ''; ?>>
+                                                        SP Approval
                                                     </option>
                                                     <option value="Disapprove" <?php echo ($selectedRemarks == 'Disapprove') ? 'selected' : ''; ?>>Disapprove</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <doiv id="dateFields">
+                                        <div id="dateFields">
                                             <div class="form-group row" id="forwardedDateField" style="display: none;">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000;">Date Forwarded to LCE:</label>
                                                 <div class="col-sm-9">
@@ -268,29 +269,26 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row" id="sbApprovalDateField" style="display: none;">
-                                                <label class="col-sm-3 col-form-label" style="color:#000000">SB Approval:</label>
+                                                <label class="col-sm-3 col-form-label" style="color:#000000">SP Approval:</label>
                                                 <div class="col-sm-9">
                                                     <input type="date" class="form-control" value="<?php echo $row['d_approved']?>" id="dateApproved" name="dateApproved">
                                                 </div>
                                             </div>
-                                        </doiv>
+                                        </div>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
                                             </div>
-                                            <?php
-                                                include "connect.php";
-                                                $filePath = $row['attachment']; 
-                                                $fileName = basename($filePath); 
-                                            ?>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="attachment" name="attachment" name="attachment" onchange="updateFileName()">
-                                                <label class="custom-file-label" for="attachment"><?php echo $fileName ? $fileName : "Choose file"; ?></label>
+                                                <input type="file" class="custom-file-input" id="attachment" value="attachment" name="attachment" onchange="updateFileName('attachmentLabel')">
+                                                <label class="custom-file-label" id="attachmentLabel"> 
+                                                    <?php echo !empty($row['attachment']) ? $row['attachment'] : "Choose file"; ?>
+                                                </label>
                                             </div>
                                         </div>
                                         <div class="form-group row d-flex justify-content-center">
                                             <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;">Update</button>
-                                            <a href="files-resolution.php" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
+                                            <a href="files-ordinances.php" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
                                         </div>
                                     </form>
                                 </div>
@@ -318,18 +316,19 @@
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
     <script>
-        function updateFileName() {
-            const fileInput = document.getElementById('attachment');
-            const fileName = fileInput.files[0].name;
-            const label = document.querySelector('.custom-file-label');
-            label.textContent = fileName;
+        function updateFileName(labelId) {
+            const fileInput = document.getElementById(labelId.replace("Label", ""));
+            const fileName = fileInput.files.length > 0 ? fileInput.files[0].name : "Choose file";
+            document.getElementById(labelId).textContent = fileName;
         }
+
         document.addEventListener("DOMContentLoaded", function () {
         restrictStatusSelection(); 
         toggleDateFields(); 
-    });
+        });
 
-    function restrictStatusSelection() {
+
+        function restrictStatusSelection() {
         var statusDropdown = document.getElementById("remarks");
         var currentStatus = statusDropdown.value;
 
