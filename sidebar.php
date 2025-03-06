@@ -17,11 +17,12 @@
                 background-color: transparent !important;
             }
 
-            /* Hover effect */
-            .quixnav a:hover {
+            .quixnav a:hover, 
+            .quixnav .has-arrow:hover {
                 background-color: #0b5e0b !important;
                 color: #FFFFFF !important;
             }
+
 
             .quixnav a.active {
                 background-color: #0b5e0b !important;
@@ -54,8 +55,17 @@
                 color: #FFFFFF !important;
             }
 
-            .quixnav li:has(.has-arrow) ul li a:hover {
-                background-color: #157f15 !important;
+            .quixnav li a.has-arrow:hover {
+                background-color: #0b5e0b !important; /* Dark green */
+                color: #FFFFFF !important;
+            }
+
+            .quixnav li a.has-arrow + ul li a {
+                background-color: #0b5e0b !important; /* Keep them consistent */
+            }
+
+            .quixnav li a.has-arrow + ul li a {
+                background-color: #0b5e0b !important; /* Keep them consistent */
             }
 
             .quixnav .has-arrow i {

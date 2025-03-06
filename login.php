@@ -103,9 +103,12 @@
                                             <!-- <label ><strong>Email</strong></label> -->
                                             <input type="email" class="form-control" placeholder="Email" name="email" id="email">
                                         </div>
-                                        <div class="form-group">
-                                            <!-- <label><strong>Password</strong></label> -->
-                                            <input type="password" class="form-control" placeholder="Password" name="password" id="password">
+                                        <!-- Password -->
+                                        <div class="form-group" style="position: relative; display: flex; align-items: center;">
+                                            <input type="password" class="form-control" placeholder="Password" name="password" id="password"
+                                                style="padding-right: 35px; width: 100%;">
+                                            <i class="fa fa-eye" id="toggleEye" onclick="togglePassword()" 
+                                                style="position: absolute; right: 10px; font-size: 18px; cursor: pointer; color: #098209;"></i>
                                         </div>
                                         <div class="form-row d-flex justify-content-between mt-4 mb-2">
                                             <div class="form-group">
@@ -140,6 +143,23 @@
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+    function togglePassword() {
+        var passwordInput = document.getElementById("password");
+        var eyeIcon = document.getElementById("toggleEye");
+        
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            eyeIcon.classList.remove("fa-eye");
+            eyeIcon.classList.add("fa-eye-slash"); // Change icon to indicate visibility
+        } else {
+            passwordInput.type = "password";
+            eyeIcon.classList.remove("fa-eye-slash");
+            eyeIcon.classList.add("fa-eye"); // Revert to normal eye icon
+        }
+    }
+</script>
 
 </body>
 

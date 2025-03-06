@@ -56,7 +56,7 @@ ini_set('display_errors', 1);
                                                 <th style="color: #FFFFFF;">ACTION</th>
                                             </tr>
                                         </thead>
-                                        <tbody style="color: #000000;">
+                                        <tbody style="color: #000000; border:#000000;">
                                             <?php
                                                 include "connect.php";
 
