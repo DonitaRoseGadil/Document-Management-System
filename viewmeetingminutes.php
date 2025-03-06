@@ -211,40 +211,40 @@ $conn->close();
     </script>
 
 <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            $('#historyModal').on('show.bs.modal', function() {
-                let resolutionId = "<?php echo $resolution_id; ?>";
+    document.addEventListener("DOMContentLoaded", function() {
+        $('#historyModal').on('show.bs.modal', function() {
+            let resolutionId = "<?php echo $resolution_id; ?>";
 
-                if (!resolutionId) {
-                    $('#historyTableBody').html("<tr><td colspan='3'>No history available.</td></tr>");
-                    return;
-                }
+            if (!resolutionId) {
+                $('#historyTableBody').html("<tr><td colspan='3'>No history available.</td></tr>");
+                return;
+            }
 
-                fetch(`fetch_history.php?id=${resolutionId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        let historyHtml = "";
-                        if (data.length > 0) {
-                            data.forEach(log => {
-                                historyHtml += `<tr>
-                                                    <td style="color: #000000;">${log.title}</td>
-                                                    <td style="color: #000000;">${log.action}</td>
-                                                    <td style="color: #000000;">${log.timestamp}</td>
-                                                </tr>`;
-                            });
-                        } else {
-                            historyHtml = "<tr><td colspan='3'>No history found.</td></tr>";
-                        }
-                        document.getElementById("historyTableBody").innerHTML = historyHtml;
-                    })
-                    .catch(error => {
-                        console.error("Error fetching history:", error);
-                        document.getElementById("historyTableBody").innerHTML = "<tr><td colspan='3'>Error loading history.</td></tr>";
+            fetch(`fetch_history.php?id=${resolutionId}&file_type=minutes`) // Add file_type parameter
+            .then(response => response.json())
+            .then(data => {
+                let historyHtml = "";
+                if (Array.isArray(data) && data.length > 0) {
+                    data.forEach(log => {
+                        historyHtml += `<tr>
+                                            <td style="color: #000000;">${log.title}</td>
+                                            <td style="color: #000000;">${log.action}</td>
+                                            <td style="color: #000000;">${log.timestamp}</td>
+                                        </tr>`;
                     });
+                } else {
+                    historyHtml = "<tr><td colspan='3'>No history found.</td></tr>";
+                }
+                document.getElementById("historyTableBody").innerHTML = historyHtml;
+            })
+            .catch(error => {
+                console.error("Error fetching history:", error);
+                document.getElementById("historyTableBody").innerHTML = "<tr><td colspan='3'>Error loading history.</td></tr>";
             });
+
         });
-        </script>
-    
+    });
+    </script>
     
 </body>
 
