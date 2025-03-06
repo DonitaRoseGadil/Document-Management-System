@@ -9,15 +9,15 @@ if(isset($_POST['save'])){
     $title = $_POST['title'];
     $dateAdopted = $_POST['dateAdopted'];
     $authorSponsor = $_POST['authorSponsor'];
-    $dateFwd = $_POST['dateFwd'];
+    $remarks = $_POST['remarks'];
+    $dateForwarded = $_POST['dateForwarded'];
     $dateSigned = $_POST['dateSigned'];
-    $spApproval = $_POST['spApproval'];
+    $dateApproved = $_POST['dateApproved'];
 
     // Handle file uploads
     $attachment = $_FILES['attachment']['name'];
 
     $uploadDir = "uploads/";  // Define upload directory
-
     if (!empty($attachment)) {
         $attachmentPath = $uploadDir . basename($attachment);
         move_uploaded_file($_FILES["attachment"]["tmp_name"], $attachmentPath);
@@ -26,17 +26,17 @@ if(isset($_POST['save'])){
         $attachmentQuery = "SELECT attachment FROM ordinance WHERE id = $id";
         $result = mysqli_query($conn, $attachmentQuery);
         $row = mysqli_fetch_assoc($result);
-        $attachment = $row['attachment'];
+        $attachmentPath = $row['attachment'];
     }
-
     $sql = "UPDATE `ordinance` SET 
                     `mo_no`='$moNo', 
                     `title`='$title', 
                     `date_adopted`='$dateAdopted', 
                     `author_sponsor`='$authorSponsor', 
-                    `date_fwd`='$dateFwd',
+                    `date_fwd`='$dateForwarded',
                     `date_signed`='$dateSigned',
-                    `sp_approval`='$spApproval', 
+                    `sp_approval`='$dateApproved',
+                    `remarks`='$remarks',
                     `attachment`='$attachmentPath' WHERE id = $id";
 
     $query = mysqli_query($conn, $sql);
@@ -89,7 +89,7 @@ if(isset($_POST['save'])){
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const requiredFields = ["moNo", "title", "dateAdopted", "authorSponsor", "coAuthor", "remarks", "dateApproved"];
+        const requiredFields = ["moNo", "title", "dateAdopted", "authorSponsor", "coAuthor", "remarks"];
 
         function validateField(field) {
             let inputElement = document.getElementById(field);
@@ -187,12 +187,11 @@ if(isset($_POST['save'])){
                                 $result2 = mysqli_query($conn, $sql2);
                                 $row2 = mysqli_fetch_assoc($result2);
 
-
                                 $selectedRemarks = $row2['remarks']; 
                             ?>
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form action="" method="post" enctype="multipart/form-data">
+                                    <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post" enctype="multipart/form-data">
                                     <div class="form-group row">
                                             <div class="col-sm-9">
                                                 <input type="hidden" class="form-control" value="<?php echo $row['id']?>" id="id" name="id">
@@ -273,7 +272,7 @@ if(isset($_POST['save'])){
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
                                             </div>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="attachment" name="attachment" onchange="updateFileName('attachmentLabel')">
+                                                <input type="file" class="custom-file-input" id="attachment" value="attachment" name="attachment" onchange="updateFileName('attachmentLabel')">
                                                 <label class="custom-file-label" id="attachmentLabel"> 
                                                     <?php echo !empty($row['attachment']) ? $row['attachment'] : "Choose file"; ?>
                                                 </label>

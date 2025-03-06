@@ -60,7 +60,7 @@ ini_set('display_errors', 1);
                                             <?php
                                                 include "connect.php";
 
-                                                $sql = "SELECT id, reso_no, title, author_sponsor, co_author, remarks, d_approved FROM resolution";
+                                                $sql = "SELECT id, reso_no, title, author_sponsor, co_author, remarks, d_forward, d_signed, d_approved FROM resolution";
                                                 $stmt = $conn->prepare($sql);
                                                 $stmt->execute();
                                                 $result = $stmt->get_result();
@@ -72,12 +72,15 @@ ini_set('display_errors', 1);
                                                 while ($row = mysqli_fetch_assoc($result)) {
                                                     ?>
                                                     <tr>
-                                                        <td><?php echo $row["reso_no"] ?></td>
-                                                        <td><?php echo $row["title"] ?></td>
-                                                        <td><?php echo $row["author_sponsor"] ?></td>     
-                                                        <td><?php echo $row["co_author"] ?></td>
-                                                        <td data-toggle="modal" data-target="#dateModal" class="remarks-cell" data-id="<?php echo $row['id']; ?>">
-                                                            <?php echo $row["remarks"] ?>
+                                                        <td style="border-bottom: 1px solid #098209; border-left: 1px solid #098209;"><?php echo $row["reso_no"] ?></td>
+                                                        <td style="border-bottom: 1px solid #098209;"><?php echo $row["title"] ?></td>
+                                                        <td style="border-bottom: 1px solid #098209;"><?php echo $row["author_sponsor"] ?></td>     
+                                                        <td style="border-bottom: 1px solid #098209;"><?php echo $row["co_author"] ?></td>
+                                                        <td style="border-bottom: 1px solid #098209;">
+                                                            <div class="container">
+                                                                <a style="color: #000000" id="popoverData" class="btn" href="#" data-content="Forwarded to LCE: <?php echo $row["d_forward"] ?>" rel="popover" 
+                                                                data-placement="bottom" data-trigger="hover"><?php echo $row["remarks"] ?></a>
+                                                            </div>
                                                         </td>
 
                                                         <td class='text-center d-flex justify-content-center gap-2'>
@@ -104,7 +107,7 @@ ini_set('display_errors', 1);
                                                             <tr>
                                                                 <th class="text-center" data-toggle="tooltip" style="color: #FFFFFF;" >Forwarded to LCE</th>
                                                                 <th class="text-center" style="color: #FFFFFF;">Signed by LCE</th>
-                                                                <th class="text-center" style="color: #FFFFFF;">SB Approval</th>
+                                                                <th class="text-center" style="color: #FFFFFF;">SP Approval</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody style="color: #000000;">
@@ -188,6 +191,9 @@ ini_set('display_errors', 1);
     <script src="./js/plugins-init/datatables.init.js"></script>
 
     <script>
+        $('#popoverData').popover();
+        $('#popoverOption').popover({ trigger: "hover" });
+
         function confirmDelete(id) {
             Swal.fire({
                 icon: 'warning',
