@@ -72,6 +72,10 @@
                 color: #FFFFFF !important;
             }
 
+            .quixnav.open ul[aria-expanded="true"] {
+                display: block !important;
+            }
+
         </style>
 
 
@@ -147,6 +151,30 @@
             });
         }
     });
+
+    document.addEventListener("DOMContentLoaded", function () {
+    let menuItems = document.querySelectorAll('.quixnav .has-arrow');
+
+    menuItems.forEach(item => {
+        item.addEventListener('click', function () {
+            let submenu = this.nextElementSibling;
+            let isExpanded = submenu.getAttribute('aria-expanded') === "true";
+
+            // Close all open submenus
+            document.querySelectorAll('.quixnav ul[aria-expanded="true"]').forEach(sub => {
+                sub.setAttribute('aria-expanded', "false");
+                sub.style.display = "none";
+            });
+
+            // Toggle the clicked submenu
+            if (!isExpanded) {
+                submenu.setAttribute('aria-expanded', "true");
+                submenu.style.display = "block";
+            }
+        });
+    });
+});
+
 </script>
 
 <!--**********************************

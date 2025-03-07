@@ -72,11 +72,11 @@ ini_set('display_errors', 1);
                                                 while ($row = mysqli_fetch_assoc($result)) {
                                                     ?>
                                                     <tr>
-                                                        <td style="border-bottom: 1px solid #098209; border-left: 1px solid #098209;"><?php echo $row["reso_no"] ?></td>
-                                                        <td style="border-bottom: 1px solid #098209;"><?php echo $row["title"] ?></td>
-                                                        <td style="border-bottom: 1px solid #098209;"><?php echo $row["author_sponsor"] ?></td>     
-                                                        <td style="border-bottom: 1px solid #098209;"><?php echo $row["co_author"] ?></td>
-                                                        <td style="border-bottom: 1px solid #098209;">
+                                                        <td><?php echo $row["reso_no"] ?></td>
+                                                        <td><?php echo $row["title"] ?></td>
+                                                        <td><?php echo $row["author_sponsor"] ?></td>     
+                                                        <td><?php echo $row["co_author"] ?></td>
+                                                        <td>
                                                             <div class="container">
                                                                 <a style="color: #000000" id="popoverData" class="btn" href="#" data-content="Forwarded to LCE: <?php echo $row["d_forward"] ?>" rel="popover" 
                                                                 data-placement="bottom" data-trigger="hover"><?php echo $row["remarks"] ?></a>
