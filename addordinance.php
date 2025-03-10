@@ -199,7 +199,7 @@
                                                     <option selected>Choose...</option>
                                                     <option>Forwarded to LCE</option>
                                                     <option>Signed by LCE</option>
-                                                    <option>SB Approval</option>
+                                                    <option>SP Approval</option>
                                                     <option>Disapprove</option>
                                                 </select>
                                             </div>
@@ -218,7 +218,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="sbApprovalDateField">
-                                                <label class="col-sm-3 col-form-label" style="color:#000000">SB Approval:</label>
+                                                <label class="col-sm-3 col-form-label" style="color:#000000">SP Approval:</label>
                                                 <div class="col-sm-9">
                                                     <input type="date" class="form-control" id="dateApproved" name="dateApproved">
                                                 </div>
@@ -299,7 +299,7 @@
                 document.getElementById("dateFields").style.display = "block";
                 document.getElementById("signedDateField").style.display = "flex";
                 document.getElementById("sbApprovalDateField").style.display = "none";
-            } else if (status === "SB Approval") {
+            } else if (status === "SP Approval") {
                 document.getElementById("forwardedDateField").style.visibility = "visible";
                 document.getElementById("forwardedDateField").style.opacity = "1";
                 document.getElementById("signedDateField").style.visibility = "visible";

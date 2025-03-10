@@ -60,7 +60,7 @@
                                         <tbody style="color: #000000;">
                                             <?php
                                                 include "connect.php";
-                                                $sql = "SELECT id, mo_no, title, date_adopted, author_sponsor, remarks FROM ordinance";
+                                                $sql = "SELECT id, mo_no, title, date_adopted, author_sponsor, remarks, date_fwd, date_signed, sp_approval FROM ordinance";
                                                 $stmt = $conn->prepare($sql);
                                                 $stmt->execute();
                                                 $result = $stmt->get_result();
@@ -76,8 +76,31 @@
                                                         <td style="border-bottom: 1px solid #098209;"><?php echo $row["title"] ?></td>
                                                         <td style="border-bottom: 1px solid #098209;"><?php echo $row["date_adopted"] ?></td>
                                                         <td style="border-bottom: 1px solid #098209;"><?php echo $row["author_sponsor"] ?></td>
-                                                        <td style="border-bottom: 1px solid #098209;" data-toggle="modal" data-target="#dateModal" class="remarks-cell" data-id="<?php echo $row['id']; ?>">
-                                                        <?php echo $row["remarks"] ?></td>
+                                                        <td style="border-bottom: 1px solid #098209;">
+                                                            <div class="container">
+                                                                <a style="color: #000000" data-placement="bottom" data-toggle="tooltip" data-html="true" title="
+                                                                    <?php
+                                                                        $d_forward = !empty($row["date_fwd"]) ? $row["date_fwd"] : "N/A";
+                                                                        $d_signed = !empty($row["date_signed"]) ? $row["date_signed"] : "N/A";
+                                                                        $d_approved = !empty($row["sp_approval"]) ? $row["sp_approval"] : "N/A";
+
+                                                                        // Display relevant dates based on remarks
+                                                                        if ($row["remarks"] == "Forwarded to LCE") {
+                                                                            echo "<strong>Forwarded to LCE:</strong> $d_forward";
+                                                                        } elseif ($row["remarks"] == "Signed by LCE") {
+                                                                            echo "<strong>Forwarded to LCE:</strong> $d_forward<br>";
+                                                                            echo "<strong>Signed by LCE:</strong> $d_signed";
+                                                                        } elseif ($row["remarks"] == "SP Approval") {
+                                                                            echo "<strong>Forwarded to LCE:</strong> $d_forward<br>";
+                                                                            echo "<strong>Signed by LCE:</strong> $d_signed<br>";
+                                                                            echo "<strong>SP Approval:</strong> $d_approved";
+                                                                        }
+                                                                    ?>
+                                                                ">
+                                                                    <?php echo $row["remarks"] ?>
+                                                                </a>
+                                                            </div>
+                                                        </td>
                                                         <td style="border-right: 1px solid #098209; border-bottom: 1px solid #098209;" class='text-center d-flex justify-content-center gap-2'>
                                                             <a href="viewordinance.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' style="color: #FFFFFF;" aria-hidden='true'></i></a>
                                                             <a href="editordinance.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' style="color:#FFFFFF" aria-hidden='true'></i></a>
@@ -118,6 +141,9 @@
     <script src="./js/plugins-init/datatables.init.js"></script>
 
     <script>
+        $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip(); 
+    });
         function confirmDelete(id) {
             Swal.fire({
                 icon: 'warning',

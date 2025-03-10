@@ -231,7 +231,7 @@
                 document.getElementById("dateFields").style.display = "block";
                 document.getElementById("signedDateField").style.display = "flex";
                 document.getElementById("sbApprovalDateField").style.display = "none";
-            } else if (status === "SB Approval") {
+            } else if (status === "SP Approval") {
                 document.getElementById("forwardedDateField").style.visibility = "visible";
                 document.getElementById("forwardedDateField").style.opacity = "1";
                 document.getElementById("signedDateField").style.visibility = "visible";
@@ -308,6 +308,28 @@
             }
         });
     });
+
+    function updateMinDate(fieldId, targetIds) {
+        let selectedDate = document.getElementById(fieldId).value;
+        if (selectedDate) {
+            targetIds.forEach(targetId => {
+                document.getElementById(targetId).min = selectedDate;
+            });
+        }
+    }
+
+    document.getElementById("dateAdopted").addEventListener("change", function () {
+        updateMinDate("dateAdopted", ["dateForwarded", "dateSigned", "dateApproved"]);
+    });
+
+    document.getElementById("dateForwarded").addEventListener("change", function () {
+        updateMinDate("dateForwarded", ["dateSigned", "dateApproved"]);
+    });
+
+    document.getElementById("dateSigned").addEventListener("change", function () {
+        updateMinDate("dateSigned", ["dateApproved"]);
+    });
+    
     </script>
     
 </body>
