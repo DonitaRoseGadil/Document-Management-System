@@ -264,69 +264,112 @@
     </script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const requiredFields = ["no_regSession", "date", "genAttachment", "title", "type", "status", "attachment"];
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+        const requiredFields = ["no_regSession", "date", "genAttachment", "title", "type", "status", "attachment"];
 
-            function validateField(field) {
-                let inputElement = document.getElementById(field);
-                let errorElement = document.getElementById(field + "-error");
+        function validateField(field) {
+            let inputElement = document.getElementById(field);
+            if (!inputElement) return true; // Skip if field is missing
 
-                if (!inputElement.value.trim() || (field === "remarks" && inputElement.value === "Choose...")) {
-                    if (!errorElement) {
-                        let errorMsg = document.createElement("div");
-                        errorMsg.id = field + "-error";
-                        errorMsg.className = "text-danger mt-1";
-                        errorMsg.textContent = "Required missing field.";
-                        inputElement.parentNode.appendChild(errorMsg);
-                    }
-                } else {
-                    if (errorElement) {
-                        errorElement.remove();
-                    }
+            let errorElement = document.getElementById(field + "-error");
+            let isEmpty = !inputElement.value.trim();
+
+            if (isEmpty) {
+                if (!errorElement) {
+                    let errorMsg = document.createElement("div");
+                    errorMsg.id = field + "-error";
+                    errorMsg.className = "text-danger mt-1";
+                    errorMsg.textContent = "Required field.";
+                    inputElement.parentNode.appendChild(errorMsg);
                 }
+                return false; // Field is invalid
+            } else {
+                if (errorElement) errorElement.remove();
+                return true; // Field is valid
+            }
+        }
+
+        function validateDynamicFields() {
+            let isValid = true;
+            let firstInvalidField = null;
+
+            document.querySelectorAll("#dynamic-form-container .card").forEach((card, index) => {
+                let resNo = card.querySelector("input[name='resNo[]']");
+                let title = card.querySelector("input[name='title[]']");
+                let status = card.querySelector("select[name='status[]']");
+
+                if (!resNo.value.trim() || !title.value.trim() || !status.value.trim()) {
+                    isValid = false;
+                    if (!firstInvalidField) firstInvalidField = resNo || title || status;
+                }
+
+                if (!resNo.value.trim()) showError(resNo);
+                if (!title.value.trim()) showError(title);
+                if (!status.value.trim()) showError(status);
+            });
+
+            if (!isValid && firstInvalidField) {
+                firstInvalidField.scrollIntoView({ behavior: "smooth", block: "center" });
+                firstInvalidField.focus();
             }
 
-            // Add event listeners for real-time validation
+            return isValid;
+        }
+
+        function showError(inputElement) {
+            let errorElement = document.createElement("div");
+            errorElement.className = "text-danger mt-1";
+            errorElement.textContent = "Required field.";
+            if (!inputElement.nextElementSibling || !inputElement.nextElementSibling.classList.contains("text-danger")) {
+                inputElement.parentNode.appendChild(errorElement);
+            }
+        }
+
+        function validateForm(event) {
+            let isValid = true;
+            let firstInvalidField = null;
+
             requiredFields.forEach(function (field) {
-                let inputElement = document.getElementById(field);
-
-                if (inputElement) {
-                    // "input" event - Hide error while typing
-                    inputElement.addEventListener("input", function () {
-                        validateField(field);
-                    });
-
-                    // "change" event for dropdown validation
-                    if (field === "remarks") {
-                        inputElement.addEventListener("change", function () {
-                            validateField(field);
-                        });
-                    }
-
-                    // "focusout" event - Show error if empty when user leaves field
-                    inputElement.addEventListener("focusout", function () {
-                        validateField(field);
-                    });
+                if (!validateField(field)) {
+                    isValid = false;
+                    if (!firstInvalidField) firstInvalidField = document.getElementById(field);
                 }
             });
 
-            // Form submit validation
-            document.querySelector("form").addEventListener("submit", function (event) {
-                let isValid = true;
-                requiredFields.forEach(function (field) {
-                    validateField(field);
-                    if (!document.getElementById(field).value.trim() || 
-                        (field === "remarks" && document.getElementById(field).value === "Choose...")) {
-                        isValid = false;
-                    }
+            if (!validateDynamicFields()) isValid = false;
+
+            if (!isValid) {
+                event.preventDefault();
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Incomplete Form',
+                    text: 'All required fields must be filled out before submitting!',
+                    confirmButtonText: 'OK'
                 });
 
-                if (!isValid) {
-                    event.preventDefault();
+                if (firstInvalidField) {
+                    firstInvalidField.scrollIntoView({ behavior: "smooth", block: "center" });
+                    firstInvalidField.focus();
                 }
-            });
+
+                return false;
+            }
+        }
+
+        requiredFields.forEach(function (field) {
+            let inputElement = document.getElementById(field);
+            if (inputElement) {
+                inputElement.addEventListener("input", function () { validateField(field); });
+                inputElement.addEventListener("focusout", function () { validateField(field); });
+            }
         });
+
+        form.addEventListener("submit", validateForm);
+    });
     </script>
+
 
 </body>
 
