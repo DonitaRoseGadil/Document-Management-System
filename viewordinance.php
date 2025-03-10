@@ -260,21 +260,21 @@ $conn->close();
     window.onload = toggleViewDateFields;
     </script>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            $('#historyModal').on('show.bs.modal', function() {
-                let resolutionId = "<?php echo $resolution_id; ?>";
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                $('#historyModal').on('show.bs.modal', function() {
+                    let resolutionId = "<?php echo $resolution_id; ?>";
 
-                if (!resolutionId) {
-                    $('#historyTableBody').html("<tr><td colspan='3'>No history available.</td></tr>");
-                    return;
-                }
+                    if (!resolutionId) {
+                        $('#historyTableBody').html("<tr><td colspan='3'>No history available.</td></tr>");
+                        return;
+                    }
 
-                fetch(`fetch_history.php?id=${resolutionId}`)
+                    fetch(`fetch_history.php?id=${resolutionId}&file_type=ordinance`) // Add file_type parameter
                     .then(response => response.json())
                     .then(data => {
                         let historyHtml = "";
-                        if (data.length > 0) {
+                        if (Array.isArray(data) && data.length > 0) {
                             data.forEach(log => {
                                 historyHtml += `<tr>
                                                     <td style="color: #000000;">${log.title}</td>
@@ -291,9 +291,10 @@ $conn->close();
                         console.error("Error fetching history:", error);
                         document.getElementById("historyTableBody").innerHTML = "<tr><td colspan='3'>Error loading history.</td></tr>";
                     });
+
+                });
             });
-        });
-        </script>
+            </script>
         
     
 </body>
