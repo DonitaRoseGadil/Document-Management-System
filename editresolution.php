@@ -245,7 +245,7 @@ if(isset($_POST['save'])){
                                                         Forwarded to LCE
                                                     </option>
                                                     <option value="Signed by LCE" <?php echo ($selectedRemarks == 'Signed by LCE') ? 'selected' : ''; ?>
-                                                        <?php echo ($selectedRemarks == 'SB Approval') ? 'disabled' : ''; ?>>
+                                                        <?php echo ($selectedRemarks == 'SP Approval') ? 'disabled' : ''; ?>>
                                                         Signed by LCE
                                                     </option>
                                                     <option value="SP Approval" <?php echo ($selectedRemarks == 'SP Approval') ? 'selected' : ''; ?>>
@@ -343,7 +343,7 @@ if(isset($_POST['save'])){
         } else if (currentStatus === "Signed by LCE") {
             options[0].disabled = true;
             options[1].disabled = true;
-        } else if (currentStatus === "SB Approval") {
+        } else if (currentStatus === "SP Approval") {
             options[0].disabled = true;
             options[1].disabled = true;
             options[2].disabled = true;
@@ -367,7 +367,7 @@ if(isset($_POST['save'])){
         } else if (status === "Signed by LCE") {
             document.getElementById("forwardedDateField").style.display = "flex";
             document.getElementById("signedDateField").style.display = "flex";
-        } else if (status === "SB Approval") {
+        } else if (status === "SP Approval") {
             document.getElementById("forwardedDateField").style.display = "flex";
             document.getElementById("signedDateField").style.display = "flex";
             document.getElementById("sbApprovalDateField").style.display = "flex";

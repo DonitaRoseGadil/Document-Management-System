@@ -107,7 +107,7 @@
                                         <div class="form-group" style="position: relative; display: flex; align-items: center;">
                                             <input type="password" class="form-control" placeholder="Password" name="password" id="password"
                                                 style="padding-right: 35px; width: 100%;">
-                                            <i class="fa fa-eye" id="toggleEye" onclick="togglePassword()" 
+                                            <i class="fa fa-eye-slash" id="toggleEye" onclick="togglePassword()" 
                                                 style="position: absolute; right: 10px; font-size: 18px; cursor: pointer; color: #098209;"></i>
                                         </div>
                                         <div class="form-row d-flex justify-content-between mt-4 mb-2">
@@ -151,12 +151,13 @@
         
         if (passwordInput.type === "password") {
             passwordInput.type = "text";
-            eyeIcon.classList.remove("fa-eye");
-            eyeIcon.classList.add("fa-eye-slash"); // Change icon to indicate visibility
-        } else {
-            passwordInput.type = "password";
             eyeIcon.classList.remove("fa-eye-slash");
             eyeIcon.classList.add("fa-eye"); // Revert to normal eye icon
+            
+        } else {
+            passwordInput.type = "password";
+            eyeIcon.classList.remove("fa-eye");
+            eyeIcon.classList.add("fa-eye-slash"); // Change icon to indicate visibility
         }
     }
 </script>

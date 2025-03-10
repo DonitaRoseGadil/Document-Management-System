@@ -57,10 +57,11 @@
                                                 <th style="color: #FFFFFF;">ACTION</th>
                                             </tr>
                                         </thead>
-                                        <tbody style="color: #000000;">
+                                        <tbody style="color: #000000; border:#000000;">
                                             <?php
                                                 include "connect.php";
-                                                $sql = "SELECT id, mo_no, title, date_adopted, author_sponsor, remarks FROM ordinance";
+
+                                                $sql = "SELECT id, mo_no, title, date_adopted, author_sponsor, remarks, date_fwd, date_signed, sp_approval FROM ordinance";
                                                 $stmt = $conn->prepare($sql);
                                                 $stmt->execute();
                                                 $result = $stmt->get_result();
@@ -72,20 +73,50 @@
                                                 while ($row = mysqli_fetch_assoc($result)) {
                                                     ?>
                                                     <tr>
-                                                        <td><?php echo $row["mo_no"]?></td>
-                                                        <td><?php echo $row["title"] ?></td>
-                                                        <td><?php echo $row["date_adopted"] ?></td>
-                                                        <td><?php echo $row["author_sponsor"] ?></td>
-                                                        <td data-toggle="modal" data-target="#dateModal" class="remarks-cell" data-id="<?php echo $row['id']; ?>">
-                                                        <?php echo $row["remarks"] ?></td>
-                                                        <td class='text-center d-flex justify-content-center gap-2'>
-                                                            <a href="viewordinance.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' style="color: #FFFFFF;" aria-hidden='true'></i></a>
-                                                            <a href="editordinance.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' style="color:#FFFFFF" aria-hidden='true'></i></a>
-                                                            <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-trash' style="color: #FFFFFF;" aria-hidden='true'></i></a>
+                                                        <td style="border-bottom: 1px solid #098209; border-left: 1px solid #098209;"><?php echo $row["mo_no"] ?></td>
+                                                        <td style="border-bottom: 1px solid #098209;"><?php echo $row["title"] ?></td>
+                                                        <td style="border-bottom: 1px solid #098209;"><?php echo $row["date_adopted"] ?></td> 
+                                                        <td style="border-bottom: 1px solid #098209;"><?php echo $row["author_sponsor"] ?></td>     
+                                                        <td style="border-bottom: 1px solid #098209;">
+                                                            <div class="container">
+                                                                <a style="color: #000000" data-placement="bottom" data-toggle="tooltip" data-html="true" title="
+                                                                    <?php
+                                                                        $d_forward = !empty($row["date_fwd"]) ? $row["date_fwd"] : "N/A";
+                                                                        $d_signed = !empty($row["date_signed"]) ? $row["date_signed"] : "N/A";
+                                                                        $d_approved = !empty($row["sp_approval"]) ? $row["sp_approval"] : "N/A";
+
+                                                                        // Display relevant dates based on remarks
+                                                                        if ($row["remarks"] == "Forwarded to LCE") {
+                                                                            echo "<strong>Forwarded to LCE:</strong> $d_forward";
+                                                                        } elseif ($row["remarks"] == "Signed by LCE") {
+                                                                            echo "<strong>Forwarded to LCE:</strong> $d_forward<br>";
+                                                                            echo "<strong>Signed by LCE:</strong> $d_signed";
+                                                                        } elseif ($row["remarks"] == "SP Approval") {
+                                                                            echo "<strong>Forwarded to LCE:</strong> $d_forward<br>";
+                                                                            echo "<strong>Signed by LCE:</strong> $d_signed<br>";
+                                                                            echo "<strong>SP Approval:</strong> $d_approved";
+                                                                        }
+                                                                    ?>
+                                                                ">
+                                                                    <?php echo $row["remarks"] ?>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+
+                                                        <!-- <td style="border-bottom: 1px solid #098209;">
+                                                            <div class="container">
+                                                                <a style="color: #000000" id="popoverData" class="btn" href="#" data-content="Forwarded to LCE: <?php echo $row["d_forward"] ?>" rel="popover" 
+                                                                data-placement="bottom" data-trigger="hover"><?php echo $row["remarks"] ?></a>
+                                                            </div>
+                                                        </td> -->
+                                                        <td style="border-bottom: 1px solid #098209; border-right: 1px solid #098209;" class='text-center d-flex justify-content-center gap-2'>
+                                                            <a href="viewresolution.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' aria-hidden='true' style="color: #FFFFFF;"></i></a>
+                                                            <a href="editresolution.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' aria-hidden='true' style="color: #FFFFFF;"></i></a>
+                                                            <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1' ><i class='fa fa-trash' aria-hidden='true' style="color: #FFFFFF"></i></a>
                                                         </td>
                                                     </tr>
-                                                    <?php
-                                                }
+                                            <?php
+                                            }
                                             ?>
                                         </tbody>
                                     </table>
@@ -118,6 +149,9 @@
     <script src="./js/plugins-init/datatables.init.js"></script>
 
     <script>
+        $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip(); 
+    });
         function confirmDelete(id) {
             Swal.fire({
                 icon: 'warning',

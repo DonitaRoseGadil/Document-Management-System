@@ -233,15 +233,15 @@ if(isset($_POST['save'])){
                                                 <select id="remarks" name="remarks" class="form-control" onchange="toggleDateFields()">
                                                     <option value="" <?php echo ($selectedRemarks == '') ? 'selected' : ''; ?>>Choose...</option>
                                                     <option value="Forwarded to LCE" <?php echo ($selectedRemarks == 'Forwarded to LCE') ? 'selected' : ''; ?>
-                                                        <?php echo ($selectedRemarks == 'Signed by LCE' || $selectedRemarks == 'SB Approval') ? 'disabled' : ''; ?>>
+                                                        <?php echo ($selectedRemarks == 'Signed by LCE' || $selectedRemarks == 'SP Approval') ? 'disabled' : ''; ?>>
                                                         Forwarded to LCE
                                                     </option>
                                                     <option value="Signed by LCE" <?php echo ($selectedRemarks == 'Signed by LCE') ? 'selected' : ''; ?>
-                                                        <?php echo ($selectedRemarks == 'SB Approval') ? 'disabled' : ''; ?>>
+                                                        <?php echo ($selectedRemarks == 'SP Approval') ? 'disabled' : ''; ?>>
                                                         Signed by LCE
                                                     </option>
-                                                    <option value="SB Approval" <?php echo ($selectedRemarks == 'SB Approval') ? 'selected' : ''; ?>>
-                                                        SB Approval
+                                                    <option value="SP Approval" <?php echo ($selectedRemarks == 'SP Approval') ? 'selected' : ''; ?>>
+                                                        SP Approval
                                                     </option>
                                                     <option value="Disapprove" <?php echo ($selectedRemarks == 'Disapprove') ? 'selected' : ''; ?>>Disapprove</option>
                                                 </select>
@@ -261,7 +261,7 @@ if(isset($_POST['save'])){
                                                 </div>
                                             </div>
                                             <div class="form-group row" id="sbApprovalDateField" style="display: none;">
-                                                <label class="col-sm-3 col-form-label" style="color:#000000">SB Approval:</label>
+                                                <label class="col-sm-3 col-form-label" style="color:#000000">SP Approval:</label>
                                                 <div class="col-sm-9">
                                                     <input type="date" class="form-control" value="<?php echo $row['sp_approval']?>" id="dateApproved" name="dateApproved">
                                                 </div>
@@ -335,7 +335,7 @@ if(isset($_POST['save'])){
         } else if (currentStatus === "Signed by LCE") {
             options[0].disabled = true;
             options[1].disabled = true;
-        } else if (currentStatus === "SB Approval") {
+        } else if (currentStatus === "SP Approval") {
             options[0].disabled = true;
             options[1].disabled = true;
             options[2].disabled = true;
@@ -359,7 +359,7 @@ if(isset($_POST['save'])){
         } else if (status === "Signed by LCE") {
             document.getElementById("forwardedDateField").style.display = "flex";
             document.getElementById("signedDateField").style.display = "flex";
-        } else if (status === "SB Approval") {
+        } else if (status === "SP Approval") {
             document.getElementById("forwardedDateField").style.display = "flex";
             document.getElementById("signedDateField").style.display = "flex";
             document.getElementById("sbApprovalDateField").style.display = "flex";
