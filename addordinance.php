@@ -163,10 +163,10 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." id="title" name="title">
-                                            </div>
+                                             <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
+                                             <div class="col-sm-9">
+                                                 <textarea class="form-control" style="resize: none;" rows="8" placeholder="Please type here..." id="title" name="title"></textarea>
+                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Date Adopted:</label>
