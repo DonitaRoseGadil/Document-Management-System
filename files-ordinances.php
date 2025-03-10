@@ -57,9 +57,10 @@
                                                 <th style="color: #FFFFFF;">ACTION</th>
                                             </tr>
                                         </thead>
-                                        <tbody style="color: #000000;">
+                                        <tbody style="color: #000000; border:#000000;">
                                             <?php
                                                 include "connect.php";
+
                                                 $sql = "SELECT id, mo_no, title, date_adopted, author_sponsor, remarks, date_fwd, date_signed, sp_approval FROM ordinance";
                                                 $stmt = $conn->prepare($sql);
                                                 $stmt->execute();
@@ -72,10 +73,10 @@
                                                 while ($row = mysqli_fetch_assoc($result)) {
                                                     ?>
                                                     <tr>
-                                                        <td style="border-bottom: 1px solid #098209; border-left: 1px solid #098209;"><?php echo $row["mo_no"]?></td>
+                                                        <td style="border-bottom: 1px solid #098209; border-left: 1px solid #098209;"><?php echo $row["mo_no"] ?></td>
                                                         <td style="border-bottom: 1px solid #098209;"><?php echo $row["title"] ?></td>
-                                                        <td style="border-bottom: 1px solid #098209;"><?php echo $row["date_adopted"] ?></td>
-                                                        <td style="border-bottom: 1px solid #098209;"><?php echo $row["author_sponsor"] ?></td>
+                                                        <td style="border-bottom: 1px solid #098209;"><?php echo $row["date_adopted"] ?></td> 
+                                                        <td style="border-bottom: 1px solid #098209;"><?php echo $row["author_sponsor"] ?></td>     
                                                         <td style="border-bottom: 1px solid #098209;">
                                                             <div class="container">
                                                                 <a style="color: #000000" data-placement="bottom" data-toggle="tooltip" data-html="true" title="
@@ -101,14 +102,21 @@
                                                                 </a>
                                                             </div>
                                                         </td>
-                                                        <td style="border-right: 1px solid #098209; border-bottom: 1px solid #098209;" class='text-center d-flex justify-content-center gap-2'>
-                                                            <a href="viewordinance.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' style="color: #FFFFFF;" aria-hidden='true'></i></a>
-                                                            <a href="editordinance.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' style="color:#FFFFFF" aria-hidden='true'></i></a>
-                                                            <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-trash' style="color: #FFFFFF;" aria-hidden='true'></i></a>
+
+                                                        <!-- <td style="border-bottom: 1px solid #098209;">
+                                                            <div class="container">
+                                                                <a style="color: #000000" id="popoverData" class="btn" href="#" data-content="Forwarded to LCE: <?php echo $row["d_forward"] ?>" rel="popover" 
+                                                                data-placement="bottom" data-trigger="hover"><?php echo $row["remarks"] ?></a>
+                                                            </div>
+                                                        </td> -->
+                                                        <td style="border-bottom: 1px solid #098209; border-right: 1px solid #098209;" class='text-center d-flex justify-content-center gap-2'>
+                                                            <a href="viewresolution.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' aria-hidden='true' style="color: #FFFFFF;"></i></a>
+                                                            <a href="editresolution.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' aria-hidden='true' style="color: #FFFFFF;"></i></a>
+                                                            <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1' ><i class='fa fa-trash' aria-hidden='true' style="color: #FFFFFF"></i></a>
                                                         </td>
                                                     </tr>
-                                                    <?php
-                                                }
+                                            <?php
+                                            }
                                             ?>
                                         </tbody>
                                     </table>
