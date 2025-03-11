@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 <label style="color:#000000;">Enter Current Password</label>
                                                 <input type="password" class="form-control" name="current_password" id="current_password" 
                                                     style="padding-right: 35px; width: 100%;" required>
-                                                <i class="fa fa-eye" id="toggleEyeCurrent" onclick="togglePassword('current_password', 'toggleEyeCurrent')" 
+                                                <i class="fa fa-eye-slash" id="toggleEyeCurrent" onclick="togglePassword('current_password', 'toggleEyeCurrent')" 
                                                     style="position: absolute; right: 10px; top: 70%; transform: translateY(-50%); font-size: 18px; cursor: pointer; color: #098209;"></i>
                                             </div>
 
@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     <label style="color:#000000">Enter New Password</label>
                                                     <input type="password" class="form-control" name="new_password" id="new_password" 
                                                         style="padding-right: 35px; width: 100%;" required>
-                                                    <i class="fa fa-eye" id="toggleEyeNew" onclick="togglePassword('new_password', 'toggleEyeNew')" 
+                                                    <i class="fa fa-eye-slash" id="toggleEyeNew" onclick="togglePassword('new_password', 'toggleEyeNew')" 
                                                         style="position: absolute; right: 10px; top: 70%; transform: translateY(-50%); font-size: 18px; cursor: pointer; color: #098209;"></i>
                                                 </div>
 
@@ -83,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     <label style="color:#000000">Confirm New Password</label>
                                                     <input type="password" class="form-control" id="confirm_password" 
                                                         style="padding-right: 35px; width: 100%;" required>
-                                                    <i class="fa fa-eye" id="toggleEyeConfirm" onclick="togglePassword('confirm_password', 'toggleEyeConfirm')" 
+                                                    <i class="fa fa-eye-slash" id="toggleEyeConfirm" onclick="togglePassword('confirm_password', 'toggleEyeConfirm')" 
                                                         style="position: absolute; right: 10px; top: 70%; transform: translateY(-50%); font-size: 18px; cursor: pointer; color: #098209;"></i>
                                                 </div>
 
@@ -153,21 +153,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="./js/custom.min.js"></script>
 
     <script>
-    function togglePassword(inputId, eyeId) {
-        var passwordInput = document.getElementById(inputId);
-        var eyeIcon = document.getElementById(eyeId);
+        function togglePassword(inputId, eyeId) {
+            var passwordInput = document.getElementById(inputId);
+            var eyeIcon = document.getElementById(eyeId);
 
-        if (passwordInput.type === "password") {
-            passwordInput.type = "text";
-            eyeIcon.classList.remove("fa-eye");
-            eyeIcon.classList.add("fa-eye-slash");
-        } else {
-            passwordInput.type = "password";
-            eyeIcon.classList.remove("fa-eye-slash");
-            eyeIcon.classList.add("fa-eye");
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                eyeIcon.classList.remove("fa-eye-slash");
+                eyeIcon.classList.add("fa-eye");
+            } else {
+                passwordInput.type = "password";
+                eyeIcon.classList.remove("fa-eye");
+                eyeIcon.classList.add("fa-eye-slash");
+            }
         }
-    }
-</script>
+    </script>
 
 
 </body>

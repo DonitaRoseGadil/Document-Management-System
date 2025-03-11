@@ -160,7 +160,7 @@
                                             </div>
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input" value="genAttachment" id="genAttachment" name="genAttachment" onchange="updateFileName('genAttachmentLabel')">
-                                                <label class="custom-file-label" id="genAttachmentLabel"> 
+                                                <label class="custom-file-label" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:block;" id="genAttachmentLabel"> 
                                                     <?php echo !empty($row['genAttachment']) ? $row['genAttachment'] : "Choose file"; ?>
                                                 </label>
                                             </div>
@@ -174,7 +174,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Title:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" value="<?php echo $row['title']?>" name="title" required>
+                                            <textarea class="form-control" id="title" name="title" rows="4" style="resize: none; overflow: hidden;"><?php echo $row['title']; ?></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -195,7 +195,7 @@
                                             </div>
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input" id="attachment" value="attachment" name="attachment" onchange="updateFileName('attachmentLabel')">
-                                                <label class="custom-file-label" id="attachmentLabel"> 
+                                                <label class="custom-file-label" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:block;" id="attachmentLabel"> 
                                                     <?php echo !empty($row['attachment']) ? $row['attachment'] : "Choose file"; ?>
                                                 </label>
                                             </div>

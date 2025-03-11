@@ -208,7 +208,7 @@ if(isset($_POST['save'])){
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" value="<?php echo $row['title']?>" id="title" name="title">
+                                            <textarea class="form-control" id="title" name="title" rows="4" style="resize: none; overflow: hidden;"><?php echo $row['title']; ?></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -281,14 +281,14 @@ if(isset($_POST['save'])){
                                             </div>
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input" id="attachment" value="attachment" name="attachment" onchange="updateFileName('attachmentLabel')">
-                                                <label class="custom-file-label" id="attachmentLabel"> 
+                                                <label class="custom-file-label" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:block;" id="attachmentLabel"> 
                                                     <?php echo !empty($row['attachment']) ? $row['attachment'] : "Choose file"; ?>
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="form-group row d-flex justify-content-center">
                                             <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;">Update</button>
-                                            <a href="files-ordinances.php" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
+                                            <a href="files-resolution.php" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
                                         </div>
                                     </form>
                                 </div>

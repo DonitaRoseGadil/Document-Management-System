@@ -72,11 +72,19 @@
                                                         <td style="pointer-events: none; "><?php $formattedDate = new DateTime($row["date"]);echo $formattedDate->format("m/d/Y");?></td>
                                                         <td style="pointer-events: none; "><?php echo $row["title"] ?></td>
                                                         <td style="pointer-events: none; "><?php echo $row["status"] ?></td>
-                                                        <td class="text-center d-flex justify-content-center gap-2">
-                                                            <a href="viewmeetingminutes.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1 mt-3'><i class='fa fa-eye' style="color: #FFFFFF;" aria-hidden='true'></i></a>
-                                                            <a href="editmeetingminutes.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1 mt-3'><i class='fa fa-edit' style="color:#FFFFFF" aria-hidden='true'></i></a>
-                                                            <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1 mt-3'><i class='fa fa-trash' style="color: #FFFFFF;" aria-hidden='true'></i></a>
-                                                        </td>
+                                                        <td style="border-bottom: 1px solid #098209; border-right: 1px solid #098209; text-align: center; vertical-align: middle;">
+                                                            <div class="d-flex justify-content-center align-items-center gap-2">
+                                                                <a href="viewmeetingminutes.php?id=<?php echo $row["id"] ?>" class="btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2">
+                                                                    <i class="fa fa-eye" aria-hidden="true" style="color: #FFFFFF;"></i>
+                                                                </a>
+                                                                <a href="editmeetingminutes.php?id=<?php echo $row["id"] ?>" class="btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 ml-1 mr-1">
+                                                                    <i class="fa fa-edit" aria-hidden="true" style="color: #FFFFFF;"></i>
+                                                                </a>
+                                                                <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class="btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2">
+                                                                    <i class="fa fa-trash" aria-hidden="true" style="color: #FFFFFF"></i>
+                                                                </a>
+                                                            </div>
+                                                        </td>       
                                                     </tr>
                                                     <?php
                                                 }

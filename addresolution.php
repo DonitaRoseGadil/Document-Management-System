@@ -102,7 +102,7 @@
                                         <div class="form-group row">
                                              <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
                                              <div class="col-sm-9">
-                                                 <textarea class="form-control" style="resize: none;" rows="8" placeholder="Please type here..." id="title" name="title"></textarea>
+                                                 <textarea class="form-control" style="resize: none;" rows="4" placeholder="Please type here..." id="title" name="title"></textarea>
                                              </div>
                                         </div>
                                         <div class="form-group row">
@@ -161,7 +161,7 @@
                                             </div>
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input" id="attachment" name="attachment" onchange="updateFileName()">
-                                                <label class="custom-file-label" for="attachment">Choose file</label>
+                                                <label class="custom-file-label text-truncate" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:block;" for="attachment">Choose file</label>
                                             </div>
                                         </div>
                                         <div class="form-group row d-flex justify-content-center">
@@ -248,7 +248,7 @@
         }
         document.addEventListener("DOMContentLoaded", function () {
         const form = document.querySelector("form");
-        const requiredFields = ["moNo", "title", "dateAdopted", "authorSponsor", "remarks"];
+        const requiredFields = ["moNo", "title", "dateAdopted", "authorSponsor"];
 
         function validateField(field) {
             let inputElement = document.getElementById(field);
