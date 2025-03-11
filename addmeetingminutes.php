@@ -122,7 +122,7 @@
                     <div class="col-xl-8 col-xxl-12 items-center">                        
                         <div class="card" style="align-self: center;">
                             <div class="card-header d-flex justify-content-center">
-                                <h4 class="card-title text-center" style="color: #098209; ">ADD MEETING MINUTES</h4>
+                                <h4 class="card-title text-center" style="color: #098209; ">ADD ORDER OF BUSINESS</h4>
                             </div>
                             <div class="card-body">
                                 <div class="basic-form">
@@ -130,13 +130,13 @@
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">No. of Regular Session</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." id="no_regSession" name="no_regSession">
+                                                <input type="text" class="form-control" placeholder="Please type here..." id="no_regSession" name="no_regSession" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Date:</label>
                                             <div class="col-sm-9">
-                                                <input type="date" class="form-control" placeholder="Please type here..." id="date" name="date">
+                                                <input type="date" class="form-control" placeholder="Please type here..." id="date" name="date" required>
                                             </div>
                                         </div>
                                         <label style="color: #000000">Upload Attachment for Order of Business:</label>
@@ -216,7 +216,7 @@
                 <div class="card-body mt-3">
                     <div class="basic-form">
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No.:</label>
+                            <label class="col-sm-3 col-form-label" style="color: #000000">Item No.:</label>
                             <div class="col-sm-9">
                                 <input type="text" placeholder="Please type here..." class="form-control" name="resNo[]" required>
                             </div>
@@ -224,19 +224,13 @@
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
                             <div class="col-sm-9">
-                                <textarea class="form-control" style="resize: none;" rows="4" placeholder="Please type here..." id="title" name="title"></textarea>
+                                <textarea class="form-control" style="resize: none;" rows="4" placeholder="Please type here..." id="title" name="title[]" required></textarea>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="status" class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
-                            <div class="col-sm-9">
-                                <select id="status" name="status[]" class="form-control">
-                                    <option value="" selected>Choose...</option>
-                                    <option value="Draft">Draft</option>
-                                    <option value="Information">Information</option>
-                                    <option value="Referred to Committee">Referred to Committee</option>
-                                    <option value="Approved">Approved</option>
-                                </select>
+                             <div class="col-sm-9">
+                                <input type="text" placeholder="Please type here..." class="form-control" name="status[]" required>
                             </div>
                         </div>
                         <div class="form-group row d-flex justify-content-center">

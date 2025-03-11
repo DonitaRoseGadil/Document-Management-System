@@ -28,7 +28,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center p-3 mt-4">
-                                <h1 class="card-title flex-grow-1 fs-4 fw-bold text-dark text-center" style="color: #000000">MINUTES OF THE MEETING</h1>
+                                <h1 class="card-title flex-grow-1 fs-4 fw-bold text-dark text-center" style="color: #000000">ORDER OF BUSINESS</h1>
                                 <div class="button-container d-flex justify-content-end">
                                     <a href="addmeetingminutes.php">
                                         <button type="button" class="btn btn-primary" style="background-color: #098209; color:#FFFFFF; border: none;"><i class="fa fa-plus"></i>&nbsp;Add New Subject</button>
@@ -68,14 +68,22 @@
                                                 while ($row = mysqli_fetch_assoc($result)) {
                                                     ?>
                                                     <tr>
-                                                        <td style="pointer-events: none;"><?php echo $row["no_regSession"] ?></td>
-                                                        <td style="pointer-events: none; "><?php $formattedDate = new DateTime($row["date"]);echo $formattedDate->format("m/d/Y");?></td>
-                                                        <td style="pointer-events: none; "><?php echo $row["title"] ?></td>
-                                                        <td style="pointer-events: none; "><?php echo $row["status"] ?></td>
-                                                        <td class="text-center d-flex justify-content-center gap-2">
-                                                            <a href="viewmeetingminutes.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1 mt-3'><i class='fa fa-eye' style="color: #FFFFFF;" aria-hidden='true'></i></a>
-                                                            <a href="editmeetingminutes.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1 mt-3'><i class='fa fa-edit' style="color:#FFFFFF" aria-hidden='true'></i></a>
-                                                            <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1 mt-3'><i class='fa fa-trash' style="color: #FFFFFF;" aria-hidden='true'></i></a>
+                                                        <td style="pointer-events: none; border-bottom: 1px solid #098209; border-left: 1px solid #098209;"><?php echo $row["no_regSession"] ?></td>
+                                                        <td style="pointer-events: none; border-bottom: 1px solid #098209;"><?php $formattedDate = new DateTime($row["date"]);echo $formattedDate->format("m/d/Y");?></td>
+                                                        <td style="pointer-events: none; border-bottom: 1px solid #098209;"><?php echo $row["title"] ?></td>
+                                                        <td style="pointer-events: none; border-bottom: 1px solid #098209;"><?php echo $row["status"] ?></td>
+                                                        <td style="border-bottom: 1px solid #098209; border-right: 1px solid #098209; text-align: center; vertical-align: middle;">
+                                                            <div class="d-flex justify-content-center align-items-center gap-2">
+                                                                <a href="viewmeetingminutes.php?id=<?php echo $row["id"] ?>" class="btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2">
+                                                                    <i class="fa fa-eye" aria-hidden="true" style="color: #FFFFFF;"></i>
+                                                                </a>
+                                                                <a href="editmeetingminutes.php?id=<?php echo $row["id"] ?>" class="btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 ml-1 mr-1">
+                                                                    <i class="fa fa-edit" aria-hidden="true" style="color: #FFFFFF;"></i>
+                                                                </a>
+                                                                <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class="btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2">
+                                                                    <i class="fa fa-trash" aria-hidden="true" style="color: #FFFFFF"></i>
+                                                                </a>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                     <?php
