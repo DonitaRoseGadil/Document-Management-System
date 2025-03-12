@@ -12,13 +12,13 @@ $lastUpdatedText = "No updates yet";
 
 
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-    $resolution_id = intval($_GET['id']);
+    $ordinance_id = intval($_GET['id']);
 
-    if ($resolution_id > 0) {
+    if ($ordinance_id > 0) {
         // Fetch the last updated timestamp for the specific file
         $sql = "SELECT timestamp FROM history_log WHERE file_id = ? ORDER BY timestamp DESC LIMIT 1";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $resolution_id);
+        $stmt->bind_param("i", $ordinance_id);
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -47,6 +47,7 @@ $conn->close();
 <head>
     <!-- Include SweetAlert CSS and JS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 </head>
 
 <body>
@@ -71,25 +72,25 @@ $conn->close();
                     <div class="col-xl-8 col-xxl-12 items-center">                        
                         <div class="card" style="align-self: center;">
                             <div class="card-header d-flex justify-content-center">
-                                <h4 class="card-title text-center" style="color: #098209; ">VIEW ORDINANCE</h4>
+                                <h4 class="card-title flex-grow-1 fs-4 fw-bold text-dark text-center" style="color: #000000">VIEW ORDINANCE</h4>
                             </div>
-                            <?php 
-                                include "connect.php";
+                            <?php
+                                include("connect.php");
                                 $id = $_GET['id'];
-                                $sql = "SELECT * FROM ordinance WHERE id = $id LIMIT 1";
-                                $result= mysqli_query($conn, $sql);   
-                                $row = mysqli_fetch_assoc($result); 
+                                $sql = "SELECT * FROM `ordinance` WHERE id = $id LIMIT 1";
+                                $result = mysqli_query($conn, $sql);
+                                $row = mysqli_fetch_assoc($result);
                             ?>
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form action="" method="post">
-                                    <div class="form-group row">
+                                    <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="post">
+                                        <div class="form-group row">
                                             <div class="col-sm-9">
                                                 <input type="hidden" class="form-control" value="<?php echo $row['id']?>" id="id" name="id">
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No. / MO No.: </label>
+                                            <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No. / MO No.:</label>
                                             <div class="col-sm-9">
                                                 <input type="text" class="form-control" value="<?php echo $row['mo_no']?>" id="moNo" name="moNo" disabled>
                                             </div>
@@ -97,15 +98,21 @@ $conn->close();
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" value="<?php echo $row['title']?>" id="title" name="title" disabled>
+                                                <textarea class="form-control" id="title" name="title" rows="3" style="resize: none; overflow: hidden;" disabled><?php echo $row['title']; ?></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Date Adopted:</label>
                                             <div class="col-sm-9">
-                                                <input type="date" class="form-control" value="<?php echo $row['date_adopted']?>" id="dateAdopted" name="dateAdopted" disabled>
+                                                <input type="text" class="form-control" value="<?php echo $row['date_adopted']?>" id="dateAdopted" name="dateAdopted" disabled>
                                             </div>
                                         </div>
+                                        <!-- <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">Description:</label>
+                                            <div class="col-sm-9">
+                                                <textarea class="form-control" id="descrip" name="descrip" rows="3" style="resize: none; overflow: hidden;" disabled><?php echo $row['descrip']; ?></textarea>
+                                            </div>
+                                        </div> -->
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Author / Sponsor:</label>
                                             <div class="col-sm-9">
@@ -119,7 +126,7 @@ $conn->close();
                                                     <option value="" selected>Choose...</option>
                                                     <option value="Forwarded to LCE" <?php if ($row['remarks'] == "Forwarded to LCE") echo "selected"; ?>>Forwarded to LCE</option>
                                                     <option value="Signed by LCE" <?php if ($row['remarks'] == "Signed by LCE") echo "selected"; ?>>Signed by LCE</option>
-                                                    <option value="SB Approval" <?php if ($row['remarks'] == "SB Approval") echo "selected"; ?>>SB Approval</option>
+                                                    <option value="SB Approval" <?php if ($row['remarks'] == "SP Approval") echo "selected"; ?>>SP Approval</option>
                                                     <option value="Disapprove" <?php if ($row['remarks'] == "Disapprove") echo "selected"; ?>>Disapprove</option>
                                                 </select>
                                             </div>
@@ -140,9 +147,9 @@ $conn->close();
                                             </div>
 
                                             <div class="form-group row" id="sbApprovalDateField">
-                                                <label class="col-sm-3 col-form-label" style="color:#000000">SB Approval:</label>
+                                                <label class="col-sm-3 col-form-label" style="color:#000000">SP Approval:</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" value="<?php echo $row['sp_approval']?>" id="spApproval" name="spApproval" disabled>
+                                                    <input type="text" class="form-control" value="<?php echo $row['sp_approval']?>" id="dateApproved" name="dateApproved" disabled>
                                                 </div>
                                             </div>
                                         </div>
@@ -155,7 +162,6 @@ $conn->close();
                                     </form>
                                 </div>
                             </div>
-
                             <!-- View History Button -->
                             <div class="card-footer d-sm-flex justify-content-between">
                                 <div class="card-footer-link mb-4 mb-sm-0">
@@ -203,8 +209,7 @@ $conn->close();
         <!--**********************************
             Content body end
         ***********************************-->
-
-        
+  
     </div>
     <!--**********************************
         Main wrapper end
@@ -217,7 +222,7 @@ $conn->close();
     <script src="./vendor/global/global.min.js"></script>
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
-   
+
     <script>
         function viewFile(id, field) {
         let filePath = document.getElementById(field).value;
@@ -235,6 +240,7 @@ $conn->close();
         }
     }
     </script>
+
     <script>
         function toggleViewDateFields() {
             var status = document.getElementById("remarks").value;
@@ -260,43 +266,42 @@ $conn->close();
     window.onload = toggleViewDateFields;
     </script>
 
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                $('#historyModal').on('show.bs.modal', function() {
-                    let resolutionId = "<?php echo $resolution_id; ?>";
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        $('#historyModal').on('show.bs.modal', function() {
+            let ordinanceId = "<?php echo $ordinance_id; ?>";
 
-                    if (!resolutionId) {
-                        $('#historyTableBody').html("<tr><td colspan='3'>No history available.</td></tr>");
-                        return;
-                    }
+            if (!ordinanceId) {
+                $('#historyTableBody').html("<tr><td colspan='3'>No history available.</td></tr>");
+                return;
+            }
 
-                    fetch(`fetch_history.php?id=${resolutionId}&file_type=ordinance`) // Add file_type parameter
-                    .then(response => response.json())
-                    .then(data => {
-                        let historyHtml = "";
-                        if (Array.isArray(data) && data.length > 0) {
-                            data.forEach(log => {
-                                historyHtml += `<tr>
-                                                    <td style="color: #000000;">${log.title}</td>
-                                                    <td style="color: #000000;">${log.action}</td>
-                                                    <td style="color: #000000;">${log.timestamp}</td>
-                                                </tr>`;
-                            });
-                        } else {
-                            historyHtml = "<tr><td colspan='3'>No history found.</td></tr>";
-                        }
-                        document.getElementById("historyTableBody").innerHTML = historyHtml;
-                    })
-                    .catch(error => {
-                        console.error("Error fetching history:", error);
-                        document.getElementById("historyTableBody").innerHTML = "<tr><td colspan='3'>Error loading history.</td></tr>";
+            fetch(`fetch_history.php?id=${ordinanceId}&file_type=ordinance`) // Add file_type parameter
+            .then(response => response.json())
+            .then(data => {
+                let historyHtml = "";
+                if (Array.isArray(data) && data.length > 0) {
+                    data.forEach(log => {
+                        historyHtml += `<tr>
+                                            <td style="color: #000000;">${log.title}</td>
+                                            <td style="color: #000000;">${log.action}</td>
+                                            <td style="color: #000000;">${log.timestamp}</td>
+                                        </tr>`;
                     });
-
-                });
+                } else {
+                    historyHtml = "<tr><td colspan='3'>No history found.</td></tr>";
+                }
+                document.getElementById("historyTableBody").innerHTML = historyHtml;
+            })
+            .catch(error => {
+                console.error("Error fetching history:", error);
+                document.getElementById("historyTableBody").innerHTML = "<tr><td colspan='3'>Error loading history.</td></tr>";
             });
-            </script>
-        
+
+        });
+    });
+    </script>
     
 </body>
 
-</html>
+</html> 

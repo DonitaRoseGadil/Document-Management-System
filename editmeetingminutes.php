@@ -119,7 +119,7 @@
                     <div class="col-xl-8 col-xxl-12 items-center">                        
                         <div class="card" style="align-self: center;">
                             <div class="card-header d-flex justify-content-center">
-                                <h4 class="card-title text-center" style="color: #098209; ">EDIT MEETING MINUTES</h4>
+                                <h4 class="card-title text-center" style="color: #098209; ">EDIT ORDER OF BUSINESS</h4>
                             </div>
                             <?php
                                 include("connect.php");
@@ -166,7 +166,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No.:</label>
+                                            <label class="col-sm-3 col-form-label" style="color: #000000">Item No.:</label>
                                             <div class="col-sm-9">
                                                 <input type="text" class="form-control" value="<?php echo $row['resNo']?>" name="resNo" required>
                                             </div>
@@ -180,13 +180,7 @@
                                         <div class="form-group row">
                                             <label for="status" class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
                                             <div class="col-sm-9">
-                                                <select id="status" name="status" class="form-control">
-                                                    <option value="" selected>Choose...</option>
-                                                    <option value="Draft" <?php if ($row['status'] == "Draft") echo "selected"; ?>>Draft</option>
-                                                    <option value="Information" <?php if ($row['status'] == "Information") echo "selected"; ?>>Information</option>
-                                                    <option value="Referred to Committee" <?php if ($row['status'] == "Referred to Committee") echo "selected"; ?>>Referred to Committee</option>
-                                                    <option value="Approved" <?php if ($row['status'] == "Approved") echo "selected"; ?>>Approved</option>
-                                                </select>
+                                                <input type="text" class="form-control" value="<?php echo $row['status']?>" name="status" required>
                                             </div>
                                         </div>
                                         <div class="input-group mb-3">

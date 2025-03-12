@@ -208,7 +208,7 @@ if(isset($_POST['save'])){
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
                                             <div class="col-sm-9">
-                                            <textarea class="form-control" id="title" name="title" rows="4" style="resize: none; overflow: hidden;"><?php echo $row['title']; ?></textarea>
+                                                <textarea class="form-control" id="title" name="title" rows="4" style="resize: none; overflow: hidden;"><?php echo $row['title']; ?></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
