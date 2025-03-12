@@ -130,7 +130,7 @@
                                                         Swal.fire({
                                                             icon: 'warning',
                                                             title: 'Duplicate Entry!',
-                                                            text: 'The Resolution No. or Title already exists.',
+                                                            text: 'The Ordinance No. or Title already exists.',
                                                             confirmButtonText: 'OK'
                                                         });
                                                     </script>";
