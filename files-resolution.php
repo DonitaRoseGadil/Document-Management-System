@@ -77,8 +77,8 @@ ini_set('display_errors', 1);
                                                         <td style="border-bottom: 1px solid #098209;"><?php echo $row["author_sponsor"] ?></td>     
                                                         <td style="border-bottom: 1px solid #098209;"><?php echo $row["co_author"] ?></td>
                                                         <td style="border-bottom: 1px solid #098209;">
-                                                            <div class="container">
-                                                                <a style="color: #000000" data-placement="bottom" data-toggle="tooltip" data-html="true" title="
+                                                            <div class="text-center d-flex justify-content-center gap-2">
+                                                                <a style="color: #000000;" data-placement="bottom" data-toggle="tooltip" data-html="true" title="
                                                                     <?php
                                                                         $d_forward = !empty($row["d_forward"]) ? $row["d_forward"] : "N/A";
                                                                         $d_signed = !empty($row["d_signed"]) ? $row["d_signed"] : "N/A";
@@ -108,11 +108,20 @@ ini_set('display_errors', 1);
                                                                 data-placement="bottom" data-trigger="hover"><?php echo $row["remarks"] ?></a>
                                                             </div>
                                                         </td> -->
-                                                        <td style="border-bottom: 1px solid #098209; border-right: 1px solid #098209;" class='text-center d-flex justify-content-center gap-2'>
-                                                            <a href="viewresolution.php?id=<?php echo $row["id"] ?>" class='btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-eye' aria-hidden='true' style="color: #FFFFFF;"></i></a>
-                                                            <a href="editresolution.php?id=<?php echo $row["id"] ?>" class='btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 mx-1'><i class='fa fa-edit' aria-hidden='true' style="color: #FFFFFF;"></i></a>
-                                                            <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class='btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2 mx-1' ><i class='fa fa-trash' aria-hidden='true' style="color: #FFFFFF"></i></a>
+                                                        <td style="border-bottom: 1px solid #098209; border-right: 1px solid #098209; text-align: center; vertical-align: middle;">
+                                                            <div class="d-flex justify-content-center align-items-center gap-2">
+                                                                <a href="viewresolution.php?id=<?php echo $row["id"] ?>" class="btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2">
+                                                                    <i class="fa fa-eye" aria-hidden="true" style="color: #FFFFFF;"></i>
+                                                                </a>
+                                                                <a href="editresolution.php?id=<?php echo $row["id"] ?>" class="btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 ml-1 mr-1">
+                                                                    <i class="fa fa-edit" aria-hidden="true" style="color: #FFFFFF;"></i>
+                                                                </a>
+                                                                <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class="btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2">
+                                                                    <i class="fa fa-trash" aria-hidden="true" style="color: #FFFFFF"></i>
+                                                                </a>
+                                                            </div>
                                                         </td>
+
                                                     </tr>
                                             <?php
                                             }

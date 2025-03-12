@@ -32,9 +32,8 @@
                                 <div class="basic-form">
                                     <form action="addresolution.php" method="post" enctype="multipart/form-data">
                                     <?php
-                                        if(isset($_POST['save'])){
+                                        if (isset($_POST['save'])) {
                                             include("connect.php");
-                                            error_reporting(0);
 
                                             $resoNo = $_POST['resoNo'];
                                             $title = $_POST['title'];
@@ -51,48 +50,71 @@
                                                 $attachmentPath = "uploads/" . basename($_FILES['attachment']['name']);
                                                 move_uploaded_file($_FILES['attachment']['tmp_name'], $attachmentPath);
                                             }
-                                            
-                                            $sql = "INSERT INTO resolution (reso_no, title, d_adopted, author_sponsor, co_author, remarks, d_forward, d_signed, d_approved, attachment) 
-                                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                                            
-                                            $stmt = $conn->prepare($sql);
-                                            $stmt->bind_param("ssssssssss", $resoNo, $title, $dateAdopted, $authorSponsor, $coAuthor, $remarks, $dateForwarded, $dateSigned, $dateApproved, $attachmentPath);
 
-                                            if ($stmt->execute()) {
-                                                $last_id = $conn->insert_id;
+                                            // Check if Resolution No. OR Title already exists (case insensitive)
+                                            $check_sql = "SELECT * FROM resolution WHERE LOWER(reso_no) = LOWER(?) OR LOWER(title) = LOWER(?)";
+                                            $stmt_check = $conn->prepare($check_sql);
+                                            $stmt_check->bind_param("ss", $resoNo, $title);
+                                            $stmt_check->execute();
+                                            $result = $stmt_check->get_result();
 
-                                                // Insert into History Log
-                                                $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
-                                                            VALUES ('Created', 'Resolution', ?, ?)";
-                                                $log_stmt = $conn->prepare($log_sql);
-                                                $log_stmt->bind_param("is", $last_id, $title);
-                                                $log_stmt->execute();
-                                                $log_stmt->close();
-
+                                            if ($result->num_rows > 0) {
+                                                // Resolution No. or Title already exists
                                                 echo "<script>
                                                         Swal.fire({
-                                                            icon: 'success',
-                                                            title: 'Resolution Created',
-                                                            text: 'The resolution have been successfully created.',
-                                                            confirmButtonText: 'OK'
-                                                        }).then(() => { window.location.href = 'files-resolution.php'; });
-                                                    </script>";
-                                            } else {
-                                                echo "<script>
-                                                        Swal.fire({
-                                                            icon: 'error',
-                                                            title: 'Error',
-                                                            text: 'There was an error creating the resolution.',
+                                                            icon: 'warning',
+                                                            title: 'Duplicate Entry!',
+                                                            text: 'The Resolution No. or Title already exists.',
                                                             confirmButtonText: 'OK'
                                                         });
                                                     </script>";
+                                            } else {
+                                                // Insert new resolution
+                                                $sql = "INSERT INTO resolution (reso_no, title, d_adopted, author_sponsor, co_author, remarks, d_forward, d_signed, d_approved, attachment) 
+                                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                                                
+                                                $stmt = $conn->prepare($sql);
+                                                $stmt->bind_param("ssssssssss", $resoNo, $title, $dateAdopted, $authorSponsor, $coAuthor, $remarks, $dateForwarded, $dateSigned, $dateApproved, $attachmentPath);
+
+                                                if ($stmt->execute()) {
+                                                    $last_id = $conn->insert_id;
+
+                                                    // Insert into History Log
+                                                    $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
+                                                                VALUES ('Created', 'Resolution', ?, ?)";
+                                                    $log_stmt = $conn->prepare($log_sql);
+                                                    $log_stmt->bind_param("is", $last_id, $title);
+                                                    $log_stmt->execute();
+                                                    $log_stmt->close();
+
+                                                    echo "<script>
+                                                            Swal.fire({
+                                                                icon: 'success',
+                                                                title: 'Resolution Created',
+                                                                text: 'The resolution has been successfully created.',
+                                                                confirmButtonText: 'OK'
+                                                            }).then(() => { window.location.href = 'files-resolution.php'; });
+                                                        </script>";
+                                                } else {
+                                                    echo "<script>
+                                                            Swal.fire({
+                                                                icon: 'error',
+                                                                title: 'Error',
+                                                                text: 'There was an error creating the resolution.',
+                                                                confirmButtonText: 'OK'
+                                                            });
+                                                        </script>";
+                                                }
+
+                                                $stmt->close();
                                             }
 
-                                            $stmt->close();
+                                            $stmt_check->close();
                                             $conn->close();
                                         }
-                                        
                                         ?>
+
+
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No.:</label>
                                             <div class="col-sm-9">
@@ -100,10 +122,10 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." id="title" name="title">
-                                            </div>
+                                             <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
+                                             <div class="col-sm-9">
+                                                 <textarea class="form-control" style="resize: none;" rows="4" placeholder="Please type here..." id="title" name="title"></textarea>
+                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000;">Date Adopted:</label>
@@ -161,7 +183,7 @@
                                             </div>
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input" id="attachment" name="attachment" onchange="updateFileName()">
-                                                <label class="custom-file-label" for="attachment">Choose file</label>
+                                                <label class="custom-file-label text-truncate" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:block;" for="attachment">Choose file</label>
                                             </div>
                                         </div>
                                         <div class="form-group row d-flex justify-content-center">
@@ -248,7 +270,7 @@
         }
         document.addEventListener("DOMContentLoaded", function () {
         const form = document.querySelector("form");
-        const requiredFields = ["moNo", "title", "dateAdopted", "authorSponsor", "remarks"];
+        const requiredFields = ["moNo", "title", "dateAdopted", "authorSponsor"];
 
         function validateField(field) {
             let inputElement = document.getElementById(field);

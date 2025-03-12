@@ -44,12 +44,34 @@
                 </div>
 
                 <ul class="navbar-nav header-right">
+                    <li class="nav-item dropdown notification_dropdown">
+                        <a class="nav-link" href="#" role="button" data-toggle="dropdown">
+                            <i class="mdi mdi-history"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <ul class="list-unstyled">
+                                <li class="media dropdown-item">
+                                    <span class="success"><i class="ti-user"></i></span>
+                                    <div class="media-body">
+                                        <a href="#">
+                                            <p><strong>Martin</strong> has added a <strong>customer</strong> Successfully
+                                            </p>
+                                        </a>
+                                    </div>
+                                    <span class="notify-time">3:20 am</span>
+                                </li>
+                            </ul>
+                            <a class="all-notification" href="fullHistory.php" style="color: #098209; text-decoration: none; pointer-events: auto;">
+                                See all History <i class="ti-arrow-right"></i>
+                            </a>
+                        </div>
+                    </li>
                     <li class="nav-item dropdown header-profile">
                         <a class="nav-link" href="#" role="button" data-toggle="dropdown">
                             <i class="mdi mdi-account"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a href="logout.php" class="dropdown-item">
+                            <a href="#" class="dropdown-item" id="logoutBtn">
                                 <i class="icon-key"></i>
                                 <span class="ml-2">Logout </span>
                             </a>
@@ -63,3 +85,24 @@
 <!--**********************************
     Header end ti-comment-alt
 ***********************************-->
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.getElementById("logoutBtn").addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent default logout action
+
+        Swal.fire({
+            title: "Sign out",
+            text: "Are you sure you would like to sign out of your account?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "logout.php"; // Redirect to logout page
+            }
+        });
+    });
+</script>
