@@ -69,7 +69,7 @@
                                                     ?>
                                                     <tr>
                                                         <td style="pointer-events: none; border-bottom: 1px solid #098209; border-left: 1px solid #098209;"><?php echo $row["no_regSession"] ?></td>
-                                                        <td style="pointer-events: none; border-bottom: 1px solid #098209;"><?php $formattedDate = new DateTime($row["date"]);echo $formattedDate->format("m/d/Y");?></td>
+                                                        <td style="pointer-events: none; border-bottom: 1px solid #098209;"><?php echo $row["date"]?></td>
                                                         <td style="pointer-events: none; border-bottom: 1px solid #098209;"><?php echo $row["title"] ?></td>
                                                         <td style="pointer-events: none; border-bottom: 1px solid #098209;"><?php echo $row["status"] ?></td>
                                                         <td style="border-bottom: 1px solid #098209; border-right: 1px solid #098209; text-align: center; vertical-align: middle;">
@@ -166,6 +166,18 @@
                 }
             });
         }
+
+        $(document).ready(function() {
+            if ($.fn.DataTable.isDataTable("#example")) {
+                $("#example").DataTable().destroy(); // Destroy existing DataTable instance
+            }
+
+            $("#example").DataTable({
+                "order": [[1, "desc"]], // Sort by the 4th column (index 3, zero-based) in descending order
+                "destroy": true // Ensure previous instance is removed
+            });
+        });
+
     </script>
 
 </body>

@@ -49,12 +49,12 @@
                                         </colgroup>
                                         <thead class="text-center" style="background-color: #098209; color: #FFFFFF;">
                                             <tr>
-                                                <th style="color: #FFFFFF;">RES NO./MO NO.</th>
-                                                <th style="color: #FFFFFF;">TITLE</th>
+                                                <th style="color: #FFFFFF;" data-orderable="false">RES NO./MO NO.</th>
+                                                <th style="color: #FFFFFF;" data-orderable="false">TITLE</th>
                                                 <th style="color: #FFFFFF;">DATE ADOPTED</th>
-                                                <th style="color: #FFFFFF;">AUTHOR/SPONSOR</th>
-                                                <th style="color: #FFFFFF;">REMARKS</th>
-                                                <th style="color: #FFFFFF;">ACTION</th>
+                                                <th style="color: #FFFFFF;" data-orderable="false">AUTHOR/SPONSOR</th>
+                                                <th style="color: #FFFFFF;" data-orderable="false">REMARKS</th>
+                                                <th style="color: #FFFFFF;" data-orderable="false">ACTION</th>
                                             </tr>
                                         </thead>
                                         <tbody style="color: #000000; border:#000000;">
@@ -175,6 +175,18 @@
                 }
             });
         }
+
+        $(document).ready(function() {
+            if ($.fn.DataTable.isDataTable("#example")) {
+                $("#example").DataTable().destroy(); // Destroy existing DataTable instance
+            }
+
+            $("#example").DataTable({
+                "order": [[2, "desc"]], // Sort by the 4th column (index 3, zero-based) in descending order
+                "destroy": true // Ensure previous instance is removed
+            });
+        });
+
     </script>
 
 </body>
