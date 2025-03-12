@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <?php include "header.php"; ?>
@@ -108,6 +108,7 @@
                                             $remarks = $_POST['remarks'];
                                             $dateForwarded = $_POST['dateForwarded'];
                                             $dateSigned = $_POST['dateSigned'];
+                                            $spResoNo = $_POST['spResoNo'];
                                             $dateApproved = $_POST['dateApproved'];
 
                                             // Upload file
@@ -117,11 +118,11 @@
                                                 move_uploaded_file($_FILES['attachment']['tmp_name'], $attachmentPath);
                                             }
 
-                                            $sql = "INSERT INTO `ordinance`(`mo_no`, `title`, `date_adopted`, `author_sponsor`, `remarks`, `date_fwd`, `date_signed`, `sp_approval`, `attachment`) 
-                                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                                            $sql = "INSERT INTO `ordinance`(`mo_no`, `title`, `date_adopted`, `author_sponsor`, `remarks`, `date_fwd`, `date_signed`, `sp_resoNo`, `sp_approval`, `attachment`) 
+                                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                                             $stmt = $conn->prepare($sql);
-                                            $stmt->bind_param("sssssssss", $moNo, $title, $dateAdopted, $authorSponsor, $remarks, $dateForwarded, $dateSigned, $dateApproved, $attachmentPath);
+                                            $stmt->bind_param("ssssssssss", $moNo, $title, $dateAdopted, $authorSponsor, $remarks, $dateForwarded, $dateSigned, $spResoNo, $dateApproved, $attachmentPath);
 
                                             if ($stmt->execute()) {
                                                 $last_id = $conn->insert_id;
@@ -217,6 +218,12 @@
                                                     <input type="date" class="form-control" id="dateSigned" name="dateSigned">
                                                 </div>
                                             </div>
+                                            <div class="form-group row" style="visibility: hidden; opacity: 0;" id="spResoNoField">
+                                                <label class="col-sm-3 col-form-label" style="color:#000000">SP Resolution No:</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" placeholder="Please type here..." id="spResoNo" name="spResoNo">
+                                                </div>
+                                            </div>
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="sbApprovalDateField">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000">SP Approval:</label>
                                                 <div class="col-sm-9">
@@ -306,9 +313,12 @@
                 document.getElementById("signedDateField").style.opacity = "1";
                 document.getElementById("sbApprovalDateField").style.visibility = "visible";
                 document.getElementById("sbApprovalDateField").style.opacity = "1";
+                document.getElementById("spResoNoField").style.visibility = "visible";
+                document.getElementById("spResoNoField").style.opacity = "1";
                 document.getElementById("dateFields").style.display = "block";
                 document.getElementById("forwardedDateField").style.display = "flex";
                 document.getElementById("signedDateField").style.display = "flex";
+                document.getElementById("spResoNoField").style.display = "flex";
                 document.getElementById("sbApprovalDateField").style.display = "flex";
             } else {
                 document.getElementById("dateFields").style.display = "none";
@@ -386,9 +396,19 @@
         // Prevent form submission
         form.addEventListener("submit", validateForm);
     });
-    </script>
-    </script>
-    
+
+    document.getElementById("dateAdopted").addEventListener("change", function () {
+        updateMinDate("dateAdopted", ["dateForwarded", "dateSigned", "dateApproved"]);
+    });
+
+    document.getElementById("dateForwarded").addEventListener("change", function () {
+        updateMinDate("dateForwarded", ["dateSigned", "dateApproved"]);
+    });
+
+    document.getElementById("dateSigned").addEventListener("change", function () {
+        updateMinDate("dateSigned", ["dateApproved"]);
+    });
+    </script>    
 </body>
 
 </html>
