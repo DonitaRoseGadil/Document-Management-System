@@ -51,7 +51,7 @@ ini_set('display_errors', 1);
                                                 <th style="color: #FFFFFF;">RESO NO./MO NO.</th>
                                                 <th style="color: #FFFFFF;">TITLE</th>
                                                 <th style="color: #FFFFFF;">AUTHOR/SPONSOR</th>
-                                                <th style="color: #FFFFFF;">CO-AUTHOR</th>
+                                                <th style="color: #FFFFFF;">DATE ADOPTED</th>
                                                 <th style="color: #FFFFFF;">REMARKS</th>
                                                 <th style="color: #FFFFFF;">ACTION</th>
                                             </tr>
@@ -60,7 +60,7 @@ ini_set('display_errors', 1);
                                             <?php
                                                 include "connect.php";
 
-                                                $sql = "SELECT id, reso_no, title, author_sponsor, co_author, remarks, d_forward, d_signed, d_approved FROM resolution";
+                                                $sql = "SELECT id, reso_no, title, author_sponsor, d_adopted, remarks, d_forward, d_signed, d_approved FROM resolution";
                                                 $stmt = $conn->prepare($sql);
                                                 $stmt->execute();
                                                 $result = $stmt->get_result();
@@ -75,7 +75,7 @@ ini_set('display_errors', 1);
                                                         <td style="border-bottom: 1px solid #098209; border-left: 1px solid #098209;"><?php echo $row["reso_no"] ?></td>
                                                         <td style="border-bottom: 1px solid #098209;"><?php echo $row["title"] ?></td>
                                                         <td style="border-bottom: 1px solid #098209;"><?php echo $row["author_sponsor"] ?></td>     
-                                                        <td style="border-bottom: 1px solid #098209;"><?php echo $row["co_author"] ?></td>
+                                                        <td style="border-bottom: 1px solid #098209;"><?php echo $row["d_adopted"] ?></td>
                                                         <td style="border-bottom: 1px solid #098209;">
                                                             <div class="text-center d-flex justify-content-center gap-2">
                                                                 <a style="color: #000000;" data-placement="bottom" data-toggle="tooltip" data-html="true" title="
