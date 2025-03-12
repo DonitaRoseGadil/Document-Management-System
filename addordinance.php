@@ -117,45 +117,68 @@
                                                 move_uploaded_file($_FILES['attachment']['tmp_name'], $attachmentPath);
                                             }
 
-                                            $sql = "INSERT INTO `ordinance`(`mo_no`, `title`, `date_adopted`, `author_sponsor`, `remarks`, `date_fwd`, `date_signed`, `sp_approval`, `attachment`) 
-                                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                                            // Check if Ordinance No. OR Title already exists (case insensitive)
+                                            $check_sql = "SELECT * FROM ordinance WHERE LOWER(mo_no) = LOWER(?) OR LOWER(title) = LOWER(?)";
+                                            $stmt_check = $conn->prepare($check_sql);
+                                            $stmt_check->bind_param("ss", $resoNo, $title);
+                                            $stmt_check->execute();
+                                            $result = $stmt_check->get_result();
 
-                                            $stmt = $conn->prepare($sql);
-                                            $stmt->bind_param("sssssssss", $moNo, $title, $dateAdopted, $authorSponsor, $remarks, $dateForwarded, $dateSigned, $dateApproved, $attachmentPath);
-
-                                            if ($stmt->execute()) {
-                                                $last_id = $conn->insert_id;
-
-                                                // Insert into History Log
-                                                $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
-                                                            VALUES ('Created', 'Ordinance', ?, ?)";
-                                                $log_stmt = $conn->prepare($log_sql);
-                                                $log_stmt->bind_param("is", $last_id, $title);
-                                                $log_stmt->execute();
-                                                $log_stmt->close();
-
+                                            if ($result->num_rows > 0) {
+                                                // Resolution No. or Title already exists
                                                 echo "<script>
                                                         Swal.fire({
-                                                            icon: 'success',
-                                                            title: 'Ordinance Created',
-                                                            text: 'The ordinance have been successfully created.'
-                                                        }).then(() => { window.location.href = 'files-ordinances.php'; });
-                                                    </script>";
-                                            } else {
-                                                echo "<script>
-                                                        Swal.fire({
-                                                            icon: 'error',
-                                                            title: 'Error',
-                                                            text: 'There was an error creating the ordinance.',
+                                                            icon: 'warning',
+                                                            title: 'Duplicate Entry!',
+                                                            text: 'The Resolution No. or Title already exists.',
                                                             confirmButtonText: 'OK'
                                                         });
                                                     </script>";
+                                            } else {
+
+                                                //Insert new ordinance
+                                                $sql = "INSERT INTO `ordinance`(`mo_no`, `title`, `date_adopted`, `author_sponsor`, `remarks`, `date_fwd`, `date_signed`, `sp_approval`, `attachment`) 
+                                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+                                                $stmt = $conn->prepare($sql);
+                                                $stmt->bind_param("sssssssss", $moNo, $title, $dateAdopted, $authorSponsor, $remarks, $dateForwarded, $dateSigned, $dateApproved, $attachmentPath);
+
+                                                if ($stmt->execute()) {
+                                                    $last_id = $conn->insert_id;
+
+                                                    // Insert into History Log
+                                                    $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
+                                                                VALUES ('Created', 'Ordinance', ?, ?)";
+                                                    $log_stmt = $conn->prepare($log_sql);
+                                                    $log_stmt->bind_param("is", $last_id, $title);
+                                                    $log_stmt->execute();
+                                                    $log_stmt->close();
+
+                                                    echo "<script>
+                                                            Swal.fire({
+                                                                icon: 'success',
+                                                                title: 'Ordinance Created',
+                                                                text: 'The ordinance have been successfully created.'
+                                                            }).then(() => { window.location.href = 'files-ordinances.php'; });
+                                                        </script>";
+                                                } else {
+                                                    echo "<script>
+                                                            Swal.fire({
+                                                                icon: 'error',
+                                                                title: 'Error',
+                                                                text: 'There was an error creating the ordinance.',
+                                                                confirmButtonText: 'OK'
+                                                            });
+                                                        </script>";
+                                                }
                                             }
 
                                             $stmt->close();
                                             $conn->close();
+
                                         }
                                         ?>
+
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No. / MO No.:</label>
                                             <div class="col-sm-9">
