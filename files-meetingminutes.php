@@ -56,7 +56,7 @@
                                         <tbody class="text-left" style="color: #000000;" >
                                             <?php
                                                 include "connect.php";
-                                                $sql = "SELECT id, no_regSession, date, title, status FROM minutes";
+                                                $sql = "SELECT id, no_regSession, date, title, status FROM minutes ORDER BY date DESC";
                                                 $stmt = $conn->prepare($sql);
                                                 $stmt->execute();
                                                 $result = $stmt->get_result();
