@@ -118,7 +118,7 @@
                                             }
 
                                             // Check if Ordinance No. OR Title already exists (case insensitive)
-                                            $check_sql = "SELECT * FROM ordinance WHERE LOWER(mo_no) = LOWER(?) OR LOWER(title) = LOWER(?)";
+                                            $check_sql = "SELECT * FROM ordinance WHERE LOWER(mo_no) = LOWER(?) AND LOWER(title) = LOWER(?)";
                                             $stmt_check = $conn->prepare($check_sql);
                                             $stmt_check->bind_param("ss", $resoNo, $title);
                                             $stmt_check->execute();
