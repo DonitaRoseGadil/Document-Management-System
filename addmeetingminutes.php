@@ -149,7 +149,7 @@
                                                 <label class="custom-file-label text-truncate" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:block;" for="genAttachment">Choose file</label>
                                             </div>
                                         </div>
-                                        <label style="color: #000000">Upload Supporting Document:</label>
+                                        <label style="color: #000000">Upload Attachment for Minutes of the Meeting:</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
@@ -224,12 +224,12 @@
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
                             <div class="col-sm-9">
-                                <textarea class="form-control" style="resize: none;" rows="4" placeholder="Please type here..." id="title" name="title[]" required></textarea>
+                                <textarea class="form-control" style="resize: none; overflow: hidden;" rows="1" placeholder="Please type here..." id="title" name="title[]" required></textarea>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="status" class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
-                             <div class="col-sm-9">
+                            <div class="col-sm-9">
                                 <input type="text" placeholder="Please type here..." class="form-control" name="status[]" required>
                             </div>
                         </div>
@@ -362,6 +362,25 @@
 
         form.addEventListener("submit", validateForm);
     });
+    </script>
+
+    <script>
+        function autoResizeTextarea(textarea) {
+            textarea.style.height = 'auto'; // Reset height to recalculate
+            textarea.style.height = textarea.scrollHeight + 'px'; // Set to scrollHeight
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const textarea = document.getElementById("title");
+
+            // Resize on input
+            textarea.addEventListener("input", function() {
+                autoResizeTextarea(this);
+            });
+
+            // Resize initially in case there's preloaded content
+            autoResizeTextarea(textarea);
+        });
     </script>
 
 

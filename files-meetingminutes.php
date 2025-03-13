@@ -56,7 +56,7 @@
                                         <tbody class="text-left" style="color: #000000;" >
                                             <?php
                                                 include "connect.php";
-                                                $sql = "SELECT id, no_regSession, date, title, status FROM minutes ORDER BY date DESC";
+                                                $sql = "SELECT id, no_regSession, date, resNo, title, status FROM minutes ORDER BY date DESC, CAST(SUBSTRING_INDEX(resNo, '.', 1) AS UNSIGNED) DESC, CAST(SUBSTRING_INDEX(resNo, '.', -1) AS UNSIGNED) DESC";
                                                 $stmt = $conn->prepare($sql);
                                                 $stmt->execute();
                                                 $result = $stmt->get_result();
@@ -70,7 +70,7 @@
                                                     <tr>
                                                         <td style="pointer-events: none; border-bottom: 1px solid #098209; border-left: 1px solid #098209;"><?php echo $row["no_regSession"] ?></td>
                                                         <td style="pointer-events: none; border-bottom: 1px solid #098209;"><?php echo $row["date"]?></td>
-                                                        <td style="pointer-events: none; border-bottom: 1px solid #098209;"><?php echo $row["title"] ?></td>
+                                                        <td style="pointer-events: none; border-bottom: 1px solid #098209; white-space: pre-line;"><?php echo nl2br(htmlspecialchars($row["title"])); ?></td>
                                                         <td style="pointer-events: none; border-bottom: 1px solid #098209;"><?php echo $row["status"] ?></td>
                                                         <td style="border-bottom: 1px solid #098209; border-right: 1px solid #098209; text-align: center; vertical-align: middle;">
                                                             <div class="d-flex justify-content-center align-items-center gap-2">
