@@ -224,7 +224,7 @@
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
                             <div class="col-sm-9">
-                                <textarea class="form-control" style="resize: none; overflow: hidden;" rows="1" placeholder="Please type here..." id="title" name="title[]" required></textarea>
+                                <textarea class="form-control dynamic-textarea" style="resize: none; overflow: hidden;" rows="1" placeholder="Please type here..." name="title[]" required></textarea>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -242,9 +242,20 @@
 
             container.appendChild(card);
 
+            // Add event listener for textarea auto-expand
+            const textarea = card.querySelector(".dynamic-textarea");
+            textarea.addEventListener("input", autoExpand);
+
+            // Delete button function
             card.querySelector(".delete-btn").addEventListener("click", function () {
                 container.removeChild(card);
             });
+        }
+
+        // Function to auto-expand the textarea
+        function autoExpand() {
+            this.style.height = "auto"; // Reset height
+            this.style.height = (this.scrollHeight) + "px"; // Adjust height based on content
         }
 
         function updateFileName(input) {
@@ -363,26 +374,6 @@
         form.addEventListener("submit", validateForm);
     });
     </script>
-
-    <script>
-        function autoResizeTextarea(textarea) {
-            textarea.style.height = 'auto'; // Reset height to recalculate
-            textarea.style.height = textarea.scrollHeight + 'px'; // Set to scrollHeight
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            const textarea = document.getElementById("title");
-
-            // Resize on input
-            textarea.addEventListener("input", function() {
-                autoResizeTextarea(this);
-            });
-
-            // Resize initially in case there's preloaded content
-            autoResizeTextarea(textarea);
-        });
-    </script>
-
 
 </body>
 
