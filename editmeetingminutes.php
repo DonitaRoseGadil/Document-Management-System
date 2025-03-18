@@ -52,25 +52,27 @@
         $query = mysqli_query($conn, $sql);
 
 
-        $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
-        VALUES ('Edited', 'Minutes', $id, '$title')";
+        $log_sql = "INSERT INTO history_log (action, file_type, status, file_id, title) 
+        VALUES ('Edited', 'Minutes', '$status', $id, '$title')";
         $conn->query($log_sql);
 
         if ($query) {
             echo "<script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Meeting Minutes Updated',
-                            text: 'The minutes have been successfully updated.',
-                            confirmButtonText: 'OK'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = 'files-meetingminutes.php';
-                            }
-                        });
-                    });
-                  </script>";
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Meeting Minutes Updated',
+                    text: 'The minutes have been successfully updated.',
+                    showCancelButton: true,
+                    confirmButtonText: 'Continue Editing',
+                    cancelButtonText: 'Return to Minutes Table'
+                }).then((result) => {
+                    if (!result.isConfirmed) {
+                        window.location.href = 'files-meetingminutes.php';
+                    }
+                });
+            });
+        </script>";
         } else {
             echo "<script>
                     document.addEventListener('DOMContentLoaded', function() {
@@ -184,7 +186,7 @@
                                                 <input type="text" class="form-control" value="<?php echo $row['status']?>" name="status" required>
                                             </div>
                                         </div>
-                                        <label style="color: #000000">Upload Attachment for Minutes of the Meeting:</label>
+                                        <label style="color: #000000">Upload Attachment as Supporting Documents:</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>

@@ -13,18 +13,20 @@
             move_uploaded_file($_FILES['genAttachment']['tmp_name'], $genAttachmentPath);
         }
 
-        // Upload General Attachment
-        $attachmentPath  = "";
-        if (!empty($_FILES['attachment']['name'])) {
-            $attachmentPath = "uploads/" . basename($_FILES['attachment']['name']);
-            move_uploaded_file($_FILES['attachment']['tmp_name'], $attachmentPath);
-        }
-
         // Check if attachments exist
         if (isset($_POST['resNo']) && is_array($_POST['resNo'])) {
             foreach ($_POST['resNo'] as $key => $resNo) {
                 $title = $_POST['title'][$key];
                 $status = $_POST['status'][$key];
+
+                // Handle attachment for each resolution
+                $attachmentPath = "";
+                if (!empty($_FILES['attachment']['name'][$key])) {
+                    $attachmentName = $_FILES['attachment']['name'][$key];
+                    $attachmentTmpName = $_FILES['attachment']['tmp_name'][$key];
+                    $attachmentPath = "uploads/" . basename($attachmentName);
+                    move_uploaded_file($attachmentTmpName, $attachmentPath);
+                }
 
                 // Insert into database
                 $sql = "INSERT INTO minutes (no_regSession, date, genAttachment, resNo, title, status, attachment) 
@@ -34,8 +36,8 @@
                 $stmt->bind_param("sssssss", $no_regSession, $date, $genAttachmentPath, $resNo, $title, $status, $attachmentPath);
                 $stmt->execute();
 
-                $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
-                VALUES ('Created', 'Minutes', LAST_INSERT_ID(), '$title')";
+                $log_sql = "INSERT INTO history_log (action, file_type, file_id, title, status) 
+                VALUES ('Created', 'Minutes', LAST_INSERT_ID(), '$title', '$status')";
             
                 $conn->query($log_sql);
     
@@ -149,16 +151,6 @@
                                                 <label class="custom-file-label text-truncate" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:block;" for="genAttachment">Choose file</label>
                                             </div>
                                         </div>
-                                        <label style="color: #000000">Upload Attachment for Minutes of the Meeting:</label>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
-                                            </div>
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="attachment" name="attachment" onchange="updateFileName(this)">
-                                                <label class="custom-file-label text-truncate" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:block;" for="attachment">Choose file</label>
-                                            </div>
-                                        </div>
                                         <div class="d-flex justify-content-between align-items-center mt-5 mb-3">
                                             <h5 style="color: #098209;">AGENDA ITEM</h5>
                                             <button type="button" class="btn btn-primary" id="add-card-btn" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;"><i class="fa fa-plus"></i>  Form</button>
@@ -231,6 +223,16 @@
                             <label for="status" class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
                             <div class="col-sm-9">
                                 <input type="text" placeholder="Please type here..." class="form-control" name="status[]" required>
+                            </div>
+                        </div>
+                        <label style="color: #000000">Upload Attachment as Supporting Documents:</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
+                            </div>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="attachment" name="attachment[]" onchange="updateFileName(this)">
+                                <label class="custom-file-label text-truncate" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:block;" for="attachment">Choose file</label>
                             </div>
                         </div>
                         <div class="form-group row d-flex justify-content-center">
