@@ -10,8 +10,10 @@ if(isset($_POST['save'])){
     $dateAdopted = $_POST['dateAdopted'];
     $authorSponsor = $_POST['authorSponsor'];
     $remarks = $_POST['remarks'];
+    $notes = $_POST['notes'];
     $dateForwarded = $_POST['dateForwarded'];
     $dateSigned = $_POST['dateSigned'];
+    $spResoNo = $_POST['spResoNo'];
     $dateApproved = $_POST['dateApproved'];
 
     // Handle file uploads
@@ -35,8 +37,10 @@ if(isset($_POST['save'])){
                     `author_sponsor`='$authorSponsor', 
                     `date_fwd`='$dateForwarded',
                     `date_signed`='$dateSigned',
+                    `sp_resoNo`='$spResoNo',
                     `sp_approval`='$dateApproved',
                     `remarks`='$remarks',
+                    `notes`='$notes',
                     `attachment`='$attachmentPath' WHERE id = $id";
 
     $query = mysqli_query($conn, $sql);
@@ -254,10 +258,22 @@ if(isset($_POST['save'])){
                                                     <input type="date" class="form-control" value="<?php echo $row['date_fwd']?>" id="dateForwarded" name="dateForwarded">
                                                 </div>
                                             </div>
+                                            <div class="form-group row" id="notesField" style="display: none;">
+                                                <label class="col-sm-3 col-form-label" style="color:#000000">Remarks/Notes:</label>
+                                                <div class="col-sm-9">
+                                                    <textarea class="form-control" id="notes" name="notes" rows="4" style="resize: none; overflow: hidden;"><?php echo $row['notes']; ?></textarea>
+                                                </div>
+                                            </div>
                                             <div class="form-group row" id="signedDateField" style="display: none;">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000">Date Signed by LCE:</label>
                                                 <div class="col-sm-9">
                                                     <input type="date" class="form-control" value="<?php echo $row['date_signed']?>" id="dateSigned" name="dateSigned">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row" id="spResoNoField" style="display: none;">
+                                                <label class="col-sm-3 col-form-label" style="color:#000000">SP Resolution No:</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" value="<?php echo $row['sp_resoNo']?>" id="spResoNo" name="spResoNo">
                                                 </div>
                                             </div>
                                             <div class="form-group row" id="sbApprovalDateField" style="display: none;">
@@ -352,6 +368,7 @@ if(isset($_POST['save'])){
 
         document.getElementById("forwardedDateField").style.display = "none";
         document.getElementById("signedDateField").style.display = "none";
+        document.getElementById("spResoNoField").style.display = "none";
         document.getElementById("sbApprovalDateField").style.display = "none";
 
         if (status === "Forwarded to LCE") {
@@ -362,11 +379,35 @@ if(isset($_POST['save'])){
         } else if (status === "SP Approval") {
             document.getElementById("forwardedDateField").style.display = "flex";
             document.getElementById("signedDateField").style.display = "flex";
+            document.getElementById("spResoNoField").style.display = "flex";
             document.getElementById("sbApprovalDateField").style.display = "flex";
+        } else if (status === "Disapprove") {
+            document.getElementById("notesField").style.display = "flex";
         }
 
         restrictStatusSelection(); 
     }
+
+    function updateMinDate(fieldId, targetIds) {
+        let selectedDate = document.getElementById(fieldId).value;
+        if (selectedDate) {
+            targetIds.forEach(targetId => {
+                document.getElementById(targetId).min = selectedDate;
+            });
+        }
+    }
+
+    document.getElementById("dateAdopted").addEventListener("change", function () {
+        updateMinDate("dateAdopted", ["dateForwarded", "dateSigned", "dateApproved"]);
+    });
+
+    document.getElementById("dateForwarded").addEventListener("change", function () {
+        updateMinDate("dateForwarded", ["dateSigned", "dateApproved"]);
+    });
+
+    document.getElementById("dateSigned").addEventListener("change", function () {
+        updateMinDate("dateSigned", ["dateApproved"]);
+    });
     </script>
     
 </body>
