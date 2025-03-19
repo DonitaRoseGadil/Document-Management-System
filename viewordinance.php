@@ -138,14 +138,24 @@ $conn->close();
                                                     <input type="text" class="form-control" value="<?php echo $row['date_fwd']?>" id="dateForwarded" name="dateForwarded" disabled>
                                                 </div>
                                             </div>
-
+                                            <div class="form-group row" id="notesField">
+                                                <label class="col-sm-3 col-form-label" style="color:#000000">Remarks/Notes:</label>
+                                                <div class="col-sm-9">
+                                                <textarea class="form-control" id="title" name="title" rows="3" style="resize: none; overflow: hidden;" disabled><?php echo $row['notes']; ?></textarea>
+                                                </div>
+                                            </div>
                                             <div class="form-group row" id="signedDateField">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000">Date Signed by LCE:</label>
                                                 <div class="col-sm-9">
                                                     <input type="text" class="form-control" value="<?php echo $row['date_signed']?>" id="dateSigned" name="dateSigned" disabled>
                                                 </div>
                                             </div>
-
+                                            <div class="form-group row" id="spResoNoField">
+                                                <label class="col-sm-3 col-form-label" style="color:#000000">SP Resolution No:</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" value="<?php echo $row['sp_resoNo']?>" id="spResoNo" name="spResoNo">
+                                                </div>
+                                            </div>
                                             <div class="form-group row" id="sbApprovalDateField">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000">SP Approval:</label>
                                                 <div class="col-sm-9">
@@ -248,7 +258,9 @@ $conn->close();
             // Hide all date fields initially
             document.getElementById("forwardedDateField").style.display = "none";
             document.getElementById("signedDateField").style.display = "none";
+            document.getElementById("spResoNoField").style.display = "none";
             document.getElementById("sbApprovalDateField").style.display = "none";
+            document.getElementById("notesField").style.display = "none";
 
             // Show fields based on status
             if (status === "Forwarded to LCE") {
@@ -259,12 +271,15 @@ $conn->close();
             } else if (status === "SB Approval") {
                 document.getElementById("forwardedDateField").style.display = "flex";
                 document.getElementById("signedDateField").style.display = "flex";
+                document.getElementById("spResoNoField").style.display = "flex";
                 document.getElementById("sbApprovalDateField").style.display = "flex";
+            } else if (status === "Disapprove") {
+                document.getElementById("notesField").style.display = "flex";
             }
         }
 
     window.onload = toggleViewDateFields;
-    </script>
+    </script> 
 
     <script>
     document.addEventListener("DOMContentLoaded", function() {

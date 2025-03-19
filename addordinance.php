@@ -1,11 +1,11 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <?php include "header.php"; ?>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const requiredFields = ["moNo", "title", "dateAdopted", "authorSponsor", "coAuthor", "remarks", "dateApproved"];
+        const requiredFields = ["moNo", "title", "dateAdopted", "authorSponsor", "coAuthor", "remarks"];
 
         function validateField(field) {
             let inputElement = document.getElementById(field);
@@ -106,8 +106,10 @@
                                             $dateAdopted = $_POST['dateAdopted'];
                                             $authorSponsor = $_POST['authorSponsor'];
                                             $remarks = $_POST['remarks'];
+                                            $notes = $_POST['notes'];
                                             $dateForwarded = $_POST['dateForwarded'];
                                             $dateSigned = $_POST['dateSigned'];
+                                            $spResoNo = $_POST['spResoNo'];
                                             $dateApproved = $_POST['dateApproved'];
 
                                             // Upload file
@@ -137,11 +139,11 @@
                                             } else {
 
                                                 //Insert new ordinance
-                                                $sql = "INSERT INTO `ordinance`(`mo_no`, `title`, `date_adopted`, `author_sponsor`, `remarks`, `date_fwd`, `date_signed`, `sp_approval`, `attachment`) 
-                                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                                                $sql = "INSERT INTO `ordinance`(`mo_no`, `title`, `date_adopted`, `author_sponsor`, `remarks`, `notes`, `date_fwd`, `date_signed`, `sp_resoNo`, `sp_approval`, `attachment`) 
+                                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-                                                $stmt = $conn->prepare($sql);
-                                                $stmt->bind_param("sssssssss", $moNo, $title, $dateAdopted, $authorSponsor, $remarks, $dateForwarded, $dateSigned, $dateApproved, $attachmentPath);
+                                            $stmt = $conn->prepare($sql);
+                                            $stmt->bind_param("sssssssssss", $moNo, $title, $dateAdopted, $authorSponsor, $remarks, $notes, $dateForwarded, $dateSigned, $spResoNo, $dateApproved, $attachmentPath);
 
                                                 if ($stmt->execute()) {
                                                     $last_id = $conn->insert_id;
@@ -234,10 +236,22 @@
                                                     <input type="date" class="form-control" id="dateForwarded" name="dateForwarded">
                                                 </div>
                                             </div>
+                                            <div class="form-group row" style="visibility: hidden; opacity: 0;" id="notesField">
+                                                <label class="col-sm-3 col-form-label" style="color:#000000">Remarks/Notes:</label>
+                                                <div class="col-sm-9">
+                                                    <textarea class="form-control" style="resize: none;" rows="4" placeholder="Please type here..." id="notes" name="notes"></textarea>
+                                                </div>
+                                            </div>
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="signedDateField">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000">Date Signed by LCE:</label>
                                                 <div class="col-sm-9">
                                                     <input type="date" class="form-control" id="dateSigned" name="dateSigned">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row" style="visibility: hidden; opacity: 0;" id="spResoNoField">
+                                                <label class="col-sm-3 col-form-label" style="color:#000000">SP Resolution No:</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" placeholder="Please type here..." id="spResoNo" name="spResoNo">
                                                 </div>
                                             </div>
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="sbApprovalDateField">
@@ -299,21 +313,25 @@
 
             // Hide all fields first
             document.getElementById("forwardedDateField").style.visibility = "hidden";
-            document.getElementById("forwardedDateField").style.opacity = "0";
-            
+            document.getElementById("forwardedDateField").style.opacity = "0";     
             document.getElementById("signedDateField").style.visibility = "hidden";
             document.getElementById("signedDateField").style.opacity = "0";
-
             document.getElementById("sbApprovalDateField").style.visibility = "hidden";
             document.getElementById("sbApprovalDateField").style.opacity = "0";
-
+            document.getElementById("spResoNoField").style.visibility = "hidden";
+            document.getElementById("spResoNoField").style.opacity = "0";
+            document.getElementById("notesField").style.visibility = "hidden";
+            document.getElementById("notesField").style.opacity = "0";
+            
             // Show the corresponding field based on selected option
             if (status === "Forwarded to LCE") {
                 document.getElementById("forwardedDateField").style.visibility = "visible";
                 document.getElementById("forwardedDateField").style.opacity = "1";
                 document.getElementById("dateFields").style.display = "block";
                 document.getElementById("signedDateField").style.display = "none";
+                document.getElementById("spResoNoField").style.display = "none";
                 document.getElementById("sbApprovalDateField").style.display = "none";
+                document.getElementById("notesField").style.display = "none";
             } else if (status === "Signed by LCE") {
                 document.getElementById("forwardedDateField").style.visibility = "visible";
                 document.getElementById("forwardedDateField").style.opacity = "1";
@@ -321,7 +339,9 @@
                 document.getElementById("signedDateField").style.opacity = "1";
                 document.getElementById("dateFields").style.display = "block";
                 document.getElementById("signedDateField").style.display = "flex";
+                document.getElementById("spResoNoField").style.display = "none";
                 document.getElementById("sbApprovalDateField").style.display = "none";
+                document.getElementById("notesField").style.display = "none";
             } else if (status === "SP Approval") {
                 document.getElementById("forwardedDateField").style.visibility = "visible";
                 document.getElementById("forwardedDateField").style.opacity = "1";
@@ -329,12 +349,24 @@
                 document.getElementById("signedDateField").style.opacity = "1";
                 document.getElementById("sbApprovalDateField").style.visibility = "visible";
                 document.getElementById("sbApprovalDateField").style.opacity = "1";
+                document.getElementById("spResoNoField").style.visibility = "visible";
+                document.getElementById("spResoNoField").style.opacity = "1";
                 document.getElementById("dateFields").style.display = "block";
                 document.getElementById("forwardedDateField").style.display = "flex";
                 document.getElementById("signedDateField").style.display = "flex";
+                document.getElementById("spResoNoField").style.display = "flex";
                 document.getElementById("sbApprovalDateField").style.display = "flex";
-            } else {
-                document.getElementById("dateFields").style.display = "none";
+                document.getElementById("notesField").style.display = "none";
+            } else if (status === "Disapprove") {
+                document.getElementById("dateFields").style.display = "block";
+                document.getElementById("forwardedDateField").style.display = "none";
+                document.getElementById("signedDateField").style.display = "none";
+                document.getElementById("spResoNoField").style.display = "none";
+                document.getElementById("sbApprovalDateField").style.display = "none";
+                document.getElementById("notesField").style.visibility = "visible";
+                document.getElementById("notesField").style.opacity = "1";
+                document.getElementById("notesField").style.display = "flex";
+                
             }
         }
 
@@ -409,9 +441,69 @@
         // Prevent form submission
         form.addEventListener("submit", validateForm);
     });
-    </script>
-    </script>
+
+    function updateMinDate(fieldId, targetIds) {
+        let selectedDate = document.getElementById(fieldId).value;
+        if (selectedDate) {
+            targetIds.forEach(targetId => {
+                document.getElementById(targetId).min = selectedDate;
+            });
+        }
+    }
+
+    document.getElementById("dateAdopted").addEventListener("change", function () {
+        updateMinDate("dateAdopted", ["dateForwarded", "dateSigned", "dateApproved"]);
+    });
+
+    document.getElementById("dateForwarded").addEventListener("change", function () {
+        updateMinDate("dateForwarded", ["dateSigned", "dateApproved"]);
+    });
+
+    document.getElementById("dateSigned").addEventListener("change", function () {
+        updateMinDate("dateSigned", ["dateApproved"]);
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const formInputs = document.querySelectorAll("input, textarea, select"); 
+
+    // Load stored values on page reload
+    formInputs.forEach(input => {
+        const savedValue = localStorage.getItem(input.id);
+        if (savedValue) {
+            input.value = savedValue; // Restore saved values
+        }
+    });
+
+    // Save input values before refresh
+    formInputs.forEach(input => {
+        input.addEventListener("input", function () {
+            localStorage.setItem(input.id, input.value);
+        });
+    });
+
+    // Warn before refreshing
+    window.addEventListener("beforeunload", function (event) {
+        event.preventDefault(); // Prevents immediate refresh
+        event.returnValue = ""; // Required for modern browsers
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Changes you made may not be saved!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, refresh",
+            cancelButtonText: "No, stay",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.clear(); // Clear data only if user confirms refresh
+                location.reload();
+            }
+        });
+        return false; // Stop default refresh
+    });
+});
+
     
+    </script>    
 </body>
 
 </html>
