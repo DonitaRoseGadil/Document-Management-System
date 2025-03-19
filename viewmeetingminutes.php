@@ -66,7 +66,7 @@ $conn->close();
                     <div class="col-xl-8 col-xxl-12 items-center">                        
                         <div class="card" style="align-self: center;">
                             <div class="card-header d-flex justify-content-center">
-                                <h4 class="card-title text-center" style="color: #098209; ">VIEW MEETING MINUTES</h4>
+                                <h4 class="card-title text-center" style="color: #098209; ">VIEW ORDER OF BUSINESS</h4>
                             </div>
                             <?php
                                 include("connect.php");
@@ -90,6 +90,7 @@ $conn->close();
                                                 <input type="date" class="form-control" placeholder="Please type here..." value="<?php echo $row['date']?>" id="date" name="date" disabled>
                                             </div>
                                         </div>
+                                        <label style="color: #000000">Attachment for Order of Business:</label>
                                         <div class="input-group mb-3">
                                             <input type="text" class="form-control" value="<?php echo $row['genAttachment']; ?>" id="genAttachment" name="genAttachment" disabled>
                                             <div class="input-group-append">
@@ -105,21 +106,16 @@ $conn->close();
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Title:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" value="<?php echo $row['title']?>" name="title" disabled>
+                                                <textarea class="form-control" id="title" name="title" rows="1" style="resize: none; overflow: hidden;" disabled><?php echo htmlspecialchars_decode($row['title']); ?></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="status" class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
                                             <div class="col-sm-9">
-                                                <select id="status" value="<?php echo $row['status']?>" name="status" class="form-control" disabled>
-                                                    <option value="" selected>Choose...</option>
-                                                    <option value="Draft" <?php if ($row['status'] == "Draft") echo "selected"; ?>>Draft</option>
-                                                    <option value="Information" <?php if ($row['status'] == "Information") echo "selected"; ?>>Information</option>
-                                                    <option value="Referred to Committee" <?php if ($row['status'] == "Referred to Committee") echo "selected"; ?>>Referred to Committee</option>
-                                                    <option value="Approved" <?php if ($row['status'] == "Approved") echo "selected"; ?>>Approved</option>
-                                                </select>
+                                                <input type="text" class="form-control" value="<?php echo $row['status']?>" name="status" disabled>
                                             </div>
                                         </div>
+                                        <label style="color: #000000">Upload Attachment as Supporting Documents:</label>
                                         <div class="input-group mb-3">
                                             <input type="text" class="form-control" value="<?php echo $row['attachment']; ?>" id="attachment" name="attachment" disabled>
                                             <div class="input-group-append">
@@ -139,7 +135,7 @@ $conn->close();
 
                             <!-- Modal for Viewing History -->
                             <div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalLabel" aria-hidden="true d-flex justify-content center">
-                                <div class="modal-dialog modal-l modal-dialog-centered">
+                                <div class="modal-dialog modal-lg modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="historyModalLabel">File History</h5>
@@ -153,11 +149,12 @@ $conn->close();
                                                     <tr>
                                                         <th style="color: #000000; font-weight:bold; text-align: center;">Title</th>
                                                         <th style="color: #000000; font-weight:bold; text-align: center;">Action</th>
+                                                        <th style="color: #000000; font-weight:bold; text-align: center;">Status</th>
                                                         <th style="color: #000000; font-weight:bold; text-align: center;">Timestamp</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="historyTableBody">
-                                                    <tr><td colspan="3">Loading history...</td></tr>
+                                                    <tr><td colspan="4">Loading history...</td></tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -210,40 +207,60 @@ $conn->close();
     }
     </script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        $('#historyModal').on('show.bs.modal', function() {
-            let resolutionId = "<?php echo $resolution_id; ?>";
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            $('#historyModal').on('show.bs.modal', function() {
+                let resolutionId = "<?php echo $resolution_id; ?>";
 
-            if (!resolutionId) {
-                $('#historyTableBody').html("<tr><td colspan='3'>No history available.</td></tr>");
-                return;
-            }
-
-            fetch(`fetch_history.php?id=${resolutionId}&file_type=minutes`) // Add file_type parameter
-            .then(response => response.json())
-            .then(data => {
-                let historyHtml = "";
-                if (Array.isArray(data) && data.length > 0) {
-                    data.forEach(log => {
-                        historyHtml += `<tr>
-                                            <td style="color: #000000;">${log.title}</td>
-                                            <td style="color: #000000;">${log.action}</td>
-                                            <td style="color: #000000;">${log.timestamp}</td>
-                                        </tr>`;
-                    });
-                } else {
-                    historyHtml = "<tr><td colspan='3'>No history found.</td></tr>";
+                if (!resolutionId) {
+                    $('#historyTableBody').html("<tr><td colspan='4'>No history available.</td></tr>");
+                    return;
                 }
-                document.getElementById("historyTableBody").innerHTML = historyHtml;
-            })
-            .catch(error => {
-                console.error("Error fetching history:", error);
-                document.getElementById("historyTableBody").innerHTML = "<tr><td colspan='3'>Error loading history.</td></tr>";
+
+                fetch(`fetch_history.php?id=${resolutionId}&file_type=minutes`) // Add file_type parameter
+                .then(response => response.json())
+                .then(data => {
+                    let historyHtml = "";
+                    if (Array.isArray(data) && data.length > 0) {
+                        data.forEach(log => {
+                            historyHtml += `<tr>
+                                                <td style="color: #000000;">${log.title}</td>
+                                                <td style="color: #000000;">${log.action}</td>
+                                                <td style="color: #000000;">${log.status}</td>
+                                                <td style="color: #000000;">${log.timestamp}</td>
+                                            </tr>`;
+                        });
+                    } else {
+                        historyHtml = "<tr><td colspan='4'>No history found.</td></tr>";
+                    }
+                    document.getElementById("historyTableBody").innerHTML = historyHtml;
+                })
+                .catch(error => {
+                    console.error("Error fetching history:", error);
+                    document.getElementById("historyTableBody").innerHTML = "<tr><td colspan='4'>Error loading history.</td></tr>";
+                });
+
+            });
+        });
+    </script>
+
+    <script>
+        function autoResizeTextarea(textarea) {
+            textarea.style.height = 'auto'; // Reset height to recalculate
+            textarea.style.height = textarea.scrollHeight + 'px'; // Set to scrollHeight
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const textarea = document.getElementById("title");
+
+            // Resize on input
+            textarea.addEventListener("input", function() {
+                autoResizeTextarea(this);
             });
 
+            // Resize initially in case there's preloaded content
+            autoResizeTextarea(textarea);
         });
-    });
     </script>
     
 </body>

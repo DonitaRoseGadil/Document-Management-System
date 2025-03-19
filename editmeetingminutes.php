@@ -52,25 +52,27 @@
         $query = mysqli_query($conn, $sql);
 
 
-        $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
-        VALUES ('Edited', 'Minutes', $id, '$title')";
+        $log_sql = "INSERT INTO history_log (action, file_type, status, file_id, title) 
+        VALUES ('Edited', 'Minutes', '$status', $id, '$title')";
         $conn->query($log_sql);
 
         if ($query) {
             echo "<script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Meeting Minutes Updated',
-                            text: 'The minutes have been successfully updated.',
-                            confirmButtonText: 'OK'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = 'files-meetingminutes.php';
-                            }
-                        });
-                    });
-                  </script>";
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Meeting Minutes Updated',
+                    text: 'The minutes have been successfully updated.',
+                    showCancelButton: true,
+                    confirmButtonText: 'Continue Editing',
+                    cancelButtonText: 'Return to Minutes Table'
+                }).then((result) => {
+                    if (!result.isConfirmed) {
+                        window.location.href = 'files-meetingminutes.php';
+                    }
+                });
+            });
+        </script>";
         } else {
             echo "<script>
                     document.addEventListener('DOMContentLoaded', function() {
@@ -154,6 +156,7 @@
                                                 <input type="date" class="form-control" placeholder="Please type here..." value="<?php echo $row['date']?>" id="date" name="date">
                                             </div>
                                         </div>
+                                        <label style="color: #000000">Upload Attachment for Order of Business:</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
@@ -174,7 +177,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Title:</label>
                                             <div class="col-sm-9">
-                                            <textarea class="form-control" id="title" name="title" rows="4" style="resize: none; overflow: hidden;"><?php echo $row['title']; ?></textarea>
+                                                <textarea class="form-control" id="title" name="title" rows="1" style="resize: none; overflow: hidden;"><?php echo htmlspecialchars_decode($row['title']); ?></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -183,6 +186,7 @@
                                                 <input type="text" class="form-control" value="<?php echo $row['status']?>" name="status" required>
                                             </div>
                                         </div>
+                                        <label style="color: #000000">Upload Attachment as Supporting Documents:</label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
@@ -231,6 +235,25 @@
             const fileName = fileInput.files.length > 0 ? fileInput.files[0].name : "Choose file";
             document.getElementById(labelId).textContent = fileName;
         }
+    </script>
+
+    <script>
+        function autoResizeTextarea(textarea) {
+            textarea.style.height = 'auto'; // Reset height to recalculate
+            textarea.style.height = textarea.scrollHeight + 'px'; // Set to scrollHeight
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const textarea = document.getElementById("title");
+
+            // Resize on input
+            textarea.addEventListener("input", function() {
+                autoResizeTextarea(this);
+            });
+
+            // Resize initially in case there's preloaded content
+            autoResizeTextarea(textarea);
+        });
     </script>
     
 </body>

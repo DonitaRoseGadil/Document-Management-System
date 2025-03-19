@@ -11,7 +11,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"]) && isset($_GET["file_type"])) 
     $file_id = intval($_GET["id"]);
     $file_type = $_GET["file_type"]; // Get file type (e.g., "resolution")
 
-    $sql = "SELECT id, file_id, file_type, timestamp, title, action 
+    $sql = "SELECT id, file_id, file_type, status, timestamp, title, action 
             FROM history_log 
             WHERE file_id = ? AND file_type = ? 
             ORDER BY timestamp DESC";
@@ -31,6 +31,7 @@ if (isset($_GET["id"]) && is_numeric($_GET["id"]) && isset($_GET["file_type"])) 
                 "id" => $row["id"],
                 "file_id" => $row["file_id"],
                 "file_type" => $row["file_type"],
+                "status" => $row["status"],
                 "title" => $row["title"],
                 "action" => $row["action"],
                 "timestamp" => $formattedDate
