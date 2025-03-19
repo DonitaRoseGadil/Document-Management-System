@@ -132,13 +132,13 @@
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">No. of Regular Session</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." id="no_regSession" name="no_regSession" required>
+                                                <input type="text" class="form-control" placeholder="Please type here..." id="no_regSession" name="no_regSession">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Date:</label>
                                             <div class="col-sm-9">
-                                                <input type="date" class="form-control" placeholder="Please type here..." id="date" name="date" required>
+                                                <input type="date" class="form-control" placeholder="Please type here..." id="date" name="date">
                                             </div>
                                         </div>
                                         <label style="color: #000000">Upload Attachment for Order of Business:</label>
@@ -203,6 +203,9 @@
 
             const card = document.createElement("div");
             card.classList.add("card", "p-3");
+
+            // Unique name per card for the radio buttons to work independently
+            const uniqueId = Date.now();
             
             card.innerHTML = `
                 <div class="card-body mt-3">
@@ -210,19 +213,34 @@
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label" style="color: #000000">Item No.:</label>
                             <div class="col-sm-9">
-                                <input type="text" placeholder="Please type here..." class="form-control" name="resNo[]" required>
+                                <input type="text" placeholder="Please type here..." class="form-control" name="resNo[]">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
                             <div class="col-sm-9">
-                                <textarea class="form-control dynamic-textarea" style="resize: none; overflow: hidden;" rows="1" placeholder="Please type here..." name="title[]" required></textarea>
+                                <textarea class="form-control dynamic-textarea" style="resize: none; overflow: hidden;" rows="1" placeholder="Please type here..." name="title[]"></textarea>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="status" class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
                             <div class="col-sm-9">
-                                <input type="text" placeholder="Please type here..." class="form-control" name="status[]" required>
+                                <input type="text" placeholder="Please type here..." class="form-control" name="status[]">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="status" class="col-sm-3 col-form-label" style="color: #000000">Select option if applicable:</label>
+                            <div class="col-sm-9 mt-2">
+                                <label class="radio-inline mr-5" style="color: #000000">
+                                    <input type="radio" name="optradio_${uniqueId}" class="deselectable-radio" value="Returned"> Returned</label>
+                                <label class="radio-inline" style="color: #000000">
+                                    <input type="radio" name="optradio_${uniqueId}" class="deselectable-radio" value="Approved"> Approved</label>
+                            </div>
+                        </div>
+                        <!-- Hidden fields section -->
+                        <div class="form-group row extra-fields mt-3" style="display: none;">
+                            <div class="col-sm-12" id="extraFields_${uniqueId}">
+                                <!-- Dynamic fields go here -->
                             </div>
                         </div>
                         <label style="color: #000000">Upload Attachment as Supporting Documents:</label>
@@ -251,6 +269,62 @@
             // Delete button function
             card.querySelector(".delete-btn").addEventListener("click", function () {
                 container.removeChild(card);
+            });
+
+            // Radio button behavior
+            const radios = card.querySelectorAll(`input[name='optradio_${uniqueId}']`);
+            const extraFieldsContainer = card.querySelector(`#extraFields_${uniqueId}`);
+            const extraFieldsRow = card.querySelector(".extra-fields");
+
+            radios.forEach(radio => {
+                radio.addEventListener('click', function (e) {
+                    if (this.checked) {
+                        // Deselect logic
+                        if (this.previousChecked) {
+                            this.checked = false;
+                            this.previousChecked = false;
+                            extraFieldsRow.style.display = "none";
+                            extraFieldsContainer.innerHTML = "";
+                        } else {
+                            radios.forEach(r => r.previousChecked = false);
+                            this.previousChecked = true;
+
+                            // Show input fields based on selected option
+                            extraFieldsRow.style.display = "block";
+                            if (this.value === "Returned") {
+                                extraFieldsContainer.innerHTML = `
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label" style="color:#000000">Return No.:</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" placeholder="Please type here..." name="returnNo[]">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label" style="color:#000000">Return Date:</label>
+                                        <div class="col-sm-9">
+                                            <input type="date" class="form-control" name="returnDate[]">
+                                        </div>
+                                    </div>
+                                `;
+                            } else if (this.value === "Approved") {
+                                extraFieldsContainer.innerHTML = `
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label" style="color:#000000">Resolution No.:</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" placeholder="Please type here..." name="resolutionNo[]">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-3 col-form-label" style="color:#000000">Resolution Date Approved:</label>
+                                        <div class="col-sm-9">
+                                            <input type="date" class="form-control" name="resolutionDate[]">
+                                        </div>
+                                    </div>
+                                `;
+                            }
+                        }
+                    }
+                });
             });
         }
 
