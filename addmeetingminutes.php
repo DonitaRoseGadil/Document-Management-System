@@ -18,6 +18,10 @@
             foreach ($_POST['resNo'] as $key => $resNo) {
                 $title = $_POST['title'][$key];
                 $status = $_POST['status'][$key];
+                $returnNo = $_POST['returnNo'][$key]; 
+                $resolutionNo = $_POST['resolutionNo'][$key]; 
+                $returnDate = $_POST['returnDate'][$key]; 
+                $resolutionDate = $_POST['resolutionDate'][$key];
 
                 // Handle attachment for each resolution
                 $attachmentPath = "";
@@ -29,17 +33,19 @@
                 }
 
                 // Insert into database
-                $sql = "INSERT INTO minutes (no_regSession, date, genAttachment, resNo, title, status, attachment) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO minutes (no_regSession, date, genAttachment, resNo, title, status, returnNo, resolutionNo, attachment, returnDate, resolutionDate) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 
                 $stmt = $conn->prepare($sql);
-                $stmt->bind_param("sssssss", $no_regSession, $date, $genAttachmentPath, $resNo, $title, $status, $attachmentPath);
+                $stmt->bind_param("sssssssssss", $no_regSession, $date, $genAttachmentPath, $resNo, $title, $status, $returnNo, $resolutionNo, $attachmentPath, $returnDate, $resolutionDate);
                 $stmt->execute();
 
                 $log_sql = "INSERT INTO history_log (action, file_type, file_id, title, status) 
-                VALUES ('Created', 'Minutes', LAST_INSERT_ID(), '$title', '$status')";
-            
-                $conn->query($log_sql);
+                VALUES ('Created', 'Minutes', LAST_INSERT_ID(), ?, ?)";
+
+                $log_stmt = $conn->prepare($log_sql);
+                $log_stmt->bind_param("ss", $title, $status);
+                $log_stmt->execute();
     
             }
         }       
@@ -243,6 +249,11 @@
                                 <!-- Dynamic fields go here -->
                             </div>
                         </div>
+                        <!-- Hidden fields -->
+                            <input type="hidden" name="returnNo[]" value="">
+                            <input type="hidden" name="resolutionNo[]" value="">
+                            <input type="hidden" name="returnDate[]" value="">
+                            <input type="hidden" name="resolutionDate[]" value="">
                         <label style="color: #000000">Upload Attachment as Supporting Documents:</label>
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
