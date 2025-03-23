@@ -105,7 +105,6 @@
     <div id="main-wrapper">
 
         <?php 
-            include "navheader.php";
             include "sidebar.php"; 
         ?>
 

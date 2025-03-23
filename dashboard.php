@@ -6,7 +6,7 @@
 <body>
     <!-- Main Wrapper Start -->
     <div id="main-wrapper">
-        <?php include "navheader.php"; ?>
+        
         <?php include "sidebar.php"; ?>
 
         <!-- Database Connection -->

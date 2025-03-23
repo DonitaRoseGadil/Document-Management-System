@@ -8060,7 +8060,7 @@ a {
   position: absolute;
   left: 0;
   top: 0;
-  background-color: #343957;
+  background-color: #098209;
   transition: all .2s ease;
   z-index: 4; }
   .nav-header .logo-abbr {
@@ -8096,7 +8096,7 @@ a {
         justify-content: center; } }
   .nav-header .brand-title {
     margin-left: 15px;
-    max-width: 75px; }
+    max-width: 75%; }
     [data-theme-version="dark"] .nav-header .brand-title {
       background-position: 0 120%; }
 
@@ -8135,7 +8135,7 @@ a {
   z-index: 999; }
 
 .hamburger .line {
-  background: #098209;
+  background-color:  #098209;
   display: block;
   height: 2px;
   margin-top: 6px;
@@ -10315,7 +10315,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   top: 5rem;
   padding-top: 0;
   z-index: 2;
-  background-color: #343957;
+  background-color: #098209;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
   transition: all .2s ease; }
   .quixnav .quixnav-scroll {
@@ -10348,25 +10348,25 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
         position: relative;
         top: -2px; }
       .quixnav .metismenu > li > a {
-        color: #bdbdc7; }
+        color: #ffffff; }
       .quixnav .metismenu > li:hover > a, .quixnav .metismenu > li:focus > a, .quixnav .metismenu > li.mm-active > a {
-        background-color: #6b51df;
-        color: #fff; }
+        background-color: #0b5e0b;
+        color: #ffffff; }
       .quixnav .metismenu > li.mm-active ul {
-        background-color: rgba(88, 115, 254, 0.04); }
+        background-color: #0b5e0b; }
         .quixnav .metismenu > li.mm-active ul ul {
-          background-color: rgba(88, 115, 254, 0.04); }
+          background-color: #0b5e0b; }
     .quixnav .metismenu li {
       position: relative; }
     .quixnav .metismenu ul {
-      background-color: #1c0f54;
+      background-color: #098209;
       transition: all .2s ease-in-out; }
       .quixnav .metismenu ul a {
         padding-left: 54px;
         font-weight: 300; }
         .quixnav .metismenu ul a:hover, .quixnav .metismenu ul a:focus, .quixnav .metismenu ul a.mm-active {
           text-decoration: none;
-          color: #fff; }
+          color: #ffffff; }
         [direction="rtl"] .quixnav .metismenu ul a {
           padding-right: 54px; }
       .quixnav .metismenu ul ul a {
@@ -10378,7 +10378,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
       display: block;
       padding: 0.8125rem 1.25rem;
       outline-width: 0;
-      color: #bdbdc7;
+      color: #ffffff;
       text-decoration: none; }
     .quixnav .metismenu .has-arrow:after {
       width: .35rem;
@@ -10648,7 +10648,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
     padding-right: 0;
     justify-content: center; }
   [data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .nav-header .nav-control .hamburger .line {
-    background-color: #593bdb !important; }
+    background-color:  #098209 !important; }
 
 [data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .header {
   padding-left: 3.75rem;
@@ -10749,7 +10749,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
       [data-sidebar-style="mini"] .nav-header .nav-control .hamburger {
         left: 3.75rem !important; }
         [data-sidebar-style="mini"] .nav-header .nav-control .hamburger .line {
-          background-color: #454545 !important; }
+          background-color:  #098209 !important; }
     [data-sidebar-style="mini"] .nav-header .brand-title {
       display: none; }
     [data-sidebar-style="mini"] .nav-header .hamburger {
@@ -11211,7 +11211,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   [data-sidebar-style="overlay"] .nav-header .hamburger.is-active {
     left: 0; }
     [data-sidebar-style="overlay"] .nav-header .hamburger.is-active .line {
-      background-color: #593bdb; }
+      background-color:  #098209; }
 
 [data-sidebar-style="overlay"] .menu-toggle .nav-header {
   position: absolute;

@@ -1,122 +1,127 @@
+<?php include 'header.php'; ?>
+
+<!--**********************************
+    Nav header start
+***********************************-->
+<div class="nav-header">
+    <a href="index.html" class="brand-logo">
+        <img class="logo-abbr" src="./images/logo.png" alt="">
+        <img class="logo-compact" src="./images/logo-text.png" alt="">
+        <img class="brand-title" src="./images/logo-text.png" alt="">
+    </a>
+
+    <div class="nav-control">
+        <div class="hamburger">
+            <span class="line"></span><span class="line"></span><span class="line"></span>
+        </div>
+    </div>
+</div>
+<!--**********************************
+    Nav header end
+***********************************-->
+
+<!--**********************************
+    Header start
+***********************************-->
+<div class="header">
+    <div class="header-content">
+        <nav class="navbar navbar-expand">
+            <div class="collapse navbar-collapse justify-content-between">
+                <div class="header-left">
+                </div>
+
+                <ul class="navbar-nav header-right">
+                    <li class="nav-item dropdown notification_dropdown">
+                        <a class="nav-link" href="#" role="button" data-toggle="dropdown">
+                            <i class="mdi mdi-history"></i>
+                            <div class="pulse-css"></div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <ul class="list-unstyled">
+                                <li class="media dropdown-item">
+                                    <span class="success"><i class="ti-user"></i></span>
+                                    <div class="media-body">
+                                        <a href="#">
+                                            <p><strong>Martin</strong> has added a <strong>customer</strong> Successfully
+                                            </p>
+                                        </a>
+                                    </div>
+                                    <span class="notify-time">3:20 am</span>
+                                </li>
+                            </ul>
+                            <a class="all-notification" href="./fullHistory.php">See all History <i
+                                    class="ti-arrow-right"></i></a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown header-profile">
+                        <a class="nav-link" href="#" role="button" data-toggle="dropdown">
+                            <i class="mdi mdi-account"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a href="./page-login.html" class="dropdown-item" id="logoutBtn">
+                                <i class="icon-key"></i>
+                                <span class="ml-2">Logout </span>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+<!--**********************************
+    Header end ti-comment-alt
+***********************************-->
+
 <!--**********************************
     Sidebar start
 ***********************************-->
 <div class="quixnav">
     <div class="quixnav-scroll">
         <ul class="metismenu" id="menu">
-            <!-- DASHBOARD -->
             <li>
-                <a href="./dashboard.php"><i class="icon icon-app-store"></i><span class="nav-text">Dashboard</span></a>
+                <a href="./dashboard.php" aria-expanded="false"><i class="icon icon-app-store"></i><span class="nav-text">Dashboard</span></a>
             </li>
-            <!-- FILES -->
             <li>
-                <a class="has-arrow" href="javascript:void(0);">
-                    <i class="icon icon-folder-15"></i><span class="nav-text">Files</span>
-                </a>
-                <ul>
+                <a class="has-arrow" href="javascript:void()" aria-expanded="false"><i class="icon icon-folder-15"></i><span class="nav-text">Files</span></a>
+                <ul aria-expanded="false">
                     <li><a href="./files-resolution.php">Resolution</a></li>
-                    <li><a href="./files-ordinances.php">Ordinances</a></li>
-                    <li><a href="./files-meetingminutes.php">Meeting Minutes</a></li>
+                    <li><a href="./files-ordinances.php">Ordinance</a></li>
+                    <li><a href="./files-meetingminutes.php">Order of Business</a></li>
                 </ul>
             </li>
-            <!-- ACCOUNT SETTINGS -->
             <li>
-                <a href="./accountSettings.php"><i class="icon icon-settings-gear-64"></i><span class="nav-text">Account Settings</span></a>
+                <a href="./accountSettings.php" aria-expanded="false"><i class="icon icon-settings-gear-64"></i><span class="nav-text">Account Settings</span></a>
             </li>
-            <!-- MANUAL -->
             <li>
-                <a href="./manual.php"><i class="icon icon-book-open-2"></i><span class="nav-text">Manual</span></a>
+                <a href="./manual.php" aria-expanded="false"><i class="icon icon-book-open-2"></i><span class="nav-text">Manual</span></a>
             </li>
         </ul>
     </div>
+
+
 </div>
-
-<!-- External CSS -->
-<style>
-    .quixnav {
-        background-color: #098209 !important;
-    }
-    .quixnav.open {
-        background-color: #0b5e0b !important;
-    }
-    .quixnav a {
-        color: #FFFFFF !important;
-        text-decoration: none;
-        background-color: transparent !important;
-    }
-    .quixnav a:hover,
-    .quixnav .has-arrow:hover,
-    .quixnav a.active,
-    .quixnav ul[aria-expanded="true"] li a.active {
-        background-color: #0b5e0b !important;
-        color: #FFFFFF !important;
-    }
-    .quixnav ul[aria-expanded="true"] li a:hover {
-        background-color: #157f15 !important;
-    }
-    .quixnav li:has(.has-arrow) ul {
-        background-color: #0b5e0b !important;
-    }
-    .quixnav li a.has-arrow + ul li a {
-        background-color: #0b5e0b !important;
-    }
-    .quixnav .has-arrow i {
-        color: #FFFFFF !important;
-    }
-    .quixnav.open ul[aria-expanded="true"] {
-        display: block !important;
-    }
-</style>
-
-<!-- Optimized JavaScript -->
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let menuLinks = document.querySelectorAll('.quixnav a');
-        let activeLink = localStorage.getItem('activeMenu');
-
-        if (activeLink) {
-            document.querySelectorAll('.quixnav a').forEach(el => {
-                if (el.href === activeLink) el.classList.add('active');
-            });
-        }
-
-        menuLinks.forEach(link => {
-            link.addEventListener('click', function () {
-                menuLinks.forEach(el => el.classList.remove('active'));
-                this.classList.add('active');
-                localStorage.setItem('activeMenu', this.href);
-            });
-        });
-
-        let menuToggle = document.querySelector('.hamburger-menu');
-        let sidebar = document.querySelector('.quixnav');
-
-        if (menuToggle) {
-            menuToggle.addEventListener('click', function () {
-                sidebar.classList.toggle('open');
-            });
-        }
-
-        let menuItems = document.querySelectorAll('.quixnav .has-arrow');
-        menuItems.forEach(item => {
-            item.addEventListener('click', function () {
-                let submenu = this.nextElementSibling;
-                let isExpanded = submenu.getAttribute('aria-expanded') === "true";
-
-                document.querySelectorAll('.quixnav ul[aria-expanded="true"]').forEach(sub => {
-                    sub.setAttribute('aria-expanded', "false");
-                    sub.style.display = "none";
-                });
-
-                if (!isExpanded) {
-                    submenu.setAttribute('aria-expanded', "true");
-                    submenu.style.display = "block";
-                }
-            });
-        });
-    });
-</script>
-
 <!--**********************************
     Sidebar end
 ***********************************-->
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.getElementById("logoutBtn").addEventListener("click", function (event) {
+        event.preventDefault(); // Prevent default logout action
+
+        Swal.fire({
+            title: "Sign out",
+            text: "Are you sure you would like to sign out of your account?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "logout.php"; // Redirect to logout page
+            }
+        });
+    });
+</script

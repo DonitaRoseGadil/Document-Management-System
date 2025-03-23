@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
 
     <div id="main-wrapper">
-        <?php include('navheader.php'); include('sidebar.php'); ?>
+        <?php include 'sidebar.php'; ?>
 
         <div class="content-body" style="background-color: #f1f9f1">
             <div class="container-fluid">

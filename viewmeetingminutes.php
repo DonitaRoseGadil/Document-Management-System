@@ -51,10 +51,7 @@ $conn->close();
     ***********************************-->
     <div id="main-wrapper">
 
-        <?php 
-            include "navheader.php";
-            include "sidebar.php"; 
-        ?>
+        <?php include "sidebar.php"; ?>
 
         <!--**********************************
             Content body start
