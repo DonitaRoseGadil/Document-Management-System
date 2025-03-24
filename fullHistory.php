@@ -25,7 +25,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">HISTORY</h4>
+                                <h4 class="card-title flex-grow-1 fs-4 fw-bold text-dark text-center" style="color: #000000">HISTORY</h4>
                             </div>
                             <div class="card-body">
                                 <!-- Nav tabs -->
@@ -47,14 +47,19 @@
                                             <div class="pt-4">
                                                 <div class="table-responsive">
                                                     <table class="table table-bordered table-responsive-sm">
-                                                        <thead>
+                                                        <colgroup>
+                                                            <col style="width: 70%;">
+                                                            <col style="width: 15%;">
+                                                            <col style="width: 15%;">
+                                                        </colgroup>
+                                                        <thead class="text-center" style="background-color: #098209; color: #FFFFFF;">
                                                             <tr>
                                                                 <th>TITLE</th>
                                                                 <th>ACTION</th>
                                                                 <th>TIMESTAMP</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
+                                                        <tbody style="color: #000000;">
                                                             <?php 
                                                                 include "connect.php";
                                                                 $sql = "SELECT title, action, timestamp FROM history_log WHERE file_type = 'Resolution' ORDER BY timestamp DESC";
@@ -69,34 +74,51 @@
                                                                     ?>
                                                                     <tr>
                                                                         <td><?php echo $row['title']; ?></td>
-                                                                        <td><?php echo $row['action']; ?></td>
-                                                                        <td><?php echo $row['timestamp']; ?></td>
+                                                                        <td class="text-center fs-4">
+                                                                            <?php 
+                                                                                switch ($row['action']) {
+                                                                                    case 'Created':
+                                                                                        echo '<span class="badge badge-primary">Created</span>';
+                                                                                        break;
+                                                                                    case 'Edited':
+                                                                                        echo '<span class="badge badge-success">Edited</span>';
+                                                                                        break;
+                                                                                    case 'Deleted':
+                                                                                        echo '<span class="badge badge-danger">Deleted</span>';
+                                                                                        break;
+                                                                                    default:
+                                                                                        echo $row['action']; // fallback if action is not recognized
+                                                                                }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td class="text-center"><?php echo $row['timestamp']; ?></td>
                                                                     </tr>   
                                                                     <?php
                                                                 }
                                                             ?>
-                                                            <tr>
-                                                                <th>1</th>
-                                                                <td>Kolor Tea Shirt For Man</td>
-                                                                <td>January 22</td>
-                                                            </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>               
                                             </div>
                                         </div>
+                                        <!--Ordinance-->
                                         <div class="tab-pane fade" id="ordinance">
                                             <div class="pt-4">
                                             <div class="table-responsive">
                                                     <table class="table table-bordered table-responsive-sm">
-                                                        <thead>
+                                                        <colgroup>
+                                                            <col style="width: 70%;">
+                                                            <col style="width: 15%;">
+                                                            <col style="width: 15%;">
+                                                        </colgroup>
+                                                        <thead class="text-center" style="background-color: #098209; color: #FFFFFF;">
                                                             <tr>
                                                                 <th>TITLE</th>
                                                                 <th>ACTION</th>
                                                                 <th>TIMESTAMP</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
+                                                        <tbody style="color: #000000;">
                                                             <?php 
                                                                 include "connect.php";
                                                                 $sql = "SELECT title, action, timestamp FROM history_log WHERE file_type = 'Ordinance' ORDER BY timestamp DESC";
@@ -111,17 +133,28 @@
                                                                     ?>
                                                                     <tr>
                                                                         <td><?php echo $row['title']; ?></td>
-                                                                        <td><?php echo $row['action']; ?></td>
-                                                                        <td><?php echo $row['timestamp']; ?></td>
+                                                                        <td class="text-center fs-4">
+                                                                            <?php 
+                                                                                switch ($row['action']) {
+                                                                                    case 'Created':
+                                                                                        echo '<span class="badge badge-primary">Created</span>';
+                                                                                        break;
+                                                                                    case 'Edited':
+                                                                                        echo '<span class="badge badge-success">Edited</span>';
+                                                                                        break;
+                                                                                    case 'Deleted':
+                                                                                        echo '<span class="badge badge-danger">Deleted</span>';
+                                                                                        break;
+                                                                                    default:
+                                                                                        echo $row['action']; // fallback if action is not recognized
+                                                                                }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td class="text-center"><?php echo $row['timestamp']; ?></td>
                                                                     </tr>   
                                                                     <?php
                                                                 }
                                                             ?>
-                                                            <tr>
-                                                                <th>1</th>
-                                                                <td>Kolor Tea Shirt For Man</td>
-                                                                <td>January 22</td>
-                                                            </tr>
                                                         </tbody>
                                                     </table>
                                                 </div> 
@@ -129,10 +162,15 @@
                                         </div>
                                         <div class="tab-pane fade" id="minutes">
                                             <div class="pt-4">
-                                                <h5>ORDER OF BUSINESS</h5>
                                                 <div class="table-responsive">
                                                     <table class="table table-bordered table-responsive-sm">
-                                                        <thead>
+                                                        <colgroup>
+                                                            <col style="width: 60%;">
+                                                            <col style="width: 10%;">
+                                                            <col style="width: 20%;">
+                                                            <col style="width: 10%;">
+                                                        </colgroup>
+                                                        <thead class="text-center" style="background-color: #098209; color: #FFFFFF;">
                                                             <tr>
                                                                 <th>TITLE</th>
                                                                 <th>ACTION</th>
@@ -140,10 +178,10 @@
                                                                 <th>TIMESTAMP</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
+                                                        <tbody style="color: #000000;">
                                                             <?php 
                                                                 include "connect.php";
-                                                                $sql = "SELECT title, action, timestamp FROM history_log WHERE file_type = 'Minutes' ORDER BY timestamp DESC";
+                                                                $sql = "SELECT title, action, status, timestamp FROM history_log WHERE file_type = 'Minutes' ORDER BY timestamp DESC";
                                                                 $stmt = $conn->prepare($sql);
                                                                 $stmt->execute();
                                                                 $result = $stmt->get_result();
@@ -155,8 +193,25 @@
                                                                     ?>
                                                                     <tr>
                                                                         <td><?php echo $row['title']; ?></td>
-                                                                        <td><?php echo $row['action']; ?></td>
-                                                                        <td><?php echo $row['timestamp']; ?></td>
+                                                                        <td class="text-center fs-4">
+                                                                            <?php 
+                                                                                switch ($row['action']) {
+                                                                                    case 'Created':
+                                                                                        echo '<span class="badge badge-primary">Created</span>';
+                                                                                        break;
+                                                                                    case 'Edited':
+                                                                                        echo '<span class="badge badge-success">Edited</span>';
+                                                                                        break;
+                                                                                    case 'Deleted':
+                                                                                        echo '<span class="badge badge-danger">Deleted</span>';
+                                                                                        break;
+                                                                                    default:
+                                                                                        echo $row['action']; // fallback if action is not recognized
+                                                                                }
+                                                                            ?>
+                                                                        </td>
+                                                                        <td class="text-center"><?php echo $row['status']; ?></td>
+                                                                        <td class="text-center"><?php echo $row['timestamp']; ?></td>
                                                                     </tr>   
                                                                     <?php
                                                                 }
