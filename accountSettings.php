@@ -1,59 +1,66 @@
 <?php
-session_start();
-include('connect.php'); // Include your database connection
+    include('connect.php'); // Include your database connection
 
-$message = ""; // Variable for SweetAlert messages
+    $message = ""; // Variable for SweetAlert messages
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST['current_password']) && isset($_POST['new_password'])) {
-        $email = $_SESSION['email']; // Assuming email is stored in session
-        $current_password = $_POST['current_password'];
-        $new_password = $_POST['new_password'];
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (isset($_POST['current_password']) && isset($_POST['new_password'])) {
+            $email = $_SESSION['email']; // Assuming email is stored in session
+            $current_password = $_POST['current_password'];
+            $new_password = $_POST['new_password'];
 
-        // Fetch current password from database
-        $sql = "SELECT password FROM accounts WHERE email = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $stmt->bind_result($db_password);
-        $stmt->fetch();
-        $stmt->close();
+            // Fetch current password from database
+            $sql = "SELECT password FROM accounts WHERE email = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $stmt->bind_result($db_password);
+            $stmt->fetch();
+            $stmt->close();
 
-        // Verify current password
-        if (password_verify($current_password, $db_password)) {
-            // Hash the new password
-            $hashed_password = password_hash($new_password, PASSWORD_BCRYPT);
+            // Verify current password
+            if (password_verify($current_password, $db_password)) {
+                // Hash the new password
+                $hashed_password = password_hash($new_password, PASSWORD_BCRYPT);
 
-            // Update password in the database
-            $update_sql = "UPDATE accounts SET password = ? WHERE email = ?";
-            $update_stmt = $conn->prepare($update_sql);
-            $update_stmt->bind_param("ss", $hashed_password, $email);
+                // Update password in the database
+                $update_sql = "UPDATE accounts SET password = ? WHERE email = ?";
+                $update_stmt = $conn->prepare($update_sql);
+                $update_stmt->bind_param("ss", $hashed_password, $email);
 
-            if ($update_stmt->execute()) {
-                $message = "success"; // Password changed successfully
+                if ($update_stmt->execute()) {
+                    $message = "success"; // Password changed successfully
+                } else {
+                    $message = "error"; // Database error
+                }
+                $update_stmt->close();
             } else {
-                $message = "error"; // Database error
+                $message = "incorrect"; // Wrong current password
             }
-            $update_stmt->close();
-        } else {
-            $message = "incorrect"; // Wrong current password
         }
+        $conn->close();
     }
-    $conn->close();
-}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
-<?php include('header.php'); ?>
+    <?php include('header.php'); ?>
 
 <body>
 
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
     <div id="main-wrapper">
-        <?php include 'sidebar.php'; ?>
 
+        <?php include('sidebar.php'); ?>
+
+        <!--**********************************
+            Content body start
+        ***********************************-->
         <div class="content-body" style="background-color: #f1f9f1">
+            <!-- row -->
             <div class="container-fluid">
                 <div class="row justify-content-center h-100 align-items-center">
                     <div class="col-md-6 mt-3">
@@ -99,9 +106,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
         </div>
+        <!--**********************************
+            Content body end
+        ***********************************-->
 
     </div>
+    <!--**********************************
+        Main wrapper end
+    ***********************************-->
 
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    <!-- Required vendors -->
+    <script src="./vendor/global/global.min.js"></script>
+    <script src="./js/quixnav-init.js"></script>
+    <script src="./js/custom.min.js"></script>
     <!-- SweetAlert2 Library -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -147,10 +167,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <?php endif; ?>
         <?php endif; ?>
     </script>
-
-    <script src="./vendor/global/global.min.js"></script>
-    <script src="./js/quixnav-init.js"></script>
-    <script src="./js/custom.min.js"></script>
 
     <script>
         function togglePassword(inputId, eyeId) {
