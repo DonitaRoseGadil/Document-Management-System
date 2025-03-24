@@ -1,93 +1,3 @@
-<?php
-
-    if(isset($_POST['save'])) {
-        include("connect.php");
-        error_reporting(0);
-
-        $id = intval($_POST['id']);
-        $no_regSession = mysqli_real_escape_string($conn, $_POST['no_regSession']);
-        $date = mysqli_real_escape_string($conn, $_POST['date']);
-        $resNo = mysqli_real_escape_string($conn, $_POST['resNo']);
-        $title = mysqli_real_escape_string($conn, $_POST['title']);
-        $status = mysqli_real_escape_string($conn, $_POST['status']);
-
-        // Handle file uploads
-        $genAttachment = $_FILES['genAttachment']['name'];
-        $attachment = $_FILES['attachment']['name'];
-
-        $uploadDir = "uploads/";  // Define upload directory
-
-        if (!empty($genAttachment)) {
-            $genAttachmentPath = $uploadDir . basename($genAttachment);
-            move_uploaded_file($_FILES["genAttachment"]["tmp_name"], $genAttachmentPath);
-        } else {
-            // Keep the old file if no new file is uploaded
-            $genAttachmentQuery = "SELECT genAttachment FROM minutes WHERE id = $id";
-            $result = mysqli_query($conn, $genAttachmentQuery);
-            $row = mysqli_fetch_assoc($result);
-            $genAttachmentPath = $row['genAttachment'];
-        }
-
-        if (!empty($attachment)) {
-            $attachmentPath = $uploadDir . basename($attachment);
-            move_uploaded_file($_FILES["attachment"]["tmp_name"], $attachmentPath);
-        } else {
-            // Keep the old file if no new file is uploaded
-            $attachmentQuery = "SELECT attachment FROM minutes WHERE id = $id";
-            $result = mysqli_query($conn, $attachmentQuery);
-            $row = mysqli_fetch_assoc($result);
-            $attachmentPath = $row['attachment'];
-        }
-
-        // Update query
-        $sql = "UPDATE `minutes` SET 
-                `no_regSession` = '$no_regSession',
-                `date` = '$date',
-                `genAttachment` = '$genAttachmentPath',
-                `resNo` = '$resNo',
-                `title` = '$title',
-                `status` = '$status',
-                `attachment` = '$attachmentPath' WHERE `id` = $id";
-
-        $query = mysqli_query($conn, $sql);
-
-
-        $log_sql = "INSERT INTO history_log (action, file_type, file_id, title) 
-        VALUES ('Edited', 'Minutes', $id, '$title')";
-        $conn->query($log_sql);
-
-        if ($query) {
-            echo "<script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Meeting Minutes Updated',
-                            text: 'The minutes have been successfully updated.',
-                            confirmButtonText: 'OK'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                window.location.href = 'files-meetingminutes.php';
-                            }
-                        });
-                    });
-                  </script>";
-        } else {
-            echo "<script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: 'There was an error updating the minutes.',
-                            confirmButtonText: 'OK'
-                        });
-                    });
-                  </script>";
-            header("Location: files-meetingminutes.php");
-            exit;
-        }
-    }
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -104,17 +14,164 @@
     ***********************************-->
     <div id="main-wrapper">
 
-        <?php 
-            include "sidebar.php"; 
-        ?>
+        <?php include "sidebar.php"; ?>
 
         <!--**********************************
             Content body start
         ***********************************-->
         <div class="content-body" style="background-color: #f1f9f1">
             <div class="container-fluid" >
-                <!-- row -->
-    
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">HISTORY</h4>
+                            </div>
+                            <div class="card-body">
+                                <!-- Nav tabs -->
+                                <div class="custom-tab-1">
+                                    <ul class="nav nav-tabs">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" data-toggle="tab" href="#resolution">Resolution</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-toggle="tab" href="#ordinance">Ordinance</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" data-toggle="tab" href="#minutes">Order of Business</a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <!--Resolution-->
+                                        <div class="tab-pane fade show active" id="resolution" role="tabpanel">
+                                            <div class="pt-4">
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered table-responsive-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>TITLE</th>
+                                                                <th>ACTION</th>
+                                                                <th>TIMESTAMP</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php 
+                                                                include "connect.php";
+                                                                $sql = "SELECT title, action, timestamp FROM history_log WHERE file_type = 'Resolution' ORDER BY timestamp DESC";
+                                                                $stmt = $conn->prepare($sql);
+                                                                $stmt->execute();
+                                                                $result = $stmt->get_result();
+                                                                if (!$result) {
+                                                                    die("SQL Error: " . $conn->error);
+                                                                }
+
+                                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                                    ?>
+                                                                    <tr>
+                                                                        <td><?php echo $row['title']; ?></td>
+                                                                        <td><?php echo $row['action']; ?></td>
+                                                                        <td><?php echo $row['timestamp']; ?></td>
+                                                                    </tr>   
+                                                                    <?php
+                                                                }
+                                                            ?>
+                                                            <tr>
+                                                                <th>1</th>
+                                                                <td>Kolor Tea Shirt For Man</td>
+                                                                <td>January 22</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>               
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="ordinance">
+                                            <div class="pt-4">
+                                            <div class="table-responsive">
+                                                    <table class="table table-bordered table-responsive-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>TITLE</th>
+                                                                <th>ACTION</th>
+                                                                <th>TIMESTAMP</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php 
+                                                                include "connect.php";
+                                                                $sql = "SELECT title, action, timestamp FROM history_log WHERE file_type = 'Ordinance' ORDER BY timestamp DESC";
+                                                                $stmt = $conn->prepare($sql);
+                                                                $stmt->execute();
+                                                                $result = $stmt->get_result();
+                                                                if (!$result) {
+                                                                    die("SQL Error: " . $conn->error);
+                                                                }
+
+                                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                                    ?>
+                                                                    <tr>
+                                                                        <td><?php echo $row['title']; ?></td>
+                                                                        <td><?php echo $row['action']; ?></td>
+                                                                        <td><?php echo $row['timestamp']; ?></td>
+                                                                    </tr>   
+                                                                    <?php
+                                                                }
+                                                            ?>
+                                                            <tr>
+                                                                <th>1</th>
+                                                                <td>Kolor Tea Shirt For Man</td>
+                                                                <td>January 22</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div> 
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade" id="minutes">
+                                            <div class="pt-4">
+                                                <h5>ORDER OF BUSINESS</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered table-responsive-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>TITLE</th>
+                                                                <th>ACTION</th>
+                                                                <th>STATUS</th>
+                                                                <th>TIMESTAMP</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php 
+                                                                include "connect.php";
+                                                                $sql = "SELECT title, action, timestamp FROM history_log WHERE file_type = 'Minutes' ORDER BY timestamp DESC";
+                                                                $stmt = $conn->prepare($sql);
+                                                                $stmt->execute();
+                                                                $result = $stmt->get_result();
+                                                                if (!$result) {
+                                                                    die("SQL Error: " . $conn->error);
+                                                                }
+
+                                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                                    ?>
+                                                                    <tr>
+                                                                        <td><?php echo $row['title']; ?></td>
+                                                                        <td><?php echo $row['action']; ?></td>
+                                                                        <td><?php echo $row['timestamp']; ?></td>
+                                                                    </tr>   
+                                                                    <?php
+                                                                }
+                                                            ?>
+                                                        </tbody>
+                                                    </table>
+                                                </div>  
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <!--**********************************
