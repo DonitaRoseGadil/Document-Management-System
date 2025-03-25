@@ -84,7 +84,7 @@
                 <!--TEXT LEFT-->
                 <div class="col-md-3 mr-5">
                     <div class="col-xl-12">
-                        <img src="./images/logo.png" alt="Welcome Image" class="img-fluid d-block mx-auto" style="width: 50%; height: 50%;">
+                        <img src="./images/logo.png" alt="Welcome Image" class="img-fluid d-block mx-auto" style="width: 50%; height: auto;">
                         <h1 class="text-center mt-4" style="color:#000000; font-weight: bold;">WELCOME<h1>
                         <h3 class="text-center mt-2" style="color:#000000;">Sangguniang Bayan Office</h3>
                         <h4 class="text-center mt-2" style="color:#000000;">Document Management System</h4>
