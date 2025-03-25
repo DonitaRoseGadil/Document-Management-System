@@ -31,34 +31,16 @@
                 </div>
 
                 <ul class="navbar-nav header-right">
-                    <li class="nav-item dropdown notification_dropdown">
-                        <a class="nav-link" href="#" role="button" data-toggle="dropdown">
-                            <i class="mdi mdi-history"></i>
-                            <div class="pulse-css"></div>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <ul class="list-unstyled">
-                                <li class="media dropdown-item">
-                                    <span class="success"><i class="ti-user"></i></span>
-                                    <div class="media-body">
-                                        <a href="#">
-                                            <p><strong>Martin</strong> has added a <strong>customer</strong> Successfully
-                                            </p>
-                                        </a>
-                                    </div>
-                                    <span class="notify-time">3:20 am</span>
-                                </li>
-                            </ul>
-                            <a class="all-notification" href="./fullHistory.php">See all History <i
-                                    class="ti-arrow-right"></i></a>
-                        </div>
-                    </li>
                     <li class="nav-item dropdown header-profile">
                         <a class="nav-link" href="#" role="button" data-toggle="dropdown">
                             <i class="mdi mdi-account"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a href="./page-login.html" class="dropdown-item" id="logoutBtn">
+                            <a href="./fullHistory.php" class="dropdown-item">
+                                <i class="mdi mdi-history"></i>
+                                <span class="ml-2">See all History </span>
+                            </a>
+                            <a href="#" class="dropdown-item" id="logoutBtn">
                                 <i class="icon-key"></i>
                                 <span class="ml-2">Logout </span>
                             </a>

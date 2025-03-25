@@ -32,13 +32,13 @@
                                 <div class="custom-tab-1">
                                     <ul class="nav nav-tabs">
                                         <li class="nav-item">
-                                            <a class="nav-link active" data-toggle="tab" href="#resolution">Resolution</a>
+                                            <a class="nav-link active" data-toggle="tab" href="#resolution" style="color: #000000">Resolution</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#ordinance">Ordinance</a>
+                                            <a class="nav-link" data-toggle="tab" href="#ordinance" style="color: #000000">Ordinance</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#minutes">Order of Business</a>
+                                            <a class="nav-link" data-toggle="tab" href="#minutes" style="color: #000000">Order of Business</a>
                                         </li>
                                     </ul>
                                     <div class="tab-content">
