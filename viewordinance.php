@@ -138,7 +138,7 @@ $conn->close();
                                             <div class="form-group row" id="notesField">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000">Remarks/Notes:</label>
                                                 <div class="col-sm-9">
-                                                <textarea class="form-control" id="title" name="title" rows="3" style="resize: none; overflow: hidden;" disabled><?php echo $row['notes']; ?></textarea>
+                                                <textarea class="form-control" id="notes" name="notes" rows="3" style="resize: none; overflow: hidden;" disabled><?php echo $row['notes']; ?></textarea>
                                                 </div>
                                             </div>
                                             <div class="form-group row" id="signedDateField">
@@ -276,7 +276,7 @@ $conn->close();
         }
 
     window.onload = toggleViewDateFields;
-    </script> 
+    </script>
 
     <script>
     document.addEventListener("DOMContentLoaded", function() {

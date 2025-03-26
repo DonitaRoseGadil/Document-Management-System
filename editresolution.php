@@ -11,8 +11,10 @@ if(isset($_POST['save'])){
     $authorSponsor = $_POST['authorSponsor'];
     $coAuthor = $_POST['coAuthor'];
     $remarks = $_POST['remarks'];
+    $notes = $_POST['notes'];
     $dateForwarded = $_POST['dateForwarded'];
     $dateSigned = $_POST['dateSigned'];
+    $spResoNo = $_POST['spResoNo'];
     $dateApproved = $_POST['dateApproved'];
 
     // Handle file uploads
@@ -37,8 +39,10 @@ if(isset($_POST['save'])){
                     `co_author`='$coAuthor', 
                     `d_forward`='$dateForwarded',
                     `d_signed`='$dateSigned',
+                    `sp_resoNo`='$spResoNo',
                     `d_approved`='$dateApproved',
                     `remarks`='$remarks',
+                    `notes`='$notes',
                     `attachment`='$attachmentPath' WHERE id = $id";
 
     $query = mysqli_query($conn, $sql);
@@ -238,11 +242,11 @@ if(isset($_POST['save'])){
                                                 <select id="remarks" name="remarks" class="form-control" onchange="toggleDateFields()">
                                                     <option value="" <?php echo ($selectedRemarks == '') ? 'selected' : ''; ?>>Choose...</option>
                                                     <option value="Forwarded to LCE" <?php echo ($selectedRemarks == 'Forwarded to LCE') ? 'selected' : ''; ?>
-                                                        <?php echo ($selectedRemarks == 'Signed by LCE' || $selectedRemarks == 'SP Approval') ? 'disabled' : ''; ?>>
+                                                        <?php echo ($selectedRemarks == 'Signed by LCE' || $selectedRemarks == 'SP Approval') ? 'selected' : ''; ?>>
                                                         Forwarded to LCE
                                                     </option>
                                                     <option value="Signed by LCE" <?php echo ($selectedRemarks == 'Signed by LCE') ? 'selected' : ''; ?>
-                                                        <?php echo ($selectedRemarks == 'SP Approval') ? 'disabled' : ''; ?>>
+                                                        <?php echo ($selectedRemarks == 'SP Approval') ? 'selected' : ''; ?>>
                                                         Signed by LCE
                                                     </option>
                                                     <option value="SP Approval" <?php echo ($selectedRemarks == 'SP Approval') ? 'selected' : ''; ?>>
@@ -265,10 +269,22 @@ if(isset($_POST['save'])){
                                                     <input type="date" class="form-control" value="<?php echo $row['d_signed']?>" id="dateSigned" name="dateSigned">
                                                 </div>
                                             </div>
+                                            <div class="form-group row" id="spResoNoField" style="display: none;">
+                                                <label class="col-sm-3 col-form-label" style="color:#000000">SP Resolution No:</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" value="<?php echo $row['sp_resoNo']?>" id="spResoNo" name="spResoNo">
+                                                </div>
+                                            </div>
                                             <div class="form-group row" id="sbApprovalDateField" style="display: none;">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000">SP Approval:</label>
                                                 <div class="col-sm-9">
                                                     <input type="date" class="form-control" value="<?php echo $row['d_approved']?>" id="dateApproved" name="dateApproved">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row" id="notesField" style="display: none;">
+                                                <label class="col-sm-3 col-form-label" style="color:#000000">Remarks/Notes:</label>
+                                                <div class="col-sm-9">
+                                                    <textarea class="form-control" id="notes" name="notes" rows="4" style="resize: none; overflow: hidden;"><?php echo $row['notes']; ?></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -320,44 +336,17 @@ if(isset($_POST['save'])){
         }
 
         document.addEventListener("DOMContentLoaded", function () {
-        restrictStatusSelection(); 
         toggleDateFields(); 
         });
 
-
-        function restrictStatusSelection() {
-        var statusDropdown = document.getElementById("remarks");
-        var currentStatus = statusDropdown.value;
-
-        var options = statusDropdown.options;
-
-        for (var i = 0; i < options.length; i++) {
-            options[i].disabled = false;
-        }
-
-        if (currentStatus === "Forwarded to LCE") {
-            options[0].disabled = true;
-        } else if (currentStatus === "Signed by LCE") {
-            options[0].disabled = true;
-            options[1].disabled = true;
-        } else if (currentStatus === "SP Approval") {
-            options[0].disabled = true;
-            options[1].disabled = true;
-            options[2].disabled = true;
-        } else if (currentStatus === "Disapprove") {
-            for (var i = 0; i < options.length; i++) {
-                options[i].disabled = true;
-            }
-            options[4].disabled = false;
-        }
-    }
-
-    function toggleDateFields() {
+        function toggleDateFields() {
         var status = document.getElementById("remarks").value;
 
         document.getElementById("forwardedDateField").style.display = "none";
         document.getElementById("signedDateField").style.display = "none";
+        document.getElementById("spResoNoField").style.display = "none";
         document.getElementById("sbApprovalDateField").style.display = "none";
+        document.getElementById("notesField").style.display = "none";
 
         if (status === "Forwarded to LCE") {
             document.getElementById("forwardedDateField").style.display = "flex";
@@ -367,10 +356,12 @@ if(isset($_POST['save'])){
         } else if (status === "SP Approval") {
             document.getElementById("forwardedDateField").style.display = "flex";
             document.getElementById("signedDateField").style.display = "flex";
+            document.getElementById("spResoNoField").style.display = "flex";
             document.getElementById("sbApprovalDateField").style.display = "flex";
+        } else if (status === "Disapprove") {
+            document.getElementById("notesField").style.display = "flex";
         }
 
-        restrictStatusSelection(); 
     }
 
     function updateMinDate(fieldId, targetIds) {
