@@ -234,11 +234,11 @@ if(isset($_POST['save'])){
                                                 <select id="remarks" name="remarks" class="form-control" onchange="toggleDateFields()">
                                                     <option value="" <?php echo ($selectedRemarks == '') ? 'selected' : ''; ?>>Choose...</option>
                                                     <option value="Forwarded to LCE" <?php echo ($selectedRemarks == 'Forwarded to LCE') ? 'selected' : ''; ?>
-                                                        <?php echo ($selectedRemarks == 'Signed by LCE' || $selectedRemarks == 'SP Approval') ? 'disabled' : ''; ?>>
+                                                        <?php echo ($selectedRemarks == 'Signed by LCE' || $selectedRemarks == 'SP Approval') ? 'selected' : ''; ?>>
                                                         Forwarded to LCE
                                                     </option>
                                                     <option value="Signed by LCE" <?php echo ($selectedRemarks == 'Signed by LCE') ? 'selected' : ''; ?>
-                                                        <?php echo ($selectedRemarks == 'SP Approval') ? 'disabled' : ''; ?>>
+                                                        <?php echo ($selectedRemarks == 'SP Approval') ? 'selected' : ''; ?>>
                                                         Signed by LCE
                                                     </option>
                                                     <option value="SP Approval" <?php echo ($selectedRemarks == 'SP Approval') ? 'selected' : ''; ?>>
@@ -328,37 +328,8 @@ if(isset($_POST['save'])){
         }
 
         document.addEventListener("DOMContentLoaded", function () {
-        restrictStatusSelection(); 
         toggleDateFields(); 
         });
-
-
-        function restrictStatusSelection() {
-        var statusDropdown = document.getElementById("remarks");
-        var currentStatus = statusDropdown.value;
-
-        var options = statusDropdown.options;
-
-        for (var i = 0; i < options.length; i++) {
-            options[i].disabled = false;
-        }
-
-        if (currentStatus === "Forwarded to LCE") {
-            options[0].disabled = true;
-        } else if (currentStatus === "Signed by LCE") {
-            options[0].disabled = true;
-            options[1].disabled = true;
-        } else if (currentStatus === "SP Approval") {
-            options[0].disabled = true;
-            options[1].disabled = true;
-            options[2].disabled = true;
-        } else if (currentStatus === "Disapprove") {
-            for (var i = 0; i < options.length; i++) {
-                options[i].disabled = true;
-            }
-            options[4].disabled = false;
-        }
-    }
 
     function toggleDateFields() {
         var status = document.getElementById("remarks").value;
@@ -367,6 +338,8 @@ if(isset($_POST['save'])){
         document.getElementById("signedDateField").style.display = "none";
         document.getElementById("spResoNoField").style.display = "none";
         document.getElementById("sbApprovalDateField").style.display = "none";
+        document.getElementById("notesField").style.display = "none";
+
 
         if (status === "Forwarded to LCE") {
             document.getElementById("forwardedDateField").style.display = "flex";
@@ -382,7 +355,6 @@ if(isset($_POST['save'])){
             document.getElementById("notesField").style.display = "flex";
         }
 
-        restrictStatusSelection(); 
     }
 
     function updateMinDate(fieldId, targetIds) {

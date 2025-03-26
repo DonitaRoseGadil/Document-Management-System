@@ -38,8 +38,10 @@
                                             $authorSponsor = $_POST['authorSponsor'];
                                             $coAuthor = $_POST['coAuthor'];
                                             $remarks = $_POST['remarks'];
+                                            $notes = $_POST['notes'];
                                             $dateForwarded = $_POST['dateForwarded'];
                                             $dateSigned = $_POST['dateSigned'];
+                                            $spResoNo = $_POST['spResoNo'];
                                             $dateApproved = $_POST['dateApproved'];
                                             $attachmentPath = "";
 
@@ -67,11 +69,11 @@
                                                     </script>";
                                             } else {
                                                 // Insert new resolution
-                                                $sql = "INSERT INTO resolution (reso_no, title, d_adopted, author_sponsor, co_author, remarks, d_forward, d_signed, d_approved, attachment) 
-                                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                                                $sql = "INSERT INTO resolution (reso_no, title, d_adopted, author_sponsor, co_author, remarks, d_forward, d_signed, sp_resoNo, d_approved, attachment, notes) 
+                                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                                                 
                                                 $stmt = $conn->prepare($sql);
-                                                $stmt->bind_param("ssssssssss", $resoNo, $title, $dateAdopted, $authorSponsor, $coAuthor, $remarks, $dateForwarded, $dateSigned, $dateApproved, $attachmentPath);
+                                                $stmt->bind_param("ssssssssssss", $resoNo, $title, $dateAdopted, $authorSponsor, $coAuthor, $remarks, $dateForwarded, $dateSigned, $spResoNo, $dateApproved, $attachmentPath, $notes);
 
                                                 if ($stmt->execute()) {
                                                     $last_id = $conn->insert_id;
@@ -160,10 +162,22 @@
                                                     <input type="date" class="form-control" id="dateForwarded" name="dateForwarded">
                                                 </div>
                                             </div>
+                                            <div class="form-group row" style="visibility: hidden; opacity: 0;" id="notesField">
+                                                <label class="col-sm-3 col-form-label" style="color:#000000">Remarks/Notes:</label>
+                                                <div class="col-sm-9">
+                                                    <textarea class="form-control" style="resize: none;" rows="4" placeholder="Please type here..." id="notes" name="notes"></textarea>
+                                                </div>
+                                            </div>
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="signedDateField">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000">Date Signed by LCE:</label>
                                                 <div class="col-sm-9">
                                                     <input type="date" class="form-control" id="dateSigned" name="dateSigned">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row" style="visibility: hidden; opacity: 0;" id="spResoNoField">
+                                                <label class="col-sm-3 col-form-label" style="color:#000000">SP Resolution No:</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" placeholder="Please type here..." id="spResoNo" name="spResoNo">
                                                 </div>
                                             </div>
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="sbApprovalDateField">
@@ -226,21 +240,25 @@
 
             // Hide all fields first
             document.getElementById("forwardedDateField").style.visibility = "hidden";
-            document.getElementById("forwardedDateField").style.opacity = "0";
-            
+            document.getElementById("forwardedDateField").style.opacity = "0";     
             document.getElementById("signedDateField").style.visibility = "hidden";
             document.getElementById("signedDateField").style.opacity = "0";
-
             document.getElementById("sbApprovalDateField").style.visibility = "hidden";
             document.getElementById("sbApprovalDateField").style.opacity = "0";
-
+            document.getElementById("spResoNoField").style.visibility = "hidden";
+            document.getElementById("spResoNoField").style.opacity = "0";
+            document.getElementById("notesField").style.visibility = "hidden";
+            document.getElementById("notesField").style.opacity = "0";
+            
             // Show the corresponding field based on selected option
             if (status === "Forwarded to LCE") {
                 document.getElementById("forwardedDateField").style.visibility = "visible";
                 document.getElementById("forwardedDateField").style.opacity = "1";
                 document.getElementById("dateFields").style.display = "block";
                 document.getElementById("signedDateField").style.display = "none";
+                document.getElementById("spResoNoField").style.display = "none";
                 document.getElementById("sbApprovalDateField").style.display = "none";
+                document.getElementById("notesField").style.display = "none";
             } else if (status === "Signed by LCE") {
                 document.getElementById("forwardedDateField").style.visibility = "visible";
                 document.getElementById("forwardedDateField").style.opacity = "1";
@@ -248,7 +266,9 @@
                 document.getElementById("signedDateField").style.opacity = "1";
                 document.getElementById("dateFields").style.display = "block";
                 document.getElementById("signedDateField").style.display = "flex";
+                document.getElementById("spResoNoField").style.display = "none";
                 document.getElementById("sbApprovalDateField").style.display = "none";
+                document.getElementById("notesField").style.display = "none";
             } else if (status === "SP Approval") {
                 document.getElementById("forwardedDateField").style.visibility = "visible";
                 document.getElementById("forwardedDateField").style.opacity = "1";
@@ -256,14 +276,27 @@
                 document.getElementById("signedDateField").style.opacity = "1";
                 document.getElementById("sbApprovalDateField").style.visibility = "visible";
                 document.getElementById("sbApprovalDateField").style.opacity = "1";
+                document.getElementById("spResoNoField").style.visibility = "visible";
+                document.getElementById("spResoNoField").style.opacity = "1";
                 document.getElementById("dateFields").style.display = "block";
                 document.getElementById("forwardedDateField").style.display = "flex";
                 document.getElementById("signedDateField").style.display = "flex";
+                document.getElementById("spResoNoField").style.display = "flex";
                 document.getElementById("sbApprovalDateField").style.display = "flex";
-            } else {
-                document.getElementById("dateFields").style.display = "none";
+                document.getElementById("notesField").style.display = "none";
+            } else if (status === "Disapprove") {
+                document.getElementById("dateFields").style.display = "block";
+                document.getElementById("forwardedDateField").style.display = "none";
+                document.getElementById("signedDateField").style.display = "none";
+                document.getElementById("spResoNoField").style.display = "none";
+                document.getElementById("sbApprovalDateField").style.display = "none";
+                document.getElementById("notesField").style.visibility = "visible";
+                document.getElementById("notesField").style.opacity = "1";
+                document.getElementById("notesField").style.display = "flex";
+                
             }
         }
+
         document.addEventListener("DOMContentLoaded", function () {
         const form = document.querySelector("form");
         const requiredFields = ["moNo", "title", "dateAdopted", "authorSponsor"];
