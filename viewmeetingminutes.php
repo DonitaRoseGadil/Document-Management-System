@@ -39,6 +39,33 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
         $stmt->close();
     }
+
+    $optRadio = isset($_POST['optradio']) ? $_POST['optradio'] : '';
+
+    // Initialize fields safely
+    $returnNo = isset($_POST['returnNo']) ? mysqli_real_escape_string($conn, $_POST['returnNo']) : '';
+    $returnDate = isset($_POST['returnDate']) ? mysqli_real_escape_string($conn, $_POST['returnDate']) : '';
+    $resolutionNo = isset($_POST['resolutionNo']) ? mysqli_real_escape_string($conn, $_POST['resolutionNo']) : '';
+    $resolutionDate = isset($_POST['resolutionDate']) ? mysqli_real_escape_string($conn, $_POST['resolutionDate']) : '';
+
+        // Use switch case to handle conditions
+        switch ($optRadio) {
+            case 'Approved':
+                $returnNo = '';
+                $returnDate = '';
+                break;
+            case 'Returned':
+                $resolutionNo = '';
+                $resolutionDate = '';
+                break;
+            default:
+                $returnNo = '';
+                $returnDate = '';
+                $resolutionNo = '';
+                $resolutionDate = '';
+                break;
+        }
+
 }
 
 $conn->close();
@@ -71,6 +98,14 @@ $conn->close();
                                 $sql = "SELECT * FROM `minutes` WHERE id = $id LIMIT 1";
                                 $result = mysqli_query($conn, $sql);
                                 $row = mysqli_fetch_assoc($result);
+
+                                // Determine the value for optRadio based on conditions
+                                $optRadio = "";
+                                if ((strlen($row['resolutionNo']) > 2) && (strlen($row['resolutionDate']) > 2)) {
+                                    $optRadio = "Approved";
+                                } elseif ((strlen($row['returnNo']) > 2) && (strlen($row['returnDate']) > 2)) {
+                                    $optRadio = "Returned";
+                                }
                             ?>
                             <div class="card-body">
                                 <div class="basic-form">
@@ -106,12 +141,33 @@ $conn->close();
                                                 <textarea class="form-control" id="title" name="title" rows="1" style="resize: none; overflow: hidden;" disabled><?php echo htmlspecialchars_decode($row['title']); ?></textarea>
                                             </div>
                                         </div>
+                                        <!-- Status Field -->
                                         <div class="form-group row">
                                             <label for="status" class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" value="<?php echo $row['status']?>" name="status" disabled>
+                                                <input type="text" class="form-control" value="<?php echo $row['status']?>" name="status" required>
                                             </div>
                                         </div>
+
+                                        <div class="form-group row">
+                                            <label for="status" class="col-sm-3 col-form-label" style="color: #000000">Select option if applicable:</label>
+                                            <div class="col-sm-9 mt-2">
+                                                <label class="radio-inline mr-5" style="color: #000000">
+                                                    <input type="radio" name="optradio" class="deselectable-radio" value="Returned" <?php echo ($optRadio === "Returned") ? 'checked' : ''; ?> disabled > Returned
+                                                </label>
+                                                <label class="radio-inline" style="color: #000000">
+                                                    <input type="radio" name="optradio" class="deselectable-radio" value="Approved" <?php echo ($optRadio === "Approved") ? 'checked' : ''; ?> disabled > Approved
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Hidden fields section -->
+                                        <div class="form-group row extra-fields mt-3" style="display: none;">
+                                            <div class="col-sm-12" id="extraFields">
+                                                <!-- Dynamic fields go here -->
+                                            </div>
+                                        </div>
+
                                         <label style="color: #000000">Upload Attachment as Supporting Documents:</label>
                                         <div class="input-group mb-3">
                                             <input type="text" class="form-control" value="<?php echo $row['attachment']; ?>" id="attachment" name="attachment" disabled>
@@ -259,7 +315,79 @@ $conn->close();
             autoResizeTextarea(textarea);
         });
     </script>
-    
+
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const radios = document.querySelectorAll("input[name='optradio']");
+            const extraFieldsContainer = document.querySelector("#extraFields");
+            const extraFieldsRow = document.querySelector(".extra-fields");
+
+            function showExtraFields(selectedValue) {
+                extraFieldsRow.style.display = "block";
+
+                if (selectedValue === "Returned") {
+                    extraFieldsContainer.innerHTML = `
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label" style="color:#000000">Return No.:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" value="<?php echo isset($row['returnNo']) ? $row['returnNo'] : ''; ?>" name="returnNo" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label" style="color:#000000">Return Date:</label>
+                            <div class="col-sm-9">
+                                <input type="date" class="form-control" value="<?php echo isset($row['returnDate']) ? $row['returnDate'] : ''; ?>" name="returnDate" readonly>
+                            </div>
+                        </div>
+                    `;
+                } else if (selectedValue === "Approved") {
+                    extraFieldsContainer.innerHTML = `
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label" style="color:#000000">Resolution No.:</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" value="<?php echo isset($row['resolutionNo']) ? $row['resolutionNo'] : ''; ?>" name="resolutionNo" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label" style="color:#000000">Resolution Date Approved:</label>
+                            <div class="col-sm-9">
+                                <input type="date" class="form-control" value="<?php echo isset($row['resolutionDate']) ? $row['resolutionDate'] : ''; ?>" name="resolutionDate" readonly>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            // Check if a radio button is already selected on page load
+            const selectedRadio = document.querySelector("input[name='optradio']:checked");
+            if (selectedRadio) {
+                showExtraFields(selectedRadio.value);
+            } else {
+                extraFieldsRow.style.display = "none";
+            }
+
+            // Add event listeners to radio buttons
+            radios.forEach(radio => {
+                radio.addEventListener('click', function () {
+                    if (this.checked) {
+                        if (this.previousChecked) {
+                            this.checked = false;
+                            this.previousChecked = false;
+                            extraFieldsRow.style.display = "none";
+                            extraFieldsContainer.innerHTML = "";
+                        } else {
+                            radios.forEach(r => r.previousChecked = false);
+                            this.previousChecked = true;
+                            showExtraFields(this.value);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+
+        
 </body>
 
 </html>

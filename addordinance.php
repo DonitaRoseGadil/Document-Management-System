@@ -439,65 +439,65 @@
         form.addEventListener("submit", validateForm);
     });
 
-    function updateMinDate(fieldId, targetIds) {
-        let selectedDate = document.getElementById(fieldId).value;
-        if (selectedDate) {
-            targetIds.forEach(targetId => {
-                document.getElementById(targetId).min = selectedDate;
-            });
-        }
-    }
+    // function updateMinDate(fieldId, targetIds) {
+    //     let selectedDate = document.getElementById(fieldId).value;
+    //     if (selectedDate) {
+    //         targetIds.forEach(targetId => {
+    //             document.getElementById(targetId).min = selectedDate;
+    //         });
+    //     }
+    // }
 
-    document.getElementById("dateAdopted").addEventListener("change", function () {
-        updateMinDate("dateAdopted", ["dateForwarded", "dateSigned", "dateApproved"]);
-    });
+    // document.getElementById("dateAdopted").addEventListener("change", function () {
+    //     updateMinDate("dateAdopted", ["dateForwarded", "dateSigned", "dateApproved"]);
+    // });
 
-    document.getElementById("dateForwarded").addEventListener("change", function () {
-        updateMinDate("dateForwarded", ["dateSigned", "dateApproved"]);
-    });
+    // document.getElementById("dateForwarded").addEventListener("change", function () {
+    //     updateMinDate("dateForwarded", ["dateSigned", "dateApproved"]);
+    // });
 
-    document.getElementById("dateSigned").addEventListener("change", function () {
-        updateMinDate("dateSigned", ["dateApproved"]);
-    });
+    // document.getElementById("dateSigned").addEventListener("change", function () {
+    //     updateMinDate("dateSigned", ["dateApproved"]);
+    // });
 
-    document.addEventListener("DOMContentLoaded", function () {
-    const formInputs = document.querySelectorAll("input, textarea, select"); 
+    // document.addEventListener("DOMContentLoaded", function () {
+    // const formInputs = document.querySelectorAll("input, textarea, select"); 
 
-    // Load stored values on page reload
-    formInputs.forEach(input => {
-        const savedValue = localStorage.getItem(input.id);
-        if (savedValue) {
-            input.value = savedValue; // Restore saved values
-        }
-    });
+    // // Load stored values on page reload
+    // formInputs.forEach(input => {
+    //     const savedValue = localStorage.getItem(input.id);
+    //     if (savedValue) {
+    //         input.value = savedValue; // Restore saved values
+    //     }
+    // });
 
-    // Save input values before refresh
-    formInputs.forEach(input => {
-        input.addEventListener("input", function () {
-            localStorage.setItem(input.id, input.value);
-        });
-    });
+    // // Save input values before refresh
+    // formInputs.forEach(input => {
+    //     input.addEventListener("input", function () {
+    //         localStorage.setItem(input.id, input.value);
+    //     });
+    // });
 
     // Warn before refreshing
-    window.addEventListener("beforeunload", function (event) {
-        event.preventDefault(); // Prevents immediate refresh
-        event.returnValue = ""; // Required for modern browsers
-        Swal.fire({
-            title: "Are you sure?",
-            text: "Changes you made may not be saved!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, refresh",
-            cancelButtonText: "No, stay",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                localStorage.clear(); // Clear data only if user confirms refresh
-                location.reload();
-            }
-        });
-        return false; // Stop default refresh
-    });
-});
+//     window.addEventListener("beforeunload", function (event) {
+//         event.preventDefault(); // Prevents immediate refresh
+//         event.returnValue = ""; // Required for modern browsers
+//         Swal.fire({
+//             title: "Are you sure?",
+//             text: "Changes you made may not be saved!",
+//             icon: "warning",
+//             showCancelButton: true,
+//             confirmButtonText: "Yes, refresh",
+//             cancelButtonText: "No, stay",
+//         }).then((result) => {
+//             if (result.isConfirmed) {
+//                 localStorage.clear(); // Clear data only if user confirms refresh
+//                 location.reload();
+//             }
+//         });
+//         return false; // Stop default refresh
+//     });
+// });
 
     
     </script>    
