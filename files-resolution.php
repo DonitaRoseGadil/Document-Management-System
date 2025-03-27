@@ -76,7 +76,7 @@ ini_set('display_errors', 1);
                                                         <td style="border-bottom: 1px solid #098209;"><?php echo $row["d_adopted"] ?></td>
                                                         <td style="border-bottom: 1px solid #098209;">
                                                             <div class="text-center d-flex justify-content-center gap-2">
-                                                                <a style="color: #000000;" data-placement="bottom" data-toggle="tooltip" data-html="true" title="
+                                                                <a style="color: #000000;" data-placement="bottom" data-toggle="tooltip" title="
                                                                     <?php
                                                                         $d_forward = !empty($row["d_forward"]) ? $row["d_forward"] : "N/A";
                                                                         $d_signed = !empty($row["d_signed"]) ? $row["d_signed"] : "N/A";
@@ -84,14 +84,11 @@ ini_set('display_errors', 1);
 
                                                                         // Display relevant dates based on remarks
                                                                         if ($row["remarks"] == "Forwarded to LCE") {
-                                                                            echo "<strong>Forwarded to LCE:</strong> $d_forward";
+                                                                            echo "Forwarded to LCE: $d_forward";
                                                                         } elseif ($row["remarks"] == "Signed by LCE") {
-                                                                            echo "<strong>Forwarded to LCE:</strong> $d_forward<br>";
-                                                                            echo "<strong>Signed by LCE:</strong> $d_signed";
+                                                                            echo "Forwarded to LCE: $d_forward \nSigned by LCE: $d_signed";
                                                                         } elseif ($row["remarks"] == "SP Approval") {
-                                                                            echo "<strong>Forwarded to LCE:</strong> $d_forward<br>";
-                                                                            echo "<strong>Signed by LCE:</strong> $d_signed<br>";
-                                                                            echo "<strong>SP Approval:</strong> $d_approved";
+                                                                            echo "Forwarded to LCE: $d_forward \nSigned by LCE: $d_signed \nSP Approval: $d_approved";
                                                                         }
                                                                     ?>
                                                                 ">
@@ -100,12 +97,6 @@ ini_set('display_errors', 1);
                                                             </div>
                                                         </td>
 
-                                                        <!-- <td style="border-bottom: 1px solid #098209;">
-                                                            <div class="container">
-                                                                <a style="color: #000000" id="popoverData" class="btn" href="#" data-content="Forwarded to LCE: <?php echo $row["d_forward"] ?>" rel="popover" 
-                                                                data-placement="bottom" data-trigger="hover"><?php echo $row["remarks"] ?></a>
-                                                            </div>
-                                                        </td> -->
                                                         <td style="border-bottom: 1px solid #098209; border-right: 1px solid #098209; text-align: center; vertical-align: middle;">
                                                             <div class="d-flex justify-content-center align-items-center gap-2">
                                                                 <a href="viewresolution.php?id=<?php echo $row["id"] ?>" class="btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2">
@@ -177,9 +168,9 @@ ini_set('display_errors', 1);
     <script src="./js/plugins-init/datatables.init.js"></script>
 
     <script>
-        $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip(); 
-        });
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+            })
 
         function confirmDelete(id) {
             Swal.fire({

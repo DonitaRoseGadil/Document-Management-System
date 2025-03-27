@@ -77,7 +77,7 @@
                                                         <td style="border-bottom: 1px solid #098209;"><?php echo $row["author_sponsor"] ?></td>     
                                                         <td style="border-bottom: 1px solid #098209;">
                                                             <div class="text-center d-flex justify-content-center gap-2">
-                                                                <a style="color: #000000" data-placement="bottom" data-toggle="tooltip" data-html="true" title="
+                                                                <a style="color: #000000" data-placement="bottom" data-toggle="tooltip" title="
                                                                     <?php
                                                                         $d_forward = !empty($row["date_fwd"]) ? $row["date_fwd"] : "N/A";
                                                                         $d_signed = !empty($row["date_signed"]) ? $row["date_signed"] : "N/A";
@@ -85,14 +85,11 @@
 
                                                                         // Display relevant dates based on remarks
                                                                         if ($row["remarks"] == "Forwarded to LCE") {
-                                                                            echo "<strong>Forwarded to LCE:</strong> $d_forward";
+                                                                            echo "Forwarded to LCE: $d_forward";
                                                                         } elseif ($row["remarks"] == "Signed by LCE") {
-                                                                            echo "<strong>Forwarded to LCE:</strong> $d_forward<br>";
-                                                                            echo "<strong>Signed by LCE:</strong> $d_signed";
+                                                                            echo "Forwarded to LCE: $d_forward \nSigned by LCE: $d_signed";
                                                                         } elseif ($row["remarks"] == "SP Approval") {
-                                                                            echo "<strong>Forwarded to LCE:</strong> $d_forward<br>";
-                                                                            echo "<strong>Signed by LCE:</strong> $d_signed<br>";
-                                                                            echo "<strong>SP Approval:</strong> $d_approved";
+                                                                            echo "Forwarded to LCE: $d_forward \nSigned by LCE: $d_signed \nSP Approval: $d_approved";
                                                                         }
                                                                     ?>
                                                                 ">
