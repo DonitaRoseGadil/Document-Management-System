@@ -55,7 +55,7 @@
                                                         <thead class="text-center" style="background-color: #098209; color: #FFFFFF;">
                                                             <tr>
                                                                 <th>TITLE</th>
-                                                                <th>ACTION</th>
+                                                                <th>ACTION TAKEN</th>
                                                                 <th>TIMESTAMP</th>
                                                             </tr>
                                                         </thead>
@@ -78,10 +78,10 @@
                                                                             <?php 
                                                                                 switch ($row['action']) {
                                                                                     case 'Created':
-                                                                                        echo '<span class="badge badge-primary">Created</span>';
+                                                                                        echo '<span class="badge badge-success">Created</span>';
                                                                                         break;
                                                                                     case 'Edited':
-                                                                                        echo '<span class="badge badge-success">Edited</span>';
+                                                                                        echo '<span class="badge badge-primary">Edited</span>';
                                                                                         break;
                                                                                     case 'Deleted':
                                                                                         echo '<span class="badge badge-danger">Deleted</span>';
@@ -114,7 +114,7 @@
                                                         <thead class="text-center" style="background-color: #098209; color: #FFFFFF;">
                                                             <tr>
                                                                 <th>TITLE</th>
-                                                                <th>ACTION</th>
+                                                                <th>ACTION TAKEN</th>
                                                                 <th>TIMESTAMP</th>
                                                             </tr>
                                                         </thead>
@@ -137,10 +137,10 @@
                                                                             <?php 
                                                                                 switch ($row['action']) {
                                                                                     case 'Created':
-                                                                                        echo '<span class="badge badge-primary">Created</span>';
+                                                                                        echo '<span class="badge badge-success">Created</span>';
                                                                                         break;
                                                                                     case 'Edited':
-                                                                                        echo '<span class="badge badge-success">Edited</span>';
+                                                                                        echo '<span class="badge badge-primary">Edited</span>';
                                                                                         break;
                                                                                     case 'Deleted':
                                                                                         echo '<span class="badge badge-danger">Deleted</span>';
@@ -173,7 +173,7 @@
                                                         <thead class="text-center" style="background-color: #098209; color: #FFFFFF;">
                                                             <tr>
                                                                 <th>TITLE</th>
-                                                                <th>ACTION</th>
+                                                                <th>ACTION TAKEN</th>
                                                                 <th>STATUS</th>
                                                                 <th>TIMESTAMP</th>
                                                             </tr>
@@ -197,10 +197,10 @@
                                                                             <?php 
                                                                                 switch ($row['action']) {
                                                                                     case 'Created':
-                                                                                        echo '<span class="badge badge-primary">Created</span>';
+                                                                                        echo '<span class="badge badge-success">Created</span>';
                                                                                         break;
                                                                                     case 'Edited':
-                                                                                        echo '<span class="badge badge-success">Edited</span>';
+                                                                                        echo '<span class="badge badge-primary">Edited</span>';
                                                                                         break;
                                                                                     case 'Deleted':
                                                                                         echo '<span class="badge badge-danger">Deleted</span>';
