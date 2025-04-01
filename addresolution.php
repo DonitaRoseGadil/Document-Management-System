@@ -195,6 +195,9 @@
                                                 <input type="file" class="custom-file-input" id="attachment" name="attachment" onchange="updateFileName()">
                                                 <label class="custom-file-label text-truncate" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:block;" for="attachment">Choose file</label>
                                             </div>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-danger" type="button" onclick="removeFile()"><i class="fa fa-close"></i></button>
+                                            </div>
                                         </div>
                                         <div class="form-group row d-flex justify-content-center">
                                             <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;">Save</button>
@@ -233,6 +236,14 @@
             const fileName = fileInput.files[0].name;
             const label = document.querySelector('.custom-file-label');
             label.textContent = fileName;
+        }
+
+        function removeFile() {
+            const fileInput = document.getElementById("attachment");
+            const fileLabel = fileInput.nextElementSibling;
+
+            fileInput.value = ""; // Clear file inputs
+            fileLabel.textContent = "Choose file"; // Reset labels
         }
 
         function toggleDateFields() {

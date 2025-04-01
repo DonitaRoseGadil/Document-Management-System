@@ -290,6 +290,9 @@ if(isset($_POST['save'])){
                                                     <?php echo !empty($row['attachment']) ? $row['attachment'] : "Choose file"; ?>
                                                 </label>
                                             </div>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-danger" type="button" onclick="removeFile()"><i class="fa fa-close"></i></button>
+                                            </div>
                                         </div>
                                         <div class="form-group row d-flex justify-content-center">
                                             <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;">Update</button>
@@ -325,6 +328,14 @@ if(isset($_POST['save'])){
             const fileInput = document.getElementById(labelId.replace("Label", ""));
             const fileName = fileInput.files.length > 0 ? fileInput.files[0].name : "Choose file";
             document.getElementById(labelId).textContent = fileName;
+        }
+
+        function removeFile() {
+            const fileInput = document.getElementById("attachment");
+            const fileLabel = fileInput.nextElementSibling;
+
+            fileInput.value = ""; // Clear file inputs
+            fileLabel.textContent = "Choose file"; // Reset labels
         }
 
         document.addEventListener("DOMContentLoaded", function () {

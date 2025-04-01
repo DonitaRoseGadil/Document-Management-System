@@ -153,6 +153,9 @@
                                                 <input type="file" class="custom-file-input" id="genAttachment" name="genAttachment" onchange="updateFileName(this)">
                                                 <label class="custom-file-label text-truncate" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:block;" for="genAttachment">Choose file</label>
                                             </div>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-danger" type="button" onclick="removeFile()"><i class="fa fa-close"></i></button>
+                                            </div>
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center mt-5 mb-3">
                                             <h5 style="color: #098209;">AGENDA ITEM</h5>
@@ -260,6 +263,9 @@
                                 <input type="file" class="custom-file-input" id="attachment" name="attachment[]" onchange="updateFileName(this)">
                                 <label class="custom-file-label text-truncate" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:block;" for="attachment">Choose file</label>
                             </div>
+                            <div class="input-group-append">
+                                <button class="btn btn-danger" type="button" onclick="removeFile2()"><i class="fa fa-close"></i></button>
+                            </div>
                         </div>
                         <div class="form-group row d-flex justify-content-center">
                             <button type="button" class="btn btn-danger delete-btn flex"><i class='fa fa-trash' aria-hidden='true'> Delete</i></button>
@@ -350,113 +356,22 @@
             }
         }
 
-    </script>
+        function removeFile() {
+            const fileInput = document.getElementById("genAttachment");
+            const fileLabel = fileInput.nextElementSibling;
 
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const form = document.querySelector("form");
-        const requiredFields = ["no_regSession", "date", "genAttachment", "title", "type", "status", "attachment"];
-
-        function validateField(field) {
-            let inputElement = document.getElementById(field);
-            if (!inputElement) return true; // Skip if field is missing
-
-            let errorElement = document.getElementById(field + "-error");
-            let isEmpty = !inputElement.value.trim();
-
-            if (isEmpty) {
-                if (!errorElement) {
-                    let errorMsg = document.createElement("div");
-                    errorMsg.id = field + "-error";
-                    errorMsg.className = "text-danger mt-1";
-                    errorMsg.textContent = "Required field.";
-                    inputElement.parentNode.appendChild(errorMsg);
-                }
-                return false; // Field is invalid
-            } else {
-                if (errorElement) errorElement.remove();
-                return true; // Field is valid
-            }
+            fileInput.value = ""; // Clear file inputs
+            fileLabel.textContent = "Choose file"; // Reset labels
         }
 
-        function validateDynamicFields() {
-            let isValid = true;
-            let firstInvalidField = null;
+        function removeFile2() {
+            const fileInput = document.getElementById("attachment");
+            const fileLabel = fileInput.nextElementSibling;
 
-            document.querySelectorAll("#dynamic-form-container .card").forEach((card, index) => {
-                let resNo = card.querySelector("input[name='resNo[]']");
-                let title = card.querySelector("input[name='title[]']");
-                let status = card.querySelector("select[name='status[]']");
-
-                if (!resNo.value.trim() || !title.value.trim() || !status.value.trim()) {
-                    isValid = false;
-                    if (!firstInvalidField) firstInvalidField = resNo || title || status;
-                }
-
-                if (!resNo.value.trim()) showError(resNo);
-                if (!title.value.trim()) showError(title);
-                if (!status.value.trim()) showError(status);
-            });
-
-            if (!isValid && firstInvalidField) {
-                firstInvalidField.scrollIntoView({ behavior: "smooth", block: "center" });
-                firstInvalidField.focus();
-            }
-
-            return isValid;
+            fileInput.value = ""; // Clear file inputs
+            fileLabel.textContent = "Choose file"; // Reset labels
         }
 
-        function showError(inputElement) {
-            let errorElement = document.createElement("div");
-            errorElement.className = "text-danger mt-1";
-            errorElement.textContent = "Required field.";
-            if (!inputElement.nextElementSibling || !inputElement.nextElementSibling.classList.contains("text-danger")) {
-                inputElement.parentNode.appendChild(errorElement);
-            }
-        }
-
-        function validateForm(event) {
-            let isValid = true;
-            let firstInvalidField = null;
-
-            requiredFields.forEach(function (field) {
-                if (!validateField(field)) {
-                    isValid = false;
-                    if (!firstInvalidField) firstInvalidField = document.getElementById(field);
-                }
-            });
-
-            if (!validateDynamicFields()) isValid = false;
-
-            if (!isValid) {
-                event.preventDefault();
-
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Incomplete Form',
-                    text: 'All required fields must be filled out before submitting!',
-                    confirmButtonText: 'OK'
-                });
-
-                if (firstInvalidField) {
-                    firstInvalidField.scrollIntoView({ behavior: "smooth", block: "center" });
-                    firstInvalidField.focus();
-                }
-
-                return false;
-            }
-        }
-
-        requiredFields.forEach(function (field) {
-            let inputElement = document.getElementById(field);
-            if (inputElement) {
-                inputElement.addEventListener("input", function () { validateField(field); });
-                inputElement.addEventListener("focusout", function () { validateField(field); });
-            }
-        });
-
-        form.addEventListener("submit", validateForm);
-    });
     </script>
 
 </body>
