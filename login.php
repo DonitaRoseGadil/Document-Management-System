@@ -27,7 +27,9 @@
                 $updateToken->bind_param("si", $token, $user['id']);
                 $updateToken->execute();
 
-                echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
+                // Set session expiration (1 hour)
+                $session_duration = 30 * 60; 
+                setcookie("session_expiry", time() + $session_duration, time() + $session_duration, "/");
                 echo "<script>
                         document.addEventListener('DOMContentLoaded', function() {
                             Swal.fire({
@@ -145,22 +147,22 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-    function togglePassword() {
-        var passwordInput = document.getElementById("password");
-        var eyeIcon = document.getElementById("toggleEye");
-        
-        if (passwordInput.type === "password") {
-            passwordInput.type = "text";
-            eyeIcon.classList.remove("fa-eye-slash");
-            eyeIcon.classList.add("fa-eye"); // Revert to normal eye icon
+        function togglePassword() {
+            var passwordInput = document.getElementById("password");
+            var eyeIcon = document.getElementById("toggleEye");
             
-        } else {
-            passwordInput.type = "password";
-            eyeIcon.classList.remove("fa-eye");
-            eyeIcon.classList.add("fa-eye-slash"); // Change icon to indicate visibility
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                eyeIcon.classList.remove("fa-eye-slash");
+                eyeIcon.classList.add("fa-eye"); // Revert to normal eye icon
+                
+            } else {
+                passwordInput.type = "password";
+                eyeIcon.classList.remove("fa-eye");
+                eyeIcon.classList.add("fa-eye-slash"); // Change icon to indicate visibility
+            }
         }
-    }
-</script>
+    </script>
 
 </body>
 
