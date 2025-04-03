@@ -1,4 +1,9 @@
-<?php include 'header.php'; ?>
+<?php 
+    include 'header.php'; 
+
+    // Fetch role from session
+    $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
+?>
 
 <!--**********************************
     Nav header start
@@ -36,10 +41,12 @@
                             <i class="mdi mdi-account"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a href="./fullHistory.php" class="dropdown-item">
-                                <i class="mdi mdi-history"></i>
-                                <span class="ml-2">See all History </span>
-                            </a>
+                            <?php if ($role === 'master') { ?>
+                                <a href="./fullHistory.php" class="dropdown-item">
+                                    <i class="mdi mdi-history"></i>
+                                    <span class="ml-2">See all History </span>
+                                </a>
+                            <?php } ?>
                             <a href="#" class="dropdown-item" id="logoutBtn">
                                 <i class="icon-key"></i>
                                 <span class="ml-2">Logout </span>
@@ -75,6 +82,11 @@
             <li>
                 <a href="./accountSettings.php" aria-expanded="false"><i class="icon icon-settings-gear-64"></i><span class="nav-text">Account Settings</span></a>
             </li>
+            <?php if ($role === 'master') { ?>
+                <li>
+                    <a href="./manageAccounts.php" aria-expanded="false"><i class="icon icon-users-mm"></i><span class="nav-text">Manage Accounts</span></a>
+                </li>
+            <?php } ?>
             <li>
                 <a href="./manual.php" aria-expanded="false"><i class="icon icon-book-open-2"></i><span class="nav-text">Manual</span></a>
             </li>

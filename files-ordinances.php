@@ -15,7 +15,14 @@
     ***********************************-->
     <div id="main-wrapper">
 
-        <?php include "sidebar.php"; ?>
+        <?php 
+        
+            include "sidebar.php"; 
+
+            // Fetch role from session
+            $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
+        
+        ?>
 
         <!--**********************************
             Content body start
@@ -28,10 +35,12 @@
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center p-3 mt-4">
                                 <h1 class="card-title flex-grow-1 fs-4 fw-bold text-dark text-center" style="color: #000000">LIST OF ORDINANCES</h1>
-                                <div class="button-container d-flex justify-content-end">
-                                    <a href="addordinance.php">
-                                        <button type="button" class="btn btn-primary" style="background-color: #098209; color:#FFFFFF; border: none;"><i class="fa fa-plus"></i>&nbsp;New Ordinance</button>
-                                    </a>
+                                <div class="button-container d-flex justify-content-end"> 
+                                    <?php if ($role === 'admin' || $role === 'master') { ?>
+                                        <a href="addordinance.php">
+                                            <button type="button" class="btn btn-primary" style="background-color: #098209; color:#FFFFFF; border: none;"><i class="fa fa-plus"></i>&nbsp;New Ordinance</button>
+                                        </a>
+                                    <?php } ?>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -97,7 +106,6 @@
                                                                 </a>
                                                             </div>
                                                         </td>
-
                                                         <!-- <td style="border-bottom: 1px solid #098209;">
                                                             <div class="container">
                                                                 <a style="color: #000000" id="popoverData" class="btn" href="#" data-content="Forwarded to LCE: <?php echo $row["d_forward"] ?>" rel="popover" 
@@ -109,12 +117,14 @@
                                                                 <a href="viewordinance.php?id=<?php echo $row["id"] ?>" class="btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2">
                                                                     <i class="fa fa-eye" aria-hidden="true" style="color: #FFFFFF;"></i>
                                                                 </a>
-                                                                <a onclick="confirmEdit(<?php echo $row['id']; ?>)" class="btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 ml-1 mr-1">
-                                                                    <i class="fa fa-edit" aria-hidden="true" style="color: #FFFFFF;"></i>
-                                                                </a>
-                                                                <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class="btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2">
-                                                                    <i class="fa fa-trash" aria-hidden="true" style="color: #FFFFFF"></i>
-                                                                </a>
+                                                                <?php if ($role === 'admin' || $role === 'master') { ?>
+                                                                    <a onclick="confirmEdit(<?php echo $row['id']; ?>)" class="btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 ml-1 mr-1">
+                                                                        <i class="fa fa-edit" aria-hidden="true" style="color: #FFFFFF;"></i>
+                                                                    </a>
+                                                                    <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class="btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2">
+                                                                        <i class="fa fa-trash" aria-hidden="true" style="color: #FFFFFF"></i>
+                                                                    </a>
+                                                                <?php } ?>
                                                             </div>
                                                         </td>
                                                     </tr>
