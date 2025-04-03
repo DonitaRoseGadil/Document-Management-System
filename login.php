@@ -17,6 +17,7 @@
             if (password_verify($password, $user['password'])) {
                 $_SESSION['email'] = $user['email'];
                 $_SESSION['user_id'] = $user['id'];
+                $_SESSION['role'] = $user['role'];
 
                 // Generate Token
                 $token = bin2hex(random_bytes(32));
