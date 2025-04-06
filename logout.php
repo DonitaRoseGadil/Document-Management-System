@@ -9,7 +9,7 @@
     }
 
     // Destroy session and expire cookies
-    setcookie("session_expiry", "", time() - 3600, "/");
+    // setcookie("session_expiry", "", time() - 3600, "/");
     session_unset();
     session_destroy();
 

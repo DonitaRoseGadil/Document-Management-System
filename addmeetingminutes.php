@@ -135,13 +135,13 @@
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">No. of Regular Session</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." id="no_regSession" name="no_regSession">
+                                                <input type="text" class="form-control" placeholder="Please type here..." id="no_regSession" name="no_regSession" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Date:</label>
                                             <div class="col-sm-9">
-                                                <input type="date" class="form-control" placeholder="Please type here..." id="date" name="date">
+                                                <input type="date" class="form-control" placeholder="Please type here..." id="date" name="date" required>
                                             </div>
                                         </div>
                                         <label style="color: #000000">Upload Attachment for Order of Business:</label>
@@ -159,7 +159,10 @@
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center mt-5 mb-3">
                                             <h5 style="color: #098209;">AGENDA ITEM</h5>
-                                            <button type="button" class="btn btn-primary" id="add-card-btn" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;"><i class="fa fa-plus"></i>  Form</button>
+                                            <div class="d-flex align-items-center">
+                                                <input type="number" id="formCountInput" class="form-control mr-2" min="1" max="50" style="width: 60px;" placeholder="0">
+                                                <button type="button" class="btn btn-primary" id="add-card-btn" value="Save Data" style="background-color: #098209; border: none; color: #FFFFFF;"><i class="fa fa-plus"></i> Form</button>
+                                            </div>
                                         </div>
                                         <div id="dynamic-form-container">
                                             <!-- Dynamic cards will be appended here -->
@@ -179,7 +182,6 @@
         <!--**********************************
             Content body end
         ***********************************-->
-
         
     </div>
     <!--**********************************
@@ -201,7 +203,10 @@
         });
 
         document.getElementById("add-card-btn").addEventListener("click", function() {
-            addDynamicCard();
+            let count = parseInt(document.getElementById("formCountInput").value) || 1;
+            for (let i = 0; i < count; i++) {
+                addDynamicCard();
+            }
         });
 
         function addDynamicCard() {
@@ -219,13 +224,13 @@
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label" style="color: #000000">Item No.:</label>
                             <div class="col-sm-9">
-                                <input type="text" placeholder="Please type here..." class="form-control" name="resNo[]">
+                                <input type="text" placeholder="Please type here..." class="form-control" name="resNo[]" required>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
                             <div class="col-sm-9">
-                                <textarea class="form-control dynamic-textarea" style="resize: none; overflow: hidden;" rows="1" placeholder="Please type here..." name="title[]"></textarea>
+                                <textarea class="form-control dynamic-textarea" style="resize: none; overflow: hidden;" rows="1" placeholder="Please type here..." name="title[]" required></textarea>
                             </div>
                         </div>
                         <div class="form-group row">

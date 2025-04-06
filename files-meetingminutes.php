@@ -36,7 +36,7 @@
                                 <div class="button-container d-flex justify-content-end">
                                     <?php if ($role === 'admin' || $role === 'master') { ?>
                                         <a href="addmeetingminutes.php">
-                                            <button type="button" class="btn btn-primary" style="background-color: #098209; color:#FFFFFF; border: none;"><i class="fa fa-plus"></i>&nbsp;Add New Subject</button>
+                                            <button type="button" class="btn btn-primary" style="background-color: #098209; color:#FFFFFF; border: none;"><i class="fa fa-plus"></i>&nbsp;Add New Agenda</button>
                                         </a>
                                     <?php } ?>
                                     
@@ -97,7 +97,7 @@
                                                     </tr>
                                                     <?php
                                                 }
-                                                ?>
+                                            ?>
                                         </tbody>
                                     </table>
                                 </div>

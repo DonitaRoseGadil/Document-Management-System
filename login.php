@@ -102,9 +102,9 @@
                                     <h1 class="text-center" style="color:#098209">Log in<h1>
                                     <h4 class="text-center mb-4" style="color:#000000">Sign in your account</h4>
                                     <form id="loginForm" action="<?php htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                                        <!--Email-->
                                         <div class="form-group">
-                                            <!-- <label ><strong>Email</strong></label> -->
-                                            <input type="email" class="form-control" placeholder="Email" name="email" id="email">
+                                            <input type="text" class="form-control" placeholder="Username" name="email" id="email">
                                         </div>
                                         <!-- Password -->
                                         <div class="form-group" style="position: relative; display: flex; align-items: center;">
