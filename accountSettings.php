@@ -1,4 +1,5 @@
 <?php
+    session_start(); // Start the session to access session variables
     include('connect.php'); // Include your database connection
 
     $message = ""; // Variable for SweetAlert messages
@@ -75,13 +76,13 @@
                                         </div>
                                         <div class="row mt-4">
                                             <div class="col">
-                                                <h4 class="m-b-0" style="text-transform: uppercase;"><?php echo htmlspecialchars($_SESSION['email']); ?></h4>
+                                                <h4 class="m-b-0" style="text-transform: uppercase; color:#000000"><?php echo htmlspecialchars($_SESSION['email']); ?></h4>
                                                 <span style="color:#000000">Username</span>
                                             </div>
                                         </div>
                                         <div class="row mt-4">
                                             <div class="col">
-                                                <h4 class="m-b-0" style="text-transform: uppercase;"><?php echo htmlspecialchars($_SESSION['role']); ?></h4>
+                                                <h4 class="m-b-0" style="text-transform: uppercase; color:#000000"><?php echo htmlspecialchars($_SESSION['role']); ?></h4>
                                                 <span style="color:#000000">Role</span>
                                             </div>
                                         </div>

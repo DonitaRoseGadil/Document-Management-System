@@ -1,6 +1,68 @@
+<?php
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Get form data
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $confirm_password = $_POST['confirm_password']; // Capture the confirm password
+        $role = $_POST['role'];
+        $status = 'active'; // default account status
+
+        // Check if passwords match
+        if ($password !== $confirm_password) {
+            // Passwords do not match, show SweetAlert and prevent further processing
+            echo "<script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Passwords do not match!',
+                        confirmButtonColor: '#3085d6'
+                    }).then(function() {
+                        window.location.href = 'add_account_form_page.php'; // Redirect back to the form
+                    });
+                </script>";
+            exit();
+        }
+
+        // Hash the password before storing it
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+        // Insert into database
+        $sql = "INSERT INTO accounts (email, password, role, account_status) VALUES (?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssss", $email, $hashed_password, $role, $status);
+
+        if ($stmt->execute()) {
+            echo "<script>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Account added successfully!',
+                        confirmButtonColor: '#098209'
+                    }).then(function() {
+                        window.location.href = 'add_account_form_page.php'; // Redirect after success
+                    });
+                </script>";
+        } else {
+            echo "<script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Something went wrong! Please try again.',
+                        confirmButtonColor: '#3085d6'
+                    });
+                </script>";
+        }
+
+        $stmt->close();
+        $conn->close();
+    }
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
-
+    
     <?php include('header.php'); ?>
 
 <body>
@@ -107,45 +169,42 @@
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content" style="color: #000000">
                             <div class="modal-header">
-                                <h5 class="modal-title">ADD ACOUNT</h5>
+                                <h5 class="modal-title" style="color:#000000">ADD ACOUNT</h5>
                                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
                                 <div class="basic-form">
-                                    <form>
+                                    <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="POST">
                                         <div class="form-group row">
                                             <label class="col-sm-4 col-form-label">Username</label>
                                             <div class="col-sm-8">
-                                                <input type="email" class="form-control" placeholder="Please type here...">
+                                                <input type="email" class="form-control" name="email" placeholder="Please type here..." required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-4 col-form-label">Password</label>
                                             <div class="col-sm-8">
-                                                <input type="password" class="form-control" placeholder="Please type here...">
+                                                <input type="password" class="form-control" name="password" placeholder="Please type here..." required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-4 col-form-label">Confirm Password</label>
                                             <div class="col-sm-8">
-                                                <input type="password" class="form-control" placeholder="Please type here...">
+                                                <input type="password" class="form-control" name="confirm_password" placeholder="Please type here..." required>
                                             </div>
                                         </div>
-                                        <fieldset class="form-group">
-                                            <div class="row">
-                                                <label class="col-form-label col-sm-4 pt-0">Role</label>
-                                                <div class="col-sm-8">
-                                                    <div class="form-group">
-                                                        <label class="radio-inline">
-                                                            <input type="radio" name="optradio"> Admin </label>
-                                                        <label class="radio-inline" >
-                                                        <label class="radio-inline" >
-                                                            <input type="radio" name="optradio" class="ml-4"> User </label>
-                                                    </div>
-                                                </div>
+                                        <div class="form-group row mb-0">
+                                            <label class="col-form-label col-sm-4 pt-0">Role</label>
+                                            <div class="col-sm-8 d-flex align-items-center">
+                                                <label class="mr-3 mb-0">
+                                                    <input type="radio" name="role" value="admin" required> Admin
+                                                </label>
+                                                <label class="mb-0">
+                                                    <input type="radio" name="role" value="user" class="ml-2"> User
+                                                </label>
                                             </div>
-                                        </fieldset>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -161,7 +220,7 @@
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content" style="color: #000000">
                             <div class="modal-header">
-                                <h5 class="modal-title">EDIT ACCOUNT</h5>
+                                <h5 class="modal-title" style="color:#000000">EDIT ACCOUNT</h5>
                                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                                 </button>
                             </div>
@@ -172,6 +231,23 @@
                                             <label class="col-sm-4 col-form-label">Username</label>
                                             <div class="col-sm-8">
                                                 <input type="email" class="form-control" disabled>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-4 col-form-label">Account Status</label>
+                                            <div class="col-sm-8">
+                                                <input type="checkbox" checked data-toggle="toggle" data-on="Deactivate" data-off="Activate" data-onstyle="success" data-offstyle="danger" data-size="sm" data-width="30%" style="border-radius: 50px; text-align: center;">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mb-0">
+                                            <label class="col-form-label col-sm-4 pt-0">Role</label>
+                                            <div class="col-sm-8 d-flex align-items-center">
+                                                <label class="mr-3 mb-0">
+                                                    <input type="radio" name="optradio" required> Admin
+                                                </label>
+                                                <label class="mb-0">
+                                                    <input type="radio" name="optradio" class="ml-2"> User
+                                                </label>
                                             </div>
                                         </div>
                                     </form>
@@ -207,6 +283,9 @@
     <!-- Datatable -->
     <script src="./vendor/datatables/js/jquery.dataTables.min.js"></script>
     <script src="./js/plugins-init/datatables.init.js"></script>
+
+    <!-- Toggle -->
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 
 
 </body>
