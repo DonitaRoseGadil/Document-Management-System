@@ -209,7 +209,7 @@ if(isset($_POST['save'])){
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
                                             <div class="col-sm-9">
-                                                <textarea class="form-control" id="title" name="title" rows="4" style="resize: none; overflow: hidden;"><?php echo $row['title']; ?></textarea>
+                                                <textarea class="form-control" id="title" name="title" rows="1" style="resize: none; overflow: hidden;"><?php echo htmlspecialchars_decode($row['title']); ?></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -284,7 +284,7 @@ if(isset($_POST['save'])){
                                             <div class="form-group row" id="notesField" style="display: none;">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000">Remarks/Notes:</label>
                                                 <div class="col-sm-9">
-                                                    <textarea class="form-control" id="notes" name="notes" rows="4" style="resize: none; overflow: hidden;"><?php echo $row['notes']; ?></textarea>
+                                                    <textarea class="form-control" id="notes" name="notes" rows="1" style="resize: none; overflow: hidden;"><?php echo htmlspecialchars_decode($row['notes']); ?></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -338,6 +338,23 @@ if(isset($_POST['save'])){
         document.addEventListener("DOMContentLoaded", function () {
         toggleDateFields(); 
         });
+
+        function autoResizeTextarea(textarea) {
+            textarea.style.height = 'auto'; // Reset height to recalculate
+            textarea.style.height = textarea.scrollHeight + 'px'; // Set to scrollHeight
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const textarea = document.getElementById("title");
+
+            // Resize on input
+            textarea.addEventListener("input", function() {
+                autoResizeTextarea(this);
+            });
+
+            // Resize initially in case there's preloaded content
+            autoResizeTextarea(textarea);
+        }); 
 
         function toggleDateFields() {
         var status = document.getElementById("remarks").value;

@@ -185,10 +185,10 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
-                                            <div class="col-sm-9">
-                                                <textarea class="form-control" style="resize: none;" rows="4" placeholder="Please type here..." id="title" name="title"></textarea>
-                                            </div>
+                                             <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
+                                             <div class="col-sm-9">
+                                                <textarea class="form-control dynamic-textarea" style="resize: none; overflow: hidden;" rows="1" placeholder="Please type here..." id="title" name="title"></textarea>
+                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Date Adopted:</label>
@@ -304,6 +304,18 @@
             const label = document.querySelector('.custom-file-label');
             label.textContent = fileName;
         }
+
+        // Function to auto-expand the textarea
+        function autoExpand(event) {
+            const textarea = event.target;
+            textarea.style.height = "auto"; 
+            textarea.style.height = textarea.scrollHeight + "px"; 
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const textarea = document.getElementById("title");
+            textarea.addEventListener("input", autoExpand);
+        });
 
         function toggleDateFields() {
             var status = document.getElementById("remarks").value;
