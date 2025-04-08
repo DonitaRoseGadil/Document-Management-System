@@ -62,7 +62,7 @@
                                                         <tbody style="color: #000000;">
                                                             <?php 
                                                                 include "connect.php";
-                                                                $sql = "SELECT title, action, timestamp FROM history_log WHERE file_type = 'Resolution' ORDER BY timestamp DESC";
+                                                                $sql = "SELECT title, action, timestamp FROM history_log WHERE file_type = 'Resolution' ORDER BY timestamp DESC LIMIT 100";
                                                                 $stmt = $conn->prepare($sql);
                                                                 $stmt->execute();
                                                                 $result = $stmt->get_result();
@@ -121,7 +121,7 @@
                                                         <tbody style="color: #000000;">
                                                             <?php 
                                                                 include "connect.php";
-                                                                $sql = "SELECT title, action, timestamp FROM history_log WHERE file_type = 'Ordinance' ORDER BY timestamp DESC";
+                                                                $sql = "SELECT title, action, timestamp FROM history_log WHERE file_type = 'Ordinance' ORDER BY timestamp DESC LIMIT 100";
                                                                 $stmt = $conn->prepare($sql);
                                                                 $stmt->execute();
                                                                 $result = $stmt->get_result();
@@ -181,7 +181,7 @@
                                                         <tbody style="color: #000000;">
                                                             <?php 
                                                                 include "connect.php";
-                                                                $sql = "SELECT title, action, status, timestamp FROM history_log WHERE file_type = 'Minutes' ORDER BY timestamp DESC";
+                                                                $sql = "SELECT title, action, status, timestamp FROM history_log WHERE file_type = 'Minutes' ORDER BY timestamp DESC LIMIT 100";
                                                                 $stmt = $conn->prepare($sql);
                                                                 $stmt->execute();
                                                                 $result = $stmt->get_result();

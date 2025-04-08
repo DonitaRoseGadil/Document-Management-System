@@ -17,6 +17,7 @@
             if (password_verify($password, $user['password'])) {
                 $_SESSION['email'] = $user['email'];
                 $_SESSION['user_id'] = $user['id'];
+                $_SESSION['role'] = $user['role'];
 
                 // Generate Token
                 $token = bin2hex(random_bytes(32));
@@ -27,7 +28,9 @@
                 $updateToken->bind_param("si", $token, $user['id']);
                 $updateToken->execute();
 
-                echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>";
+                // Set session expiration (1 hour)
+                $session_duration = 30 * 60; 
+                setcookie("session_expiry", time() + $session_duration, time() + $session_duration, "/");
                 echo "<script>
                         document.addEventListener('DOMContentLoaded', function() {
                             Swal.fire({
@@ -99,9 +102,9 @@
                                     <h1 class="text-center" style="color:#098209">Log in<h1>
                                     <h4 class="text-center mb-4" style="color:#000000">Sign in your account</h4>
                                     <form id="loginForm" action="<?php htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                                        <!--Email-->
                                         <div class="form-group">
-                                            <!-- <label ><strong>Email</strong></label> -->
-                                            <input type="email" class="form-control" placeholder="Email" name="email" id="email">
+                                            <input type="text" class="form-control" placeholder="Username" name="email" id="email">
                                         </div>
                                         <!-- Password -->
                                         <div class="form-group" style="position: relative; display: flex; align-items: center;">
@@ -145,22 +148,22 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-    function togglePassword() {
-        var passwordInput = document.getElementById("password");
-        var eyeIcon = document.getElementById("toggleEye");
-        
-        if (passwordInput.type === "password") {
-            passwordInput.type = "text";
-            eyeIcon.classList.remove("fa-eye-slash");
-            eyeIcon.classList.add("fa-eye"); // Revert to normal eye icon
+        function togglePassword() {
+            var passwordInput = document.getElementById("password");
+            var eyeIcon = document.getElementById("toggleEye");
             
-        } else {
-            passwordInput.type = "password";
-            eyeIcon.classList.remove("fa-eye");
-            eyeIcon.classList.add("fa-eye-slash"); // Change icon to indicate visibility
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                eyeIcon.classList.remove("fa-eye-slash");
+                eyeIcon.classList.add("fa-eye"); // Revert to normal eye icon
+                
+            } else {
+                passwordInput.type = "password";
+                eyeIcon.classList.remove("fa-eye");
+                eyeIcon.classList.add("fa-eye-slash"); // Change icon to indicate visibility
+            }
         }
-    }
-</script>
+    </script>
 
 </body>
 

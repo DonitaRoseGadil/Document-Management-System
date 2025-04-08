@@ -3,26 +3,21 @@
 
 <?php include "header.php"; ?>
 
+
 <body>
     <!-- Main Wrapper Start -->
     <div id="main-wrapper">
         
-        <?php include "sidebar.php"; ?>
-
-        <!-- Database Connection -->
         <?php
-        // Database connection
-        $conn = new mysqli("localhost", "root", "", "lgu_dms");
+            include "sidebar.php"; 
 
-        // Check connection
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
+            // Fetch counts from tables
+            $resolution_count = $conn->query("SELECT COUNT(*) as count FROM resolution")->fetch_assoc()['count'];
+            $ordinance_count = $conn->query("SELECT COUNT(*) as count FROM ordinance")->fetch_assoc()['count'];
+            $minutes_count = $conn->query("SELECT COUNT(*) as count FROM minutes")->fetch_assoc()['count'];
 
-        // Fetch counts from tables
-        $resolution_count = $conn->query("SELECT COUNT(*) as count FROM resolution")->fetch_assoc()['count'];
-        $ordinance_count = $conn->query("SELECT COUNT(*) as count FROM ordinance")->fetch_assoc()['count'];
-        $minutes_count = $conn->query("SELECT COUNT(*) as count FROM minutes")->fetch_assoc()['count'];
+            // Fetch role from session
+            $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
         ?>
 
         <!-- Content Body Start -->
@@ -132,11 +127,6 @@
             </div>
         </div>
 
-        <!-- Footer -->
-        <div class="footer">
-            <div class="copyright"></div>
-        </div>
-
     </div>
 
     <!-- Scripts -->
@@ -145,54 +135,54 @@
     <script src="./js/custom.min.js"></script>
 
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        fetchRecentActivities();
-    });
+        document.addEventListener("DOMContentLoaded", function () {
+            fetchRecentActivities();
+        });
 
-    function fetchRecentActivities() {
-    fetch("recentactivities.php?timestamp=" + new Date().getTime())
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("HTTP error! Status: " + response.status);
-            }
-            return response.json();
-        })
-        .then(data => {
-            let activitiesContainer = document.getElementById("recentActivities");
-            activitiesContainer.innerHTML = ""; 
+        function fetchRecentActivities() {
+            fetch("recentactivities.php?timestamp=" + new Date().getTime())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("HTTP error! Status: " + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    let activitiesContainer = document.getElementById("recentActivities");
+                    activitiesContainer.innerHTML = ""; 
 
-            if (data.activities.length > 0) {
-                data.activities.forEach(activity => {
-                    let activityHTML = `
-                        <div class="col-lg-12" style="overflow: visible;">
-                            <div class="card p-2" 
-                                style="margin-bottom: 10px; 
-                                    border-left: 4px solid 
-                                    ${activity.action === 'Edited' ? '#007BFF' : 
-                                        activity.action === 'Created' ? '#098209' : 
-                                        activity.action === 'Deleted' ? '#DC3545' : '#E0E0E0'}; 
-                                    background: #f9f9f9; 
-                                    padding: 10px;
-                                    box-shadow: 5px 5px 10px rgba(0.1, 0, 0, 0.1);">
-                                <div style="color: #333; font-weight: bold; font-size: 1rem;">
-                                    ${activity.file_type}: ${activity.title}
+                    if (data.activities.length > 0) {
+                        data.activities.forEach(activity => {
+                            let activityHTML = `
+                                <div class="col-lg-12" style="overflow: visible;">
+                                    <div class="card p-2" 
+                                        style="margin-bottom: 10px; 
+                                            border-left: 4px solid 
+                                            ${activity.action === 'Edited' ? '#007BFF' : 
+                                                activity.action === 'Created' ? '#098209' : 
+                                                activity.action === 'Deleted' ? '#DC3545' : '#E0E0E0'}; 
+                                            background: #f9f9f9; 
+                                            padding: 10px;
+                                            box-shadow: 5px 5px 10px rgba(0.1, 0, 0, 0.1);">
+                                        <div style="color: #333; font-weight: bold; font-size: 1rem;">
+                                            ${activity.file_type}: ${activity.title}
+                                        </div>
+                                        <div style="color: gray; font-size: 0.85rem;">
+                                            ${activity.action} on ${activity.timestamp}
+                                        </div>
+                                    </div>
                                 </div>
-                                <div style="color: gray; font-size: 0.85rem;">
-                                    ${activity.action} on ${activity.timestamp}
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    activitiesContainer.insertAdjacentHTML("beforeend", activityHTML);
-                });
-            } else {
-                activitiesContainer.innerHTML = '<p style="color: gray; margin-left: 10px;">No recent activities.</p>';
-            }
-        })
-        .catch(error => console.error("Error fetching activities:", error));
-}
+                            `;
+                            activitiesContainer.insertAdjacentHTML("beforeend", activityHTML);
+                        });
+                    } else {
+                        activitiesContainer.innerHTML = '<p style="color: gray; margin-left: 10px;">No recent activities.</p>';
+                    }
+                })
+                .catch(error => console.error("Error fetching activities:", error));
+        }
 
-</script>
+    </script>
 
 
 </body>

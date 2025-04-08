@@ -1,4 +1,5 @@
 <?php
+    session_start(); // Start the session to access session variables
     include('connect.php'); // Include your database connection
 
     $message = ""; // Variable for SweetAlert messages
@@ -62,43 +63,68 @@
         <div class="content-body" style="background-color: #f1f9f1">
             <!-- row -->
             <div class="container-fluid">
-                <div class="row justify-content-center h-100 align-items-center">
-                    <div class="col-md-6 mt-3">
-                        <div class="authincation-content">
-                            <div class="row no-gutters">
-                                <div class="col-xl-12">
-                                    <div class="auth-form">
-                                        <h4 class="text-center mb-4" style="color: #000000;">Set New Password</h4>
-                                        <form method="POST" onsubmit="return validatePasswords()">
-                                            <div class="form-group" style="position: relative;">
-                                                <label style="color:#000000;">Enter Current Password</label>
-                                                <input type="password" class="form-control" name="current_password" id="current_password" 
+                <div class="row d-flex align-items-stretch justify-content-center">
+                    <div class="col-lg-3">
+                        <div class="card h-100">
+                            <div class="card-body d-flex flex-column justify-content-center align-items-center text-center" style="height: 100%;">
+                                <div class="profile-statistics">
+                                    <div class="text-center mt-4 border-bottom-1 pb-3">
+                                        <div class="row">
+                                            <div class="col">
+                                                <img src="./images/user.jpg" alt="User Image" class="rounded-circle" width="50%" style="border: 5px solid #098209;">
+                                            </div>
+                                        </div>
+                                        <div class="row mt-4">
+                                            <div class="col">
+                                                <h4 class="m-b-0" style="text-transform: uppercase; color:#000000"><?php echo htmlspecialchars($_SESSION['email']); ?></h4>
+                                                <span style="color:#000000">Username</span>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-4">
+                                            <div class="col">
+                                                <h4 class="m-b-0" style="text-transform: uppercase; color:#000000"><?php echo htmlspecialchars($_SESSION['role']); ?></h4>
+                                                <span style="color:#000000">Role</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="auth-form">
+                                    <h4 class="text-center mb-4" style="color: #000000;">Set New Password</h4>
+                                    <form method="POST" onsubmit="return validatePasswords()">
+                                        <div class="form-group" style="position: relative;">
+                                            <label style="color:#000000;">Enter Current Password</label>
+                                            <input type="password" class="form-control" name="current_password" id="current_password" 
+                                                style="padding-right: 35px; width: 100%;" required>
+                                            <i class="fa fa-eye-slash" id="toggleEyeCurrent" onclick="togglePassword('current_password', 'toggleEyeCurrent')" 
+                                                style="position: absolute; right: 10px; top: 70%; transform: translateY(-50%); font-size: 18px; cursor: pointer; color: #098209;"></i>
+                                        </div>
+
+                                        <div class="form-group" style="position: relative;">
+                                                <label style="color:#000000">Enter New Password</label>
+                                                <input type="password" class="form-control" name="new_password" id="new_password" 
                                                     style="padding-right: 35px; width: 100%;" required>
-                                                <i class="fa fa-eye-slash" id="toggleEyeCurrent" onclick="togglePassword('current_password', 'toggleEyeCurrent')" 
+                                                <i class="fa fa-eye-slash" id="toggleEyeNew" onclick="togglePassword('new_password', 'toggleEyeNew')" 
                                                     style="position: absolute; right: 10px; top: 70%; transform: translateY(-50%); font-size: 18px; cursor: pointer; color: #098209;"></i>
                                             </div>
 
                                             <div class="form-group" style="position: relative;">
-                                                    <label style="color:#000000">Enter New Password</label>
-                                                    <input type="password" class="form-control" name="new_password" id="new_password" 
-                                                        style="padding-right: 35px; width: 100%;" required>
-                                                    <i class="fa fa-eye-slash" id="toggleEyeNew" onclick="togglePassword('new_password', 'toggleEyeNew')" 
-                                                        style="position: absolute; right: 10px; top: 70%; transform: translateY(-50%); font-size: 18px; cursor: pointer; color: #098209;"></i>
-                                                </div>
-
-                                                <div class="form-group" style="position: relative;">
-                                                    <label style="color:#000000">Confirm New Password</label>
-                                                    <input type="password" class="form-control" id="confirm_password" 
-                                                        style="padding-right: 35px; width: 100%;" required>
-                                                    <i class="fa fa-eye-slash" id="toggleEyeConfirm" onclick="togglePassword('confirm_password', 'toggleEyeConfirm')" 
-                                                        style="position: absolute; right: 10px; top: 70%; transform: translateY(-50%); font-size: 18px; cursor: pointer; color: #098209;"></i>
-                                                </div>
-
-                                            <div class="text-center">
-                                                <button type="submit" class="btn btn-primary btn-block" style="background-color: #098209; border: none; color: #FFFFFF;">Save</button>
+                                                <label style="color:#000000">Confirm New Password</label>
+                                                <input type="password" class="form-control" id="confirm_password" 
+                                                    style="padding-right: 35px; width: 100%;" required>
+                                                <i class="fa fa-eye-slash" id="toggleEyeConfirm" onclick="togglePassword('confirm_password', 'toggleEyeConfirm')" 
+                                                    style="position: absolute; right: 10px; top: 70%; transform: translateY(-50%); font-size: 18px; cursor: pointer; color: #098209;"></i>
                                             </div>
-                                        </form>
-                                    </div>
+
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary btn-block" style="background-color: #098209; border: none; color: #FFFFFF;">Save</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>

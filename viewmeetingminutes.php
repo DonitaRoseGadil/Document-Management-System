@@ -2,73 +2,73 @@
 <html lang="en">
 
 <?php 
-include "header.php"; 
-include "connect.php"; 
+    include "header.php"; 
+    include "connect.php"; 
 
 
-date_default_timezone_set('Asia/Manila');
+    date_default_timezone_set('Asia/Manila');
 
-$lastUpdatedText = "No updates yet";
+    $lastUpdatedText = "No updates yet";
 
 
-if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-    $resolution_id = intval($_GET['id']);
+    if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+        $resolution_id = intval($_GET['id']);
 
-    if ($resolution_id > 0) {
-        // Fetch the last updated timestamp for the specific file
-        $sql = "SELECT timestamp FROM history_log WHERE file_id = ? ORDER BY timestamp DESC LIMIT 1";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("i", $resolution_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        if ($resolution_id > 0) {
+            // Fetch the last updated timestamp for the specific file
+            $sql = "SELECT timestamp FROM history_log WHERE file_id = ? ORDER BY timestamp DESC LIMIT 1";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("i", $resolution_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
-        if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-            $lastUpdated = strtotime($row["timestamp"]); // Convert to Unix timestamp
-            $currentDate = date("Y-m-d"); // Get today's date
-            $updatedDate = date("Y-m-d", $lastUpdated); // Get last updated date
+            if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $lastUpdated = strtotime($row["timestamp"]); // Convert to Unix timestamp
+                $currentDate = date("Y-m-d"); // Get today's date
+                $updatedDate = date("Y-m-d", $lastUpdated); // Get last updated date
 
-            if ($currentDate === $updatedDate) {
-                // If updated today, show "Today at [time]"
-                $lastUpdatedText = "Last updated today at " . date("g:i A", $lastUpdated);
-            } else {
-                // Show full date and time if not today
-                $lastUpdatedText = "Last updated on " . date("F j, Y \\a\\t g:i A", $lastUpdated);
+                if ($currentDate === $updatedDate) {
+                    // If updated today, show "Today at [time]"
+                    $lastUpdatedText = "Last updated today at " . date("g:i A", $lastUpdated);
+                } else {
+                    // Show full date and time if not today
+                    $lastUpdatedText = "Last updated on " . date("F j, Y \\a\\t g:i A", $lastUpdated);
+                }
             }
+
+            $stmt->close();
         }
 
-        $stmt->close();
-    }
+        $optRadio = isset($_POST['optradio']) ? $_POST['optradio'] : '';
 
-    $optRadio = isset($_POST['optradio']) ? $_POST['optradio'] : '';
-
-    // Initialize fields safely
-    $returnNo = isset($_POST['returnNo']) ? mysqli_real_escape_string($conn, $_POST['returnNo']) : '';
-    $returnDate = isset($_POST['returnDate']) ? mysqli_real_escape_string($conn, $_POST['returnDate']) : '';
-    $resolutionNo = isset($_POST['resolutionNo']) ? mysqli_real_escape_string($conn, $_POST['resolutionNo']) : '';
-    $resolutionDate = isset($_POST['resolutionDate']) ? mysqli_real_escape_string($conn, $_POST['resolutionDate']) : '';
+        // Initialize fields safely
+        $returnNo = isset($_POST['returnNo']) ? mysqli_real_escape_string($conn, $_POST['returnNo']) : '';
+        $returnDate = isset($_POST['returnDate']) ? mysqli_real_escape_string($conn, $_POST['returnDate']) : '';
+        $resolutionNo = isset($_POST['resolutionNo']) ? mysqli_real_escape_string($conn, $_POST['resolutionNo']) : '';
+        $resolutionDate = isset($_POST['resolutionDate']) ? mysqli_real_escape_string($conn, $_POST['resolutionDate']) : '';
 
         // Use switch case to handle conditions
         switch ($optRadio) {
             case 'Approved':
-                $returnNo = '';
-                $returnDate = '';
+                $returnNo = "";
+                $returnDate = "";
                 break;
             case 'Returned':
-                $resolutionNo = '';
-                $resolutionDate = '';
+                $resolutionNo = "";
+                $resolutionDate = "";
                 break;
             default:
-                $returnNo = '';
-                $returnDate = '';
-                $resolutionNo = '';
-                $resolutionDate = '';
+                $returnNo = "";
+                $returnDate = "";
+                $resolutionNo = "";
+                $resolutionDate = "";
                 break;
         }
 
-}
+    }
 
-$conn->close();
+    $conn->close();
 ?>
 
 <body>
@@ -86,6 +86,7 @@ $conn->close();
         <div class="content-body" style="background-color: #f1f9f1">
             <div class="container-fluid" >
                 <!-- row -->
+                 
                 <div class="row d-flex justify-content-center">
                     <div class="col-xl-8 col-xxl-12 items-center">                        
                         <div class="card" style="align-self: center;">
@@ -101,11 +102,11 @@ $conn->close();
 
                                 // Determine the value for optRadio based on conditions
                                 $optRadio = "";
-                                if ((strlen($row['resolutionNo']) > 2) && (strlen($row['resolutionDate']) > 2)) {
+                                if ($row['resolutionNo'] != "" && $row['resolutionDate'] != "") {
                                     $optRadio = "Approved";
-                                } elseif ((strlen($row['returnNo']) > 2) && (strlen($row['returnDate']) > 2)) {
+                                } elseif ($row['returnNo'] != "" &&  $row['returnDate'] != "") {
                                     $optRadio = "Returned";
-                                }
+                                } 
                             ?>
                             <div class="card-body">
                                 <div class="basic-form">

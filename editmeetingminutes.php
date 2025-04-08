@@ -22,18 +22,18 @@
         // Use switch case to handle conditions
         switch ($optRadio) {
             case 'Approved':
-                $returnNo = '';
-                $returnDate = '';
+                $returnNo = "";
+                $returnDate = "";
                 break;
             case 'Returned':
-                $resolutionNo = '';
-                $resolutionDate = '';
+                $resolutionNo = "";
+                $resolutionDate = "";
                 break;
             default:
-                $returnNo = '';
-                $returnDate = '';
-                $resolutionNo = '';
-                $resolutionDate = '';
+                $returnNo = "";
+                $returnDate = "";
+                $resolutionNo = "";
+                $resolutionDate = "";
                 break;
         }
 
@@ -164,11 +164,11 @@
 
                                 // Determine the value for optRadio based on conditions
                                 $optRadio = "";
-                                if ((strlen($row['resolutionNo']) > 2) && (strlen($row['resolutionDate']) > 2)) {
+                                if ($row['resolutionNo'] != "" && $row['resolutionDate'] != "") {
                                     $optRadio = "Approved";
-                                } elseif ((strlen($row['returnNo']) > 2) && (strlen($row['returnDate']) > 2)) {
+                                } elseif ($row['returnNo'] != "" &&  $row['returnDate'] != "") {
                                     $optRadio = "Returned";
-                                }
+                                } 
                             ?>
                             <div class="card-body">
                                 <div class="basic-form">
@@ -200,6 +200,9 @@
                                                 <label class="custom-file-label" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:block;" id="genAttachmentLabel"> 
                                                     <?php echo !empty($row['genAttachment']) ? $row['genAttachment'] : "Choose file"; ?>
                                                 </label>
+                                            </div>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-danger" type="button" onclick="removeFile()"><i class="fa fa-close"></i></button>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -248,6 +251,9 @@
                                                     <?php echo !empty($row['attachment']) ? $row['attachment'] : "Choose file"; ?>
                                                 </label>
                                             </div>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-danger" type="button" onclick="removeFile2()"><i class="fa fa-close"></i></button>
+                                            </div>
                                         </div>
                                         <div class="form-group row d-flex justify-content-center mt-5">
                                             <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;">Update</button>
@@ -292,6 +298,22 @@
         function autoResizeTextarea(textarea) {
             textarea.style.height = 'auto'; // Reset height to recalculate
             textarea.style.height = textarea.scrollHeight + 'px'; // Set to scrollHeight
+        }
+
+        function removeFile() {
+            const fileInput = document.getElementById("genAttachment");
+            const fileLabel = fileInput.nextElementSibling;
+
+            fileInput.value = ""; // Clear file inputs
+            fileLabel.textContent = "Choose file"; // Reset labels
+        }
+
+        function removeFile2() {
+            const fileInput = document.getElementById("attachment");
+            const fileLabel = fileInput.nextElementSibling;
+
+            fileInput.value = ""; // Clear file inputs
+            fileLabel.textContent = "Choose file"; // Reset labels
         }
 
         document.addEventListener("DOMContentLoaded", function() {

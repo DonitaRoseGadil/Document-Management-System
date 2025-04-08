@@ -3,16 +3,14 @@
 
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $entered_password = $_POST["password"] ?? '';
-        $email = "talisay@gmail.com";
 
-        // Secure query using prepared statement
-        $sql = "SELECT password FROM accounts WHERE email = ?";
+        // Secure query using prepared statement to get the password for the "master" role
+        $sql = "SELECT password FROM accounts WHERE role = 'master' LIMIT 1";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
 
-        // Check if user exists
+        // Check if a master account exists
         if ($row = $result->fetch_assoc()) {
             $hashed_password = $row["password"];
 
@@ -23,7 +21,7 @@
                 echo json_encode(["success" => false, "message" => "Incorrect password. Try again."]);
             }
         } else {
-            echo json_encode(["success" => false, "message" => "No user found with this email."]);
+            echo json_encode(["success" => false, "message" => "No master account found."]);
         }
 
         $stmt->close();
