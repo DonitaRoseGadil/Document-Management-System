@@ -99,9 +99,9 @@
                         <div class="row no-gutters">
                             <div class="col-xl-12">
                                 <div class="auth-form">
-                                    <h1 class="text-center" style="color:#098209">Log in<h1>
+                                    <h1 class="text-center" style="color:#098209">Log in</h1>
                                     <h4 class="text-center mb-4" style="color:#000000">Sign in your account</h4>
-                                    <form id="loginForm" action="<?php htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                                    <form id="loginForm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                                         <!--Email-->
                                         <div class="form-group">
                                             <input type="text" class="form-control" placeholder="Username" name="email" id="email">
