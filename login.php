@@ -28,9 +28,6 @@
                 $updateToken->bind_param("si", $token, $user['id']);
                 $updateToken->execute();
 
-                // Set session expiration (1 hour)
-                $session_duration = 30 * 60; 
-                setcookie("session_expiry", time() + $session_duration, time() + $session_duration, "/");
                 echo "<script>
                         document.addEventListener('DOMContentLoaded', function() {
                             Swal.fire({
