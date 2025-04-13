@@ -1,57 +1,104 @@
 <?php
+    if(isset($_POST['save_account'])){
+        include "connect.php";
+        error_reporting(0);
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Get form data
         $email = $_POST['email'];
         $password = $_POST['password'];
-        $confirm_password = $_POST['confirm_password']; // Capture the confirm password
+        $confirm_pasword = $_POST['confirm_password'];
         $role = $_POST['role'];
-        $status = 'active'; // default account status
+        $account_status = 'active';
 
-        // Check if passwords match
-        if ($password !== $confirm_password) {
-            // Passwords do not match, show SweetAlert and prevent further processing
-            echo "<script>
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Passwords do not match!',
-                        confirmButtonColor: '#3085d6'
-                    }).then(function() {
-                        window.location.href = 'add_account_form_page.php'; // Redirect back to the form
-                    });
-                </script>";
-            exit();
-        }
-
-        // Hash the password before storing it
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
         // Insert into database
-        $sql = "INSERT INTO accounts (email, password, role, account_status) VALUES (?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssss", $email, $hashed_password, $role, $status);
+        $sql = "INSERT INTO accounts (email, password, role, account_status) 
+                VALUES (?, ?, ?, ?)";
 
-        if ($stmt->execute()) {
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssss", $email, $hashed_password, $role, $account_status);
+        $stmt->execute();
+
+        if ($stmt) {
             echo "<script>
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Account added successfully!',
-                        confirmButtonColor: '#098209'
-                    }).then(function() {
-                        window.location.href = 'add_account_form_page.php'; // Redirect after success
+                    document.addEventListener('DOMContentLoaded', function() {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Account Created',
+                            text: 'The account have been successfully created.',
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = 'manageAccounts.php';
+                            }
+                        });
                     });
-                </script>";
+                  </script>";    
         } else {
             echo "<script>
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'Something went wrong! Please try again.',
-                        confirmButtonColor: '#3085d6'
+                    document.addEventListener('DOMContentLoaded', function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'There was an error creating the account.',
+                            confirmButtonText: 'OK'
+                        });
+                    });
+                  </script>";
+            header("Location: " . $_SERVER['PHP_SELF']);
+            exit;    
+        }
+
+        $stmt->close();
+        $conn->close();
+    }
+?>
+
+<?php
+    if (isset($_POST['update_account'])) {
+        include "connect.php";
+
+        // Sanitize and get inputs
+        $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+        $account_status = isset($_POST['account_status']) && $_POST['account_status'] === 'active' ? 'active' : 'inactive';
+        $role = isset($_POST['role']) ? mysqli_real_escape_string($conn, $_POST['role']) : '';
+
+        
+        // Update the record
+        $sql = "UPDATE accounts SET account_status = ?, role = ? WHERE id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssi", $account_status, $role, $id);
+        $stmt->execute();
+
+        if ($stmt) {
+            echo "<script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Account Updated',
+                            text: 'The account have been successfully updated.',
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = 'manageAccounts.php';
+                            }
+                        });
+                    });
+                  </script>";
+            
+        } else {
+            echo "<script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'There was an error updating the account.',
+                            confirmButtonText: 'OK'
+                        });
                     });
                 </script>";
+                header("Location: " . $_SERVER['PHP_SELF']);
+                exit;
         }
 
         $stmt->close();
@@ -111,7 +158,7 @@
                                         </thead>
                                         <tbody class="text-left" style="color: #000000;" >
                                             <?php
-                                                $sql = "SELECT email, role, account_status FROM accounts";
+                                                $sql = "SELECT id, email, role, account_status FROM accounts";
                                                 $stmt = $conn->prepare($sql);
                                                 $stmt->execute();
                                                 $result = $stmt->get_result();
@@ -141,13 +188,15 @@
                                                         </td>
                                                         <td style="border-bottom: 1px solid #098209; border-right: 1px solid #098209; text-align: center; vertical-align: middle;">
                                                             <div class="d-flex justify-content-center align-items-center gap-2">
-                                                                <!-- Button trigger modal -->
-                                                                <a class="btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 ml-1 mr-1" data-toggle="modal" data-target="#editAccountModal">
-                                                                    <i class="fa fa-edit" aria-hidden="true" style="color: #FFFFFF;"></i>
-                                                                </a>
-                                                                <a class="btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2">
-                                                                    <i class="fa fa-trash" aria-hidden="true" style="color: #FFFFFF"></i>
-                                                                </a>
+                                                                <!--Button trigger modal-->
+                                                                <?php if ($role === 'admin' || $role === 'master') { ?>
+                                                                    <a onclick="confirmEdit(<?php echo $row['id']; ?>)" class="btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 ml-1 mr-1" data-toggle="modal"">
+                                                                        <i class="fa fa-edit" aria-hidden="true" style="color: #FFFFFF;"></i>
+                                                                    </a>
+                                                                    <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class="btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2">
+                                                                        <i class="fa fa-trash" aria-hidden="true" style="color: #FFFFFF"></i>
+                                                                    </a>
+                                                                <?php } ?> 
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -175,23 +224,33 @@
                             </div>
                             <div class="modal-body">
                                 <div class="basic-form">
-                                    <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]) ?>" method="POST">
+                                    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" onsubmit="return validatePasswords();"  method="POST">
                                         <div class="form-group row">
                                             <label class="col-sm-4 col-form-label">Username</label>
                                             <div class="col-sm-8">
-                                                <input type="email" class="form-control" name="email" placeholder="Please type here..." required>
+                                                <input type="text" class="form-control" name="email" id="email" placeholder="Please type here..." required>
                                             </div>
                                         </div>
+                                        <!-- Password Field -->
                                         <div class="form-group row">
                                             <label class="col-sm-4 col-form-label">Password</label>
                                             <div class="col-sm-8">
-                                                <input type="password" class="form-control" name="password" placeholder="Please type here..." required>
+                                                <div style="position: relative;">
+                                                    <input type="password" class="form-control" name="password" id="password" placeholder="Please type here..." required style="padding-right: 35px;">
+                                                    <i class="fa fa-eye-slash" id="togglePassword" onclick="toggleVisibility('password', 'togglePassword')" 
+                                                        style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); font-size: 18px; cursor: pointer; color: #098209;"></i>
+                                                </div>
                                             </div>
                                         </div>
+                                        <!-- Confirm Password Field -->
                                         <div class="form-group row">
                                             <label class="col-sm-4 col-form-label">Confirm Password</label>
                                             <div class="col-sm-8">
-                                                <input type="password" class="form-control" name="confirm_password" placeholder="Please type here..." required>
+                                                <div style="position: relative;">
+                                                    <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Please type here..." required style="padding-right: 35px;">
+                                                    <i class="fa fa-eye-slash" id="toggleConfirmPassword" onclick="toggleVisibility('confirm_password', 'toggleConfirmPassword')" 
+                                                        style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); font-size: 18px; cursor: pointer; color: #098209;"></i>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="form-group row mb-0">
@@ -205,12 +264,14 @@
                                                 </label>
                                             </div>
                                         </div>
+                                        <div class="form-group row justify-content-center mt-4">
+                                            <div class="col-sm-12 text-center">
+                                                <button type="submit" class="btn btn-primary mr-2" name="save_account" style="background-color: #098209; color:#FFFFFF; border: none;">Add Account</button>
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                                            </div>
+                                        </div>
                                     </form>
                                 </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" style="background-color: #098209; color:#FFFFFF; border: none;">Add Account</button>
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
                             </div>
                         </div>
                     </div>
@@ -221,46 +282,48 @@
                         <div class="modal-content" style="color: #000000">
                             <div class="modal-header">
                                 <h5 class="modal-title" style="color:#000000">EDIT ACCOUNT</h5>
-                                <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
-                                </button>
+                                <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                             </div>
                             <div class="modal-body">
                                 <div class="basic-form">
-                                    <form>
+                                    <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST">
+                                        <input type="hidden" name="id">
                                         <div class="form-group row">
                                             <label class="col-sm-4 col-form-label">Username</label>
                                             <div class="col-sm-8">
-                                                <input type="email" class="form-control" disabled>
+                                                <input type="text" name="email" class="form-control" readonly>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-4 col-form-label">Account Status</label>
                                             <div class="col-sm-8">
-                                                <input type="checkbox" checked data-toggle="toggle" data-on="Deactivate" data-off="Activate" data-onstyle="success" data-offstyle="danger" data-size="sm" data-width="30%" style="border-radius: 50px; text-align: center;">
+                                                <input type="checkbox" id="account_status_toggle" value="active" data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger" data-size="sm" data-width="30%" style="border-radius: 50px; text-align: center;">
+                                                <input type="hidden" name="account_status" id="account_status_value">
                                             </div>
                                         </div>
                                         <div class="form-group row mb-0">
                                             <label class="col-form-label col-sm-4 pt-0">Role</label>
                                             <div class="col-sm-8 d-flex align-items-center">
                                                 <label class="mr-3 mb-0">
-                                                    <input type="radio" name="optradio" required> Admin
+                                                    <input type="radio" name="role" value="admin" required> Admin
                                                 </label>
                                                 <label class="mb-0">
-                                                    <input type="radio" name="optradio" class="ml-2"> User
+                                                    <input type="radio" name="role" value="user" class="ml-2"> User
                                                 </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row justify-content-center mt-4">
+                                            <div class="col-sm-12 text-center">
+                                                <button type="submit" class="btn btn-primary mr-2" name="update_account" style="background-color: #098209; color:#FFFFFF; border: none;">Update Account</button>
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" style="background-color: #098209; color:#FFFFFF; border: none;" >Save Changes</button>
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                            </div>
                         </div>
                     </div>
-                </div> 
-                                           
+                </div>                            
             </div>
         </div>
         <!--**********************************
@@ -286,7 +349,177 @@
 
     <!-- Toggle -->
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+    
+    <script>
+        function validatePasswords() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
 
+            if (password !== confirmPassword) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Password Mismatch',
+                    text: 'Password and Confirm Password do not match.',
+                    confirmButtonText: 'OK'
+                });
+                return false; // Prevent form submission
+            }
+
+            return true; // Allow form submission
+        }
+        </script>                                            
+    
+    
+    <!--Eye Toggle Script-->
+    <script>
+        
+        function toggleVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+        }
+    </script>
+
+    <script>
+        function confirmDelete(id) {
+            Swal.fire({
+                title: "Enter Password",
+                input: "password",
+                inputAttributes: {
+                    autocapitalize: "off",
+                    required: true
+                },
+                showCancelButton: true,
+                confirmButtonText: "Submit",
+                showLoaderOnConfirm: true,
+                preConfirm: (password) => {
+                    return fetch("validate_password.php", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: "password=" + encodeURIComponent(password)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.success) {
+                            throw new Error(data.message || "Incorrect password.");
+                        }
+                    })
+                    .catch(error => {
+                        Swal.showValidationMessage(error.message);
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Are you sure?",
+                        text: "You won't be able to revert this!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Confirm!"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Acount has been deleted.",
+                                icon: "success",
+                                showConfirmButton: false,
+                                timer: 2000
+                            });
+                            window.location.href = 'deleteaccount.php?id=' + id;
+                        }
+                    });
+                }
+            });
+        } 
+        
+        function confirmEdit(id) {
+            Swal.fire({
+                title: "Enter Password",
+                input: "password",
+                inputAttributes: {
+                    autocapitalize: "off",
+                    required: true
+                },
+                showCancelButton: true,
+                confirmButtonText: "Submit",
+                showLoaderOnConfirm: true,
+                preConfirm: (password) => {
+                    return fetch("validate_password.php", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: "password=" + encodeURIComponent(password)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.success) {
+                            throw new Error(data.message || "Incorrect password.");
+                        }
+                    })
+                    .catch(error => {
+                        Swal.showValidationMessage(error.message);
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // AJAX fetch data here instead of redirecting
+                    $.ajax({
+                        url: "fetch_account.php",
+                        type: "GET",
+                        data: { id: id },
+                        dataType: "json",
+                        success: function(data) {
+                            if (data.success) {
+                                // Populate modal fields
+                                $('input[name="id"]').val(data.id);
+                                $('input[name="email"]').val(data.email);
+                                // Set toggle and hidden field
+                                let isActive = data.account_status === 'active';
+                                $('#account_status_toggle')
+                                    .prop('checked', isActive)
+                                    .bootstrapToggle(isActive ? 'on' : 'off');
+
+                                $('#account_status_value').val(isActive ? 'active' : 'inactive');
+                                $('input[name="role"][value="' + data.role + '"]').prop('checked', true);
+
+                                // Show modal
+                                $('#editAccountModal').modal('show');
+                            } else {
+                                Swal.fire("Error", data.message, "error");
+                            }
+                        },
+                        error: function() {
+                            Swal.fire("Error", "Failed to fetch account data.", "error");
+                        }
+                    });
+                }
+            });
+        }
+
+        $('#account_status_toggle').change(function () {
+            $('#account_status_value').val(this.checked ? 'active' : 'inactive');
+        });
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
 
 </body>
 
