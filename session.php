@@ -24,6 +24,12 @@
         if ($stmt->num_rows === 0) {
             session_unset();
             session_destroy();
+
+            // Optional: Clear token from database
+            $stmt = $conn->prepare("UPDATE accounts SET token = NULL WHERE email = ?");
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+
             header("Location: login.php");
             exit();
         }

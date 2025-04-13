@@ -15,31 +15,46 @@
             $user = $result->fetch_assoc();
 
             if (password_verify($password, $user['password'])) {
-                $_SESSION['email'] = $user['email'];
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['role'] = $user['role'];
+                if ($user['account_status'] === 'active') {
+                    $_SESSION['email'] = $user['email'];
+                    $_SESSION['user_id'] = $user['id'];
+                    $_SESSION['role'] = $user['role'];
 
-                // Generate Token
-                $token = bin2hex(random_bytes(32));
-                $_SESSION['token'] = $token;
+                    // Generate Token
+                    $token = bin2hex(random_bytes(32));
+                    $_SESSION['token'] = $token;
 
-                // Save Token in Database
-                $updateToken = $conn->prepare("UPDATE accounts SET token=? WHERE id=?");
-                $updateToken->bind_param("si", $token, $user['id']);
-                $updateToken->execute();
+                    // Save Token in Database
+                    $updateToken = $conn->prepare("UPDATE accounts SET token=? WHERE id=?");
+                    $updateToken->bind_param("si", $token, $user['id']);
+                    $updateToken->execute();
 
-                echo "<script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Login successfully',
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then(() => {
-                                window.location.href = 'dashboard.php';
+                    echo "<script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Login successfully',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                }).then(() => {
+                                    window.location.href = 'dashboard.php';
+                                });
                             });
-                        });
-                    </script>";
+                        </script>";
+                } else {
+                    echo "<script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Account Inactive',
+                                    text: 'Your account is not active. Please contact the administrator.',
+                                    confirmButtonText: 'OK'
+                                }).then(() => {
+                                    window.location.href = 'login.php';
+                                });
+                            });
+                        </script>";
+                }
             } else {
                 echo "<script>
                         document.addEventListener('DOMContentLoaded', function() {
