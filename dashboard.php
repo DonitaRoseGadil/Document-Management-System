@@ -90,39 +90,41 @@
                         </div>
                     </div>
 
-
-                    <!-- Shortcuts Section -->
-                    <div class="col-lg-6">
-                        <h4 class="mt-4" style="color: #098209;">SHORTCUTS</h4>
-                        <div class="row flex-column" style="gap: 2px;">
-                            <div class="col-lg-12">
-                                <div class="card p-2 d-flex align-items-center"
-                                    style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209; 
-                                            display: flex; flex-direction: row; justify-content: space-between;">
-                                    <span style="color: black; font-weight: bold;">Add new file resolution</span>
-                                    <button class="btn btn-success btn-sm" onclick="window.location.href='addresolution.php';">+</button>
+                    <?php if ($role === 'master' || $role === 'admin') { ?>
+                        <!-- Shortcuts Section -->
+                        <div class="col-lg-6">
+                            <h4 class="mt-4" style="color: #098209;">SHORTCUTS</h4>
+                            <div class="row flex-column" style="gap: 2px;">
+                                <div class="col-lg-12">
+                                    <div class="card p-2 d-flex align-items-center"
+                                        style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209; 
+                                                display: flex; flex-direction: row; justify-content: space-between;">
+                                        <span style="color: black; font-weight: bold;">Add new file resolution</span>
+                                        <button class="btn btn-success btn-sm" onclick="window.location.href='addresolution.php';">+</button>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="col-lg-12">
-                                <div class="card p-2 d-flex align-items-center"
-                                    style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209; 
-                                            display: flex; flex-direction: row; justify-content: space-between;">
-                                    <span style="color: black; font-weight: bold;">Add new file ordinances</span>
-                                    <button class="btn btn-success btn-sm" onclick="window.location.href='addordinance.php';">+</button>
+                                <div class="col-lg-12">
+                                    <div class="card p-2 d-flex align-items-center"
+                                        style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209; 
+                                                display: flex; flex-direction: row; justify-content: space-between;">
+                                        <span style="color: black; font-weight: bold;">Add new file ordinances</span>
+                                        <button class="btn btn-success btn-sm" onclick="window.location.href='addordinance.php';">+</button>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="col-lg-12">
-                                <div class="card p-2 d-flex align-items-center"
-                                    style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209; 
-                                            display: flex; flex-direction: row; justify-content: space-between;">
-                                    <span style="color: black; font-weight: bold;">Add new meeting minutes</span>
-                                    <button class="btn btn-success btn-sm" onclick="window.location.href='addmeetingminutes.php';">+</button>
+                                <div class="col-lg-12">
+                                    <div class="card p-2 d-flex align-items-center"
+                                        style="margin-bottom: 10px; border-radius: 6px; border: 1px solid #098209; 
+                                                display: flex; flex-direction: row; justify-content: space-between;">
+                                        <span style="color: black; font-weight: bold;">Add new meeting minutes</span>
+                                        <button class="btn btn-success btn-sm" onclick="window.location.href='addmeetingminutes.php';">+</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    <?php } ?>
+
                 </div>
             </div>
         </div>
