@@ -233,19 +233,21 @@
                                 <textarea class="form-control dynamic-textarea" style="resize: none; overflow: hidden;" rows="1" placeholder="Please type here..." name="title[]" required></textarea>
                             </div>
                         </div>
-                        <div class="form-group row">
+                       <div class="form-group row">
                             <label for="status" class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
                             <div class="col-sm-9">
-                                <input type="text" placeholder="Please type here..." class="form-control" name="status[]">
+                                <input type="text" placeholder="Please type here..." class="form-control status-input" id="status_${uniqueId}" name="status[]">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="status" class="col-sm-3 col-form-label" style="color: #000000">Select option if applicable:</label>
                             <div class="col-sm-9 mt-2">
                                 <label class="radio-inline mr-5" style="color: #000000">
-                                    <input type="radio" name="optradio_${uniqueId}" class="deselectable-radio" value="Returned"> Returned</label>
+                                    <input type="radio" name="optradio_${uniqueId}" class="deselectable-radio" value="Returned"> Returned
+                                </label>
                                 <label class="radio-inline" style="color: #000000">
-                                    <input type="radio" name="optradio_${uniqueId}" class="deselectable-radio" value="Approved"> Approved</label>
+                                    <input type="radio" name="optradio_${uniqueId}" class="deselectable-radio" value="Approved"> Approved
+                                </label>
                             </div>
                         </div>
                         <!-- Hidden fields section -->
@@ -294,6 +296,8 @@
             const radios = card.querySelectorAll(`input[name='optradio_${uniqueId}']`);
             const extraFieldsContainer = card.querySelector(`#extraFields_${uniqueId}`);
             const extraFieldsRow = card.querySelector(".extra-fields");
+            const statusInput = card.querySelector(`.status-input`);
+
 
             radios.forEach(radio => {
                 radio.addEventListener('click', function (e) {
@@ -304,9 +308,11 @@
                             this.previousChecked = false;
                             extraFieldsRow.style.display = "none";
                             extraFieldsContainer.innerHTML = "";
+                            statusInput.value = "";
                         } else {
                             radios.forEach(r => r.previousChecked = false);
                             this.previousChecked = true;
+                            statusInput.value = this.value;
 
                             // Show input fields based on selected option
                             extraFieldsRow.style.display = "block";
@@ -376,6 +382,7 @@
             fileInput.value = ""; // Clear file inputs
             fileLabel.textContent = "Choose file"; // Reset labels
         }
+
 
     </script>
 

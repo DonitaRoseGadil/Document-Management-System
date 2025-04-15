@@ -220,7 +220,7 @@
                                         <div class="form-group row">
                                             <label for="status" class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" value="<?php echo $row['status']?>" name="status" required>
+                                                <input type="text" class="form-control" value="<?php echo $row['status']?>" id="status" name="status" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -334,6 +334,8 @@
             const radios = document.querySelectorAll("input[name='optradio']");
             const extraFieldsContainer = document.querySelector("#extraFields");
             const extraFieldsRow = document.querySelector(".extra-fields");
+            const statusInputField = document.querySelectorAll("input[name='status']");
+            const statusInput = document.querySelector("#status");
 
             function showExtraFields(selectedValue) {
                 extraFieldsRow.style.display = "block";
@@ -388,10 +390,12 @@
                             this.previousChecked = false;
                             extraFieldsRow.style.display = "none";
                             extraFieldsContainer.innerHTML = "";
+                            statusInput.value = "";
                         } else {
                             radios.forEach(r => r.previousChecked = false);
                             this.previousChecked = true;
                             showExtraFields(this.value);
+                            statusInput.value = this.value;
                         }
                     }
                 });

@@ -322,7 +322,7 @@
 
         document.addEventListener("DOMContentLoaded", function () {
         const form = document.querySelector("form");
-        const requiredFields = ["moNo", "title", "dateAdopted", "authorSponsor"];
+        const requiredFields = ["resoNo", "title", "dateAdopted", "authorSponsor"];
 
         function validateField(field) {
             let inputElement = document.getElementById(field);
