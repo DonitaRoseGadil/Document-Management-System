@@ -301,6 +301,152 @@
     <script src="./js/custom.min.js"></script>
 
     <script>
+
+        document.getElementById("moNo").addEventListener("input", checkOrdinanceData);
+        // document.getElementById("title").addEventListener("input", checkResolutionData);
+
+        function checkOrdinanceData() {
+            const moNo = document.getElementById("moNo").value.trim();
+            const title = document.getElementById("title").value.trim();
+
+            // Only proceed if moNo is filled (title can be empty!)
+            if (!moNo) {
+                clearForm();
+                showDuplicateEntryMessage(false);
+                toggleFields(false);
+                return;
+            }
+
+        function disableSaveButton(disable) {
+            const saveButton = document.getElementById("save_btn");
+            if (saveButton) {
+                saveButton.disabled = disable;
+
+                // Optional: change button styling to reflect disabled state
+                if (disable) {
+                    saveButton.style.opacity = "0.6";
+                    saveButton.style.cursor = "not-allowed";
+                } else {
+                    saveButton.style.opacity = "1";
+                    saveButton.style.cursor = "pointer";
+                }
+            }
+        }
+
+
+        fetch("check-ordinance.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `mo_no=${encodeURIComponent(moNo)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.exists) {
+                showDuplicateEntryMessage(true);
+                fillForm(data);
+                toggleFields(true);
+                disableSaveButton(true);  // Disable save if duplicate
+            } else {
+                showDuplicateEntryMessage(false);
+                clearForm();
+                toggleFields(false);
+                disableSaveButton(false); // Enable save if new
+            }
+        })
+        .catch(err => {
+            console.error("Error checking ordinance:", err);
+        });
+                    
+        }
+
+
+    // Trigger check on blur of either input field
+    //document.getElementById("moNo").addEventListener("blur", validateBeforeCheck);
+    // document.getElementById("title").addEventListener("blur", validateBeforeCheck);
+
+        function showDuplicateEntryMessage(isDuplicate) {
+            const moNoContainer = document.getElementById("moNo").parentNode;
+            const titleContainer = document.getElementById("title").parentNode;
+
+            // Remove any existing messages first
+            const existingMoNoMsg = document.getElementById("duplicate-moNo-msg");
+            const existingTitleMsg = document.getElementById("duplicate-title-msg");
+            if (existingMoNoMsg) existingMoNoMsg.remove();
+            if (existingTitleMsg) existingTitleMsg.remove();
+
+            if (isDuplicate) {
+                // Add duplicate message under Resolution No.
+                const moNoMsg = document.createElement("div");
+                moNoMsg.id = "duplicate-moNo-msg";
+                moNoMsg.className = "text-danger mt-1";
+                moNoMsg.textContent = "Duplicate Entry for Resolution No./MO No.";
+                moNoContainer.appendChild(moNoMsg);
+
+                // Add duplicate message under Title
+                const titleMsg = document.createElement("div");
+                titleMsg.id = "duplicate-title-msg";
+                titleMsg.className = "text-danger mt-1";
+                titleMsg.textContent = "Duplicate Entry for Title";
+                titleContainer.appendChild(titleMsg);
+            }
+        }
+
+        function fillForm(data) {
+            const titleEl = document.getElementById("title");
+            titleEl.value = data.title || "";
+            autoExpand({ target: titleEl }); 
+
+            document.getElementById("title").value = data.title || "";
+            document.getElementById("dateAdopted").value = data.dateAdopted || "";
+            document.getElementById("authorSponsor").value = data.authorSponsor || "";
+            // document.getElementById("coAuthor").value = data.coAuthor || "";
+            document.getElementById("remarks").value = data.remarks || "";
+            document.getElementById("dateForwarded").value = data.dateForwarded || "";
+            document.getElementById("dateSigned").value = data.dateSigned || "";
+            document.getElementById("spResoNo").value = data.spResoNo || "";
+            document.getElementById("dateApproved").value = data.dateApproved || "";
+            document.getElementById("notes").value = data.notes || "";
+        }
+
+
+        function toggleFields(disable) {
+            const fields = [
+                "title", "dateAdopted", "authorSponsor", "remarks",
+                "dateForwarded", "dateSigned", "spResoNo", "dateApproved", "notes"
+            ];
+
+            fields.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.disabled = disable;
+
+                    if (disable) {
+                        // Apply darker background and text color
+                        el.style.backgroundColor = "#e9ecef";
+                        el.style.color = "#495057";
+                        el.style.cursor = "not-allowed";
+                    } else {
+                        // Reset to default styling
+                        el.style.backgroundColor = "";
+                        el.style.color = "";
+                        el.style.cursor = "";
+                    }
+                }
+            });
+        }
+
+        function clearForm() {
+            const fields = [
+                "title", "dateAdopted", "authorSponsor", "remarks",
+                "dateForwarded", "dateSigned", "spResoNo", "dateApproved", "notes"
+            ];
+
+            fields.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = "";
+            });
+        }
+
         function updateFileName() {
             const fileInput = document.getElementById('attachment');
             const fileName = fileInput.files[0].name;
