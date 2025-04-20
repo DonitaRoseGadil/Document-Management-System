@@ -169,7 +169,7 @@
                                         </div>
                                         <div class="form-group row d-flex justify-content-center mt-5">
                                             <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;">Save</button>
-                                            <a href="files-meetingminutes.php" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
+                                            <a href="#" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" data-href="files-meetingminutes.php" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
                                         </div>
                                     </form>
                                 </div>
@@ -377,6 +377,27 @@
             fileLabel.textContent = "Choose file"; // Reset labels
         }
 
+    </script>
+
+    <script>
+        document.getElementById('cancel_btn').addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent immediate navigation
+            const redirectUrl = this.getAttribute('data-href');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "All unsaved changes will be lost.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, cancel it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = redirectUrl;
+                }
+            });
+        });
     </script>
 
 </body>
