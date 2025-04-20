@@ -3,6 +3,7 @@
 
 <?php include "header.php"; ?>
 
+
 <body>
 
     <!--**********************************
@@ -116,7 +117,7 @@
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Resolution No.:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." id="resoNo" name="resoNo">
+                                                <input type="text" class="form-control" placeholder="Please type here..." id="resoNo" name="resoNo"> 
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -128,25 +129,25 @@
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000;">Date Adopted:</label>
                                             <div class="col-sm-9">
-                                                <input type="date" class="form-control" id="dateAdopted" name="dateAdopted">
+                                                <input type="date" class="form-control" id="dateAdopted" name="dateAdopted" disabled>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Author / Sponsor:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." id="authorSponsor" name="authorSponsor">
+                                                <input type="text" class="form-control" placeholder="Please type here..." id="authorSponsor" name="authorSponsor" disabled>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Co-Author:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." id="coAuthor" name="coAuthor">
+                                                <input type="text" class="form-control" placeholder="Please type here..." id="coAuthor" name="coAuthor" disabled>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
                                             <div class="col-sm-9">
-                                                <select id="remarks" name="remarks" class="form-control" onchange="toggleDateFields()">
+                                                <select id="remarks" name="remarks" class="form-control" onchange="toggleDateFields()" disabled>
                                                     <option selected>Choose...</option>
                                                     <option>Forwarded to LCE</option>
                                                     <option>Signed by LCE</option>
@@ -159,31 +160,31 @@
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="forwardedDateField">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000;">Date Forwarded to LCE:</label>
                                                 <div class="col-sm-9">
-                                                    <input type="date" class="form-control" id="dateForwarded" name="dateForwarded">
+                                                    <input type="date" class="form-control" id="dateForwarded" name="dateForwarded" disabled>
                                                 </div>
                                             </div>
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="notesField">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000">Remarks/Notes:</label>
                                                 <div class="col-sm-9">
-                                                    <textarea class="form-control" style="resize: none;" rows="4" placeholder="Please type here..." id="notes" name="notes"></textarea>
+                                                    <textarea class="form-control" style="resize: none;" rows="4" placeholder="Please type here..." id="notes" name="notes" disabled></textarea>
                                                 </div>
                                             </div>
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="signedDateField">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000">Date Signed by LCE:</label>
                                                 <div class="col-sm-9">
-                                                    <input type="date" class="form-control" id="dateSigned" name="dateSigned">
+                                                    <input type="date" class="form-control" id="dateSigned" name="dateSigned" disabled>
                                                 </div>
                                             </div>
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="spResoNoField">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000">SP Resolution No:</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" placeholder="Please type here..." id="spResoNo" name="spResoNo">
+                                                    <input type="text" class="form-control" placeholder="Please type here..." id="spResoNo" name="spResoNo" disabled>
                                                 </div>
                                             </div>
                                             <div class="form-group row" style="visibility: hidden; opacity: 0;" id="sbApprovalDateField">
                                                 <label class="col-sm-3 col-form-label" style="color:#000000">SP Approval:</label>
                                                 <div class="col-sm-9">
-                                                    <input type="date" class="form-control" id="dateApproved" name="dateApproved">
+                                                    <input type="date" class="form-control" id="dateApproved" name="dateApproved" disabled>
                                                 </div>
                                             </div>
                                         </div>
@@ -231,6 +232,153 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
     <script>
+        document.getElementById("resoNo").addEventListener("input", checkResolutionData);
+        // document.getElementById("title").addEventListener("input", checkResolutionData);
+
+        function checkResolutionData() {
+            const resoNo = document.getElementById("resoNo").value.trim();
+            const title = document.getElementById("title").value.trim();
+
+            // Only proceed if resoNo is filled (title can be empty!)
+            if (!resoNo) {
+                clearForm();
+                showDuplicateEntryMessage(false);
+                toggleFields(false);
+                return;
+            }
+
+        function disableSaveButton(disable) {
+            const saveButton = document.getElementById("save_btn");
+            if (saveButton) {
+                saveButton.disabled = disable;
+
+                // Optional: change button styling to reflect disabled state
+                if (disable) {
+                    saveButton.style.opacity = "0.6";
+                    saveButton.style.cursor = "not-allowed";
+                } else {
+                    saveButton.style.opacity = "1";
+                    saveButton.style.cursor = "pointer";
+                }
+            }
+        }
+
+
+        fetch("check-resolution.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `reso_no=${encodeURIComponent(resoNo)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.exists) {
+                showDuplicateEntryMessage(true);
+                fillForm(data);
+                toggleFields(true);
+                disableSaveButton(true);  // Disable save if duplicate
+            } else {
+                showDuplicateEntryMessage(false);
+                clearForm();
+                toggleFields(false);
+                disableSaveButton(false); // Enable save if new
+            }
+        })
+        .catch(err => {
+            console.error("Error checking resolution:", err);
+        });
+
+
+                    
+        }
+
+
+    // Trigger check on blur of either input field
+    // document.getElementById("resoNo").addEventListener("blur", validateBeforeCheck);
+    // document.getElementById("title").addEventListener("blur", validateBeforeCheck);
+
+    function showDuplicateEntryMessage(isDuplicate) {
+        const resoContainer = document.getElementById("resoNo").parentNode;
+        const titleContainer = document.getElementById("title").parentNode;
+
+        // Remove any existing messages first
+        const existingResoMsg = document.getElementById("duplicate-reso-msg");
+        const existingTitleMsg = document.getElementById("duplicate-title-msg");
+        if (existingResoMsg) existingResoMsg.remove();
+        if (existingTitleMsg) existingTitleMsg.remove();
+
+        if (isDuplicate) {
+            // Add duplicate message under Resolution No.
+            const resoMsg = document.createElement("div");
+            resoMsg.id = "duplicate-reso-msg";
+            resoMsg.className = "text-danger mt-1";
+            resoMsg.textContent = "Duplicate Entry for Resolution No.";
+            resoContainer.appendChild(resoMsg);
+
+            // Add duplicate message under Title
+            const titleMsg = document.createElement("div");
+            titleMsg.id = "duplicate-title-msg";
+            titleMsg.className = "text-danger mt-1";
+            titleMsg.textContent = "Duplicate Entry for Title";
+            titleContainer.appendChild(titleMsg);
+        }
+    }
+
+
+        function fillForm(data) {
+            const titleEl = document.getElementById("title");
+            titleEl.value = data.title || "";
+            autoExpand({ target: titleEl }); 
+
+            document.getElementById("title").value = data.title || "";
+            document.getElementById("dateAdopted").value = data.dateAdopted || "";
+            document.getElementById("authorSponsor").value = data.authorSponsor || "";
+            document.getElementById("coAuthor").value = data.coAuthor || "";
+            document.getElementById("remarks").value = data.remarks || "";
+            document.getElementById("dateForwarded").value = data.dateForwarded || "";
+            document.getElementById("dateSigned").value = data.dateSigned || "";
+            document.getElementById("spResoNo").value = data.spResoNo || "";
+            document.getElementById("dateApproved").value = data.dateApproved || "";
+            document.getElementById("notes").value = data.notes || "";
+        }
+
+        function toggleFields(disable) {
+            const fields = [
+                "title", "dateAdopted", "authorSponsor", "coAuthor", "remarks",
+                "dateForwarded", "dateSigned", "spResoNo", "dateApproved", "notes"
+            ];
+
+            fields.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.disabled = disable;
+
+                    if (disable) {
+                        // Apply darker background and text color
+                        el.style.backgroundColor = "#e9ecef";
+                        el.style.color = "#495057";
+                        el.style.cursor = "not-allowed";
+                    } else {
+                        // Reset to default styling
+                        el.style.backgroundColor = "";
+                        el.style.color = "";
+                        el.style.cursor = "";
+                    }
+                }
+            });
+        }
+
+        function clearForm() {
+            const fields = [
+                "title", "dateAdopted", "authorSponsor", "coAuthor", "remarks",
+                "dateForwarded", "dateSigned", "spResoNo", "dateApproved", "notes"
+            ];
+
+            fields.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = "";
+            });
+        }
+
         function updateFileName() {
             const fileInput = document.getElementById('attachment');
             const fileName = fileInput.files[0].name;
@@ -322,7 +470,7 @@
 
         document.addEventListener("DOMContentLoaded", function () {
         const form = document.querySelector("form");
-        const requiredFields = ["moNo", "title", "dateAdopted", "authorSponsor"];
+        const requiredFields = ["resoNo", "title", "dateAdopted", "authorSponsor"];
 
         function validateField(field) {
             let inputElement = document.getElementById(field);
