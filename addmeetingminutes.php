@@ -135,13 +135,13 @@
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">No. of Regular Session</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." id="no_regSession" name="no_regSession" required>
+                                                <input type="text" class="form-control" placeholder="Please type here..." id="no_regSession" name="no_regSession">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color:#000000">Date:</label>
                                             <div class="col-sm-9">
-                                                <input type="date" class="form-control" placeholder="Please type here..." id="date" name="date" required>
+                                                <input type="date" class="form-control" placeholder="Please type here..." id="date" name="date">
                                             </div>
                                         </div>
                                         <label style="color: #000000">Upload Attachment for Order of Business:</label>
@@ -224,13 +224,13 @@
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label" style="color: #000000">Item No.:</label>
                             <div class="col-sm-9">
-                                <input type="text" placeholder="Please type here..." class="form-control" name="resNo[]" required>
+                                <input type="text" placeholder="Please type here..." class="form-control" name="resNo[]">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
                             <div class="col-sm-9">
-                                <textarea class="form-control dynamic-textarea" style="resize: none; overflow: hidden;" rows="1" placeholder="Please type here..." name="title[]" required></textarea>
+                                <textarea class="form-control dynamic-textarea" style="resize: none; overflow: hidden;" rows="1" placeholder="Please type here..." name="title[]"></textarea>
                             </div>
                         </div>
                        <div class="form-group row">
@@ -383,8 +383,82 @@
             fileLabel.textContent = "Choose file"; // Reset labels
         }
 
-
     </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.querySelector("form");
+            const requiredFields = ["no_regSession", "date", "resNo[]", "title[]"];
+
+            function validateField(field) {
+                let inputElement = document.getElementById(field);
+                if (!inputElement) return true; // Skip if field is missing
+
+                let errorElement = document.getElementById(field + "-error");
+                let isEmpty = !inputElement.value.trim() || (field === "remarks" && inputElement.value === "Choose...");
+
+                if (isEmpty) {
+                    if (!errorElement) {
+                        let errorMsg = document.createElement("div");
+                        errorMsg.id = field + "-error";
+                        errorMsg.className = "text-danger mt-1";
+                        errorMsg.textContent = "Required field.";
+                        inputElement.parentNode.appendChild(errorMsg);
+                    }
+                    return false; // Field is invalid
+                } else {
+                    if (errorElement) errorElement.remove();
+                    return true; // Field is valid
+                }
+            }
+
+            function validateForm(event) {
+                let isValid = true;
+                let firstInvalidField = null; // Store the first empty field
+
+                requiredFields.forEach(function (field) {
+                    if (!validateField(field)) {
+                        isValid = false;
+                        if (!firstInvalidField) firstInvalidField = field; // Capture the first invalid field
+                    }
+                });
+
+                if (!isValid) {
+                    event.preventDefault(); // Stop submission
+
+                    // SweetAlert2 Alert
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Incomplete Form',
+                        text: 'All required fields must be filled out before submitting!',
+                        confirmButtonText: 'OK'
+                    });
+
+                    // Scroll to the first invalid field
+                    if (firstInvalidField) {
+                        document.getElementById(firstInvalidField).scrollIntoView({ behavior: "smooth", block: "center" });
+                        document.getElementById(firstInvalidField).focus();
+                    }
+
+                    return false;
+                }
+            }
+
+            // Add validation to fields
+            requiredFields.forEach(function (field) {
+                let inputElement = document.getElementById(field);
+                if (inputElement) {
+                    inputElement.addEventListener("input", function () { validateField(field); });
+                    if (field === "remarks") inputElement.addEventListener("change", function () { validateField(field); });
+                    inputElement.addEventListener("focusout", function () { validateField(field); });
+                }
+            });
+
+            // Prevent form submission
+            form.addEventListener("submit", validateForm);
+        });
+    </script>
+
 
     <script>
         document.getElementById('cancel_btn').addEventListener('click', function(e) {
