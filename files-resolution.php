@@ -36,7 +36,7 @@ ini_set('display_errors', 1);
                                 <div class="button-container d-flex justify-content-end">
                                     <?php if ($role === 'admin' || $role === 'master') { ?>
                                         <a href="addresolution.php">
-                                            <button type="button" class="btn btn-primary" style="background-color: #098209; color:#FFFFFF; border: none;"><i class="fa fa-plus"></i>&nbsp;Add New Resolution</button>
+                                            <button type="button" class="btn btn-primary" style="background-color: #098209; color:#FFFFFF; border: none;"><i class="fa fa-plus"></i>&nbsp;New Resolution</button>
                                         </a>
                                     <?php } ?>
                                 </div>

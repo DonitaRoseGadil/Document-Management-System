@@ -102,9 +102,9 @@
 
                                 // Determine the value for optRadio based on conditions
                                 $optRadio = "";
-                                if ($row['resolutionNo'] != "" && $row['resolutionDate'] != "") {
+                                if ($row['resolutionNo'] != "" || $row['resolutionDate'] != "") {
                                     $optRadio = "Approved";
-                                } elseif ($row['returnNo'] != "" &&  $row['returnDate'] != "") {
+                                } elseif ($row['returnNo'] != "" ||  $row['returnDate'] != "") {
                                     $optRadio = "Returned";
                                 } 
                             ?>
