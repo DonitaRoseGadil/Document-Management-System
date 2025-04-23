@@ -133,26 +133,26 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color: #000000">Author / Sponsor:</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." id="authorSponsor" name="authorSponsor" disabled>
-                                            </div>
+                                             <label class="col-sm-3 col-form-label" style="color:#000000">Author / Sponsor:</label>
+                                             <div class="col-sm-9">
+                                                <textarea class="form-control dynamic-textarea" style="resize: none; overflow: hidden;" rows="1" placeholder="Please type here..." id="authorSponsor" name="authorSponsor"></textarea>
+                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Co-Author:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." id="coAuthor" name="coAuthor" disabled>
+                                                <input type="text" class="form-control" placeholder="Please type here..." id="coAuthor" name="coAuthor">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
                                             <div class="col-sm-9">
                                                 <select id="remarks" name="remarks" class="form-control" onchange="toggleDateFields()" disabled>
-                                                    <option selected>Choose...</option>
-                                                    <option>Forwarded to LCE</option>
-                                                    <option>Signed by LCE</option>
-                                                    <option>SP Approval</option>
-                                                    <option>Disapprove</option>
+                                                    <option value="" selected>Choose...</option>
+                                                    <option value="Forwarded to LCE">Forwarded to LCE</option>
+                                                    <option value="Signed by LCE">Signed by LCE</option>
+                                                    <option value="SP Approval">SP Approval</option>
+                                                    <option value="Disapprove">Disapprove</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -395,6 +395,11 @@
 
         document.addEventListener("DOMContentLoaded", function () {
             const textarea = document.getElementById("title");
+            textarea.addEventListener("input", autoExpand);
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const textarea = document.getElementById("authorSponsor");
             textarea.addEventListener("input", autoExpand);
         });
 

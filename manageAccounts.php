@@ -170,8 +170,8 @@
                                                 while ($row = mysqli_fetch_assoc($result)) {
                                                     ?>
                                                     <tr>
-                                                        <td style="pointer-events: none; border-bottom: 1px solid #098209; border-left: 1px solid #098209;"><?php echo $row["email"] ?></td>
-                                                        <td style="pointer-events: none; border-bottom: 1px solid #098209;  text-align: center;"><?php echo $row["role"]?></td>
+                                                        <td style="pointer-events: none; border-bottom: 1px solid #098209; border-left: 1px solid #098209; text-transform: uppercase;"><?php echo $row["email"] ?></td>
+                                                        <td style="pointer-events: none; border-bottom: 1px solid #098209;  text-align: center; text-transform: uppercase;"><?php echo $row["role"]?></td>
                                                         <td style="pointer-events: none; border-bottom: 1px solid #098209;" class="text-center fs-4">
                                                             <?php 
                                                                 switch ($row['account_status']) {

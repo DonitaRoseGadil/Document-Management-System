@@ -93,9 +93,9 @@ $conn->close();
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Title:</label>
+                                            <label class="col-sm-3 col-form-label" style="color: #000000">Title:</label>
                                             <div class="col-sm-9">
-                                                <textarea class="form-control" id="title" name="title" rows="3" style="resize: none; overflow: hidden;" disabled><?php echo $row['title']; ?></textarea>
+                                                <textarea class="form-control" id="title" name="title" rows="1" style="resize: none; overflow: hidden;" disabled><?php echo htmlspecialchars_decode($row['title']); ?></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -104,16 +104,10 @@ $conn->close();
                                                 <input type="text" class="form-control" value="<?php echo $row['date_adopted']?>" id="dateAdopted" name="dateAdopted" disabled>
                                             </div>
                                         </div>
-                                        <!-- <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color:#000000">Description:</label>
-                                            <div class="col-sm-9">
-                                                <textarea class="form-control" id="descrip" name="descrip" rows="3" style="resize: none; overflow: hidden;" disabled><?php echo $row['descrip']; ?></textarea>
-                                            </div>
-                                        </div> -->
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Author / Sponsor:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" value="<?php echo $row['author_sponsor']?>" id="authorSponsor" name="authorSponsor" disabled>
+                                                <textarea class="form-control" id="authorSponsor" name="authorSponsor" rows="1" style="resize: none; overflow: hidden;" disabled><?php echo htmlspecialchars_decode($row['author_sponsor']); ?></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -313,6 +307,30 @@ $conn->close();
         });
     });
     </script>
+
+    <script>
+        function autoResizeTextarea(textarea) {
+            textarea.style.height = 'auto'; // Reset height to recalculate
+            textarea.style.height = textarea.scrollHeight + 'px'; // Set to scrollHeight
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const textareas = [document.getElementById("title"), document.getElementById("authorSponsor")];
+
+            textareas.forEach(textarea => {
+                if (textarea) {
+                    // Resize on input
+                    textarea.addEventListener("input", function() {
+                        autoResizeTextarea(this);
+                    });
+
+                    // Resize initially in case there's preloaded content
+                    autoResizeTextarea(textarea);
+                }
+            });
+        });
+    </script>
+
     
 </body>
 

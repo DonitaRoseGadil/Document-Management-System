@@ -223,9 +223,9 @@ if(isset($_POST['save'])){
                                             </div>
                                         </div> -->
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color: #000000">Author / Sponsor:</label>
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">Author / Sponsor:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" value="<?php echo $row['author_sponsor']?>" id="authorSponsor" name="authorSponsor">
+                                                <textarea class="form-control" id="authorSponsor" name="authorSponsor" rows="1" style="resize: none; overflow: hidden;"><?php echo htmlspecialchars_decode($row['author_sponsor']); ?></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -348,63 +348,68 @@ if(isset($_POST['save'])){
         }
 
         document.addEventListener("DOMContentLoaded", function() {
-            const textarea = document.getElementById("title");
+            const textareas = [document.getElementById("title"), document.getElementById("authorSponsor")];
 
-            // Resize on input
-            textarea.addEventListener("input", function() {
-                autoResizeTextarea(this);
+            textareas.forEach(textarea => {
+                if (textarea) {
+                    // Resize on input
+                    textarea.addEventListener("input", function() {
+                        autoResizeTextarea(this);
+                    });
+
+                    // Resize initially in case there's preloaded content
+                    autoResizeTextarea(textarea);
+                }
             });
-
-            // Resize initially in case there's preloaded content
-            autoResizeTextarea(textarea);
-        }); 
-
-    function toggleDateFields() {
-        var status = document.getElementById("remarks").value;
-
-        document.getElementById("forwardedDateField").style.display = "none";
-        document.getElementById("signedDateField").style.display = "none";
-        document.getElementById("spResoNoField").style.display = "none";
-        document.getElementById("sbApprovalDateField").style.display = "none";
-        document.getElementById("notesField").style.display = "none";
+        });
 
 
-        if (status === "Forwarded to LCE") {
-            document.getElementById("forwardedDateField").style.display = "flex";
-        } else if (status === "Signed by LCE") {
-            document.getElementById("forwardedDateField").style.display = "flex";
-            document.getElementById("signedDateField").style.display = "flex";
-        } else if (status === "SP Approval") {
-            document.getElementById("forwardedDateField").style.display = "flex";
-            document.getElementById("signedDateField").style.display = "flex";
-            document.getElementById("spResoNoField").style.display = "flex";
-            document.getElementById("sbApprovalDateField").style.display = "flex";
-        } else if (status === "Disapprove") {
-            document.getElementById("notesField").style.display = "flex";
+        function toggleDateFields() {
+            var status = document.getElementById("remarks").value;
+
+            document.getElementById("forwardedDateField").style.display = "none";
+            document.getElementById("signedDateField").style.display = "none";
+            document.getElementById("spResoNoField").style.display = "none";
+            document.getElementById("sbApprovalDateField").style.display = "none";
+            document.getElementById("notesField").style.display = "none";
+
+
+            if (status === "Forwarded to LCE") {
+                document.getElementById("forwardedDateField").style.display = "flex";
+            } else if (status === "Signed by LCE") {
+                document.getElementById("forwardedDateField").style.display = "flex";
+                document.getElementById("signedDateField").style.display = "flex";
+            } else if (status === "SP Approval") {
+                document.getElementById("forwardedDateField").style.display = "flex";
+                document.getElementById("signedDateField").style.display = "flex";
+                document.getElementById("spResoNoField").style.display = "flex";
+                document.getElementById("sbApprovalDateField").style.display = "flex";
+            } else if (status === "Disapprove") {
+                document.getElementById("notesField").style.display = "flex";
+            }
+
         }
 
-    }
-
-    function updateMinDate(fieldId, targetIds) {
-        let selectedDate = document.getElementById(fieldId).value;
-        if (selectedDate) {
-            targetIds.forEach(targetId => {
-                document.getElementById(targetId).min = selectedDate;
-            });
+        function updateMinDate(fieldId, targetIds) {
+            let selectedDate = document.getElementById(fieldId).value;
+            if (selectedDate) {
+                targetIds.forEach(targetId => {
+                    document.getElementById(targetId).min = selectedDate;
+                });
+            }
         }
-    }
 
-    document.getElementById("dateAdopted").addEventListener("change", function () {
-        updateMinDate("dateAdopted", ["dateForwarded", "dateSigned", "dateApproved"]);
-    });
+        document.getElementById("dateAdopted").addEventListener("change", function () {
+            updateMinDate("dateAdopted", ["dateForwarded", "dateSigned", "dateApproved"]);
+        });
 
-    document.getElementById("dateForwarded").addEventListener("change", function () {
-        updateMinDate("dateForwarded", ["dateSigned", "dateApproved"]);
-    });
+        document.getElementById("dateForwarded").addEventListener("change", function () {
+            updateMinDate("dateForwarded", ["dateSigned", "dateApproved"]);
+        });
 
-    document.getElementById("dateSigned").addEventListener("change", function () {
-        updateMinDate("dateSigned", ["dateApproved"]);
-    });
+        document.getElementById("dateSigned").addEventListener("change", function () {
+            updateMinDate("dateSigned", ["dateApproved"]);
+        });
     </script>
 
     <script>
