@@ -63,7 +63,7 @@
                                         <tbody class="text-left" style="color: #000000;" >
                                             <?php
                                                 include "connect.php";
-                                                $sql = "SELECT id, no_regSession, date, resNo, title, status FROM minutes ORDER BY date DESC, CAST(SUBSTRING_INDEX(resNo, '.', 1) AS UNSIGNED) DESC, CAST(SUBSTRING_INDEX(resNo, '.', -1) AS UNSIGNED) DESC";
+                                                $sql = "SELECT id, no_regSession, date, resNo, title, status, returnNo, resolutionNo, returnDate, resolutionDate FROM minutes ORDER BY date DESC, CAST(SUBSTRING_INDEX(resNo, '.', 1) AS UNSIGNED) DESC, CAST(SUBSTRING_INDEX(resNo, '.', -1) AS UNSIGNED) DESC";
                                                 $stmt = $conn->prepare($sql);
                                                 $stmt->execute();
                                                 $result = $stmt->get_result();
@@ -78,7 +78,34 @@
                                                         <td style="pointer-events: none; border-bottom: 1px solid #098209; border-left: 1px solid #098209;"><?php echo $row["no_regSession"] ?></td>
                                                         <td style="pointer-events: none; border-bottom: 1px solid #098209;"><?php echo $row["date"]?></td>
                                                         <td style="pointer-events: none; border-bottom: 1px solid #098209; white-space: pre-line;"><?php echo nl2br(htmlspecialchars($row["title"])); ?></td>
-                                                        <td style="pointer-events: none; border-bottom: 1px solid #098209;"><?php echo $row["status"] ?></td>
+                                                        
+                                                        <td style="pointer-events: none; border-bottom: 1px solid #098209; padding-top: 10px;">
+                                                            <?php echo $row["status"]; ?>
+
+                                                            <?php if (!empty($row["returnNo"])): ?>
+                                                                <hr style="border: 1px solid #ccc; margin: 5px 0;">
+                                                                <div>Return No: <?php echo htmlspecialchars($row["returnNo"]); ?></div>
+                                                            <?php endif; ?>
+
+                                                            <?php if (!empty($row["resolutionNo"])): ?>
+                                                                <hr style="border: 1px solid #ccc; margin: 5px 0;">
+                                                                <div>Resolution No: <?php echo htmlspecialchars($row["resolutionNo"]); ?></div>
+                                                            <?php endif; ?>
+
+                                                            <?php if (!empty($row["returnDate"]) && $row["returnDate"] !== "0000-00-00"): ?>
+                                                                <hr style="border: 1px solid #ccc; margin: 5px 0;">
+                                                                <div>Return Date: <?php echo htmlspecialchars($row["returnDate"]); ?></div>
+                                                            <?php endif; ?>
+
+                                                            <?php if (!empty($row["resolutionDate"]) && $row["resolutionDate"] !== "0000-00-00"): ?>
+                                                                <hr style="border: 1px solid #ccc; margin: 5px 0;">
+                                                                <div>Resolution Date: <?php echo htmlspecialchars($row["resolutionDate"]); ?></div>
+                                                            <?php endif; ?>
+                                                        </td>
+
+
+
+
                                                         <td style="border-bottom: 1px solid #098209; border-right: 1px solid #098209; text-align: center; vertical-align: middle;">
                                                             <div class="d-flex justify-content-center align-items-center gap-2">
                                                                 <a href="viewmeetingminutes.php?id=<?php echo $row["id"] ?>" class="btn btn-primary btn-sm d-flex align-items-center justify-content-center p-2">

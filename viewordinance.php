@@ -16,7 +16,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
     if ($ordinance_id > 0) {
         // Fetch the last updated timestamp for the specific file
-        $sql = "SELECT timestamp FROM history_log WHERE file_id = ? ORDER BY timestamp DESC LIMIT 1";
+        $sql = "SELECT timestamp FROM history_log WHERE file_id = ? AND file_type = 'ordinance' ORDER BY timestamp DESC LIMIT 1";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $ordinance_id);
         $stmt->execute();
@@ -272,39 +272,105 @@ $conn->close();
     window.onload = toggleViewDateFields;
     </script>
 
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        $('#historyModal').on('show.bs.modal', function() {
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // Global function to load resolution history
+        window.loadHistory = function () {
             let ordinanceId = "<?php echo $ordinance_id; ?>";
 
             if (!ordinanceId) {
-                $('#historyTableBody').html("<tr><td colspan='3'>No history available.</td></tr>");
+                $('#historyTableBody').html("<tr><td colspan='4'>No history available.</td></tr>");
                 return;
             }
 
-            fetch(`fetch_history.php?id=${ordinanceId}&file_type=ordinance`) // Add file_type parameter
-            .then(response => response.json())
-            .then(data => {
-                let historyHtml = "";
-                if (Array.isArray(data) && data.length > 0) {
-                    data.forEach(log => {
-                        historyHtml += `<tr>
-                                            <td style="color: #000000;">${log.title}</td>
-                                            <td style="color: #000000;">${log.action}</td>
-                                            <td style="color: #000000;">${log.timestamp}</td>
-                                        </tr>`;
-                    });
-                } else {
-                    historyHtml = "<tr><td colspan='3'>No history found.</td></tr>";
-                }
-                document.getElementById("historyTableBody").innerHTML = historyHtml;
-            })
-            .catch(error => {
-                console.error("Error fetching history:", error);
-                document.getElementById("historyTableBody").innerHTML = "<tr><td colspan='3'>Error loading history.</td></tr>";
-            });
+            fetch(`fetch_history.php?id=${ordinanceId}&file_type=ordinance`)
+                .then(response => response.json())
+                .then(data => {
+                    let historyHtml = "";
+                    if (Array.isArray(data) && data.length > 0) {
+                        data.forEach(log => {
+                            historyHtml += `<tr id="history-row-${log.id}">
+                                                <td style="color: #000000;">${log.title}</td>
+                                                <td style="color: #000000;">${log.action}</td>
+                                                <td style="color: #000000;">${log.timestamp}</td>
+                                                <td style="text-align: center;">
+                                                    <a onclick="confirmDelete(${log.id})" class="btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2" title="Delete">
+                                                        <i class="fa fa-trash" aria-hidden="true" style="color: #FFFFFF;"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>`;
+                        });
+                    } else {
+                        historyHtml = "<tr><td colspan='4'>No history found.</td></tr>";
+                    }
+                    document.getElementById("historyTableBody").innerHTML = historyHtml;
+                })
+                .catch(error => {
+                    console.error("Error fetching history:", error);
+                    document.getElementById("historyTableBody").innerHTML = "<tr><td colspan='4'>Error loading history.</td></tr>";
+                });
+        }
 
-        });
+        // When the modal is shown, load the history table
+        $('#historyModal').on('show.bs.modal', loadHistory);
+
+        // Global delete function
+        window.confirmDelete = function (id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to undo this action!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('deleteHistory.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: 'id=' + encodeURIComponent(id)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Deleted!',
+                                text: 'The history item has been deleted.',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1600); // Wait after SweetAlert
+
+                            // Check if the modal is currently open before refreshing
+                            if ($('#historyModal').hasClass('show')) {
+                                loadHistory(); // Refresh the modal content
+                            }
+
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Error deleting: ' + (data.error || "Unknown error"),
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Delete error:", error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Server Error',
+                            text: 'Server error while deleting.',
+                        });
+                    });
+                }
+            });
+        };
     });
     </script>
 
