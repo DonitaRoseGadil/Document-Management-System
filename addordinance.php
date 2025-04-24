@@ -203,10 +203,10 @@
                                             </div>
                                         </div> -->
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color: #000000">Author / Sponsor:</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." id="authorSponsor" name="authorSponsor">
-                                            </div>
+                                             <label class="col-sm-3 col-form-label" style="color:#000000">Author / Sponsor:</label>
+                                             <div class="col-sm-9">
+                                                <textarea class="form-control dynamic-textarea" style="resize: none; overflow: hidden;" rows="1" placeholder="Please type here..." id="authorSponsor" name="authorSponsor"></textarea>
+                                             </div>
                                         </div>
                                         <!--<div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Co-Author:</label>
@@ -272,7 +272,7 @@
                                         </div>
                                         <div class="form-group row d-flex justify-content-center">
                                             <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;">Save</button>
-                                            <a href="files-ordinances.php" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
+                                            <a href="#" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" data-href="files-ordinances.php" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
                                         </div>
                                     </form>
                                 </div>
@@ -463,6 +463,11 @@
 
         document.addEventListener("DOMContentLoaded", function () {
             const textarea = document.getElementById("title");
+            textarea.addEventListener("input", autoExpand);
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const textarea = document.getElementById("authorSponsor");
             textarea.addEventListener("input", autoExpand);
         });
 
@@ -668,8 +673,28 @@
 //     });
 // });
 
-    
     </script>    
+
+    <script>
+        document.getElementById('cancel_btn').addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent immediate navigation
+            const redirectUrl = this.getAttribute('data-href');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "All unsaved changes will be lost.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, cancel it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = redirectUrl;
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

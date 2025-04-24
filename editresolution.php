@@ -95,7 +95,7 @@ if(isset($_POST['save'])){
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const requiredFields = ["resoNo", "title", "dateAdopted", "authorSponsor", "coAuthor", "remarks"];
+        const requiredFields = ["resoNo", "title", "dateAdopted", "authorSponsor", "remarks"];
 
         function validateField(field) {
             let inputElement = document.getElementById(field);
@@ -225,9 +225,9 @@ if(isset($_POST['save'])){
                                             </div>
                                         </div> -->
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color: #000000">Author / Sponsor:</label>
+                                            <label class="col-sm-3 col-form-label" style="color:#000000">Author / Sponsor:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" value="<?php echo $row['author_sponsor']?>" id="authorSponsor" name="authorSponsor">
+                                                <textarea class="form-control" id="authorSponsor" name="authorSponsor" rows="1" style="resize: none; overflow: hidden;"><?php echo htmlspecialchars_decode($row['author_sponsor']); ?></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -304,7 +304,7 @@ if(isset($_POST['save'])){
                                         </div>
                                         <div class="form-group row d-flex justify-content-center">
                                             <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;">Update</button>
-                                            <a href="files-resolution.php" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
+                                            <a href="#" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" data-href="files-resolution.php" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
                                         </div>
                                     </form>
                                 </div>
@@ -356,16 +356,20 @@ if(isset($_POST['save'])){
         }
 
         document.addEventListener("DOMContentLoaded", function() {
-            const textarea = document.getElementById("title");
+            const textareas = [document.getElementById("title"), document.getElementById("authorSponsor")];
 
-            // Resize on input
-            textarea.addEventListener("input", function() {
-                autoResizeTextarea(this);
+            textareas.forEach(textarea => {
+                if (textarea) {
+                    // Resize on input
+                    textarea.addEventListener("input", function() {
+                        autoResizeTextarea(this);
+                    });
+
+                    // Resize initially in case there's preloaded content
+                    autoResizeTextarea(textarea);
+                }
             });
-
-            // Resize initially in case there's preloaded content
-            autoResizeTextarea(textarea);
-        }); 
+        });
 
         function toggleDateFields() {
         var status = document.getElementById("remarks").value;
@@ -412,6 +416,27 @@ if(isset($_POST['save'])){
     document.getElementById("dateSigned").addEventListener("change", function () {
         updateMinDate("dateSigned", ["dateApproved"]);
     });
+    </script>
+
+    <script>
+        document.getElementById('cancel_btn').addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent immediate navigation
+            const redirectUrl = this.getAttribute('data-href');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "All unsaved changes will be lost.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, cancel it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = redirectUrl;
+                }
+            });
+        });
     </script>
     
 </body>

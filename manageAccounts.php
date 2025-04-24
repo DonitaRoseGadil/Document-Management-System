@@ -170,8 +170,8 @@
                                                 while ($row = mysqli_fetch_assoc($result)) {
                                                     ?>
                                                     <tr>
-                                                        <td style="pointer-events: none; border-bottom: 1px solid #098209; border-left: 1px solid #098209;"><?php echo $row["email"] ?></td>
-                                                        <td style="pointer-events: none; border-bottom: 1px solid #098209;  text-align: center;"><?php echo $row["role"]?></td>
+                                                        <td style="pointer-events: none; border-bottom: 1px solid #098209; border-left: 1px solid #098209; text-transform: uppercase;"><?php echo $row["email"] ?></td>
+                                                        <td style="pointer-events: none; border-bottom: 1px solid #098209;  text-align: center; text-transform: uppercase;"><?php echo $row["role"]?></td>
                                                         <td style="pointer-events: none; border-bottom: 1px solid #098209;" class="text-center fs-4">
                                                             <?php 
                                                                 switch ($row['account_status']) {
@@ -190,12 +190,22 @@
                                                             <div class="d-flex justify-content-center align-items-center gap-2">
                                                                 <!--Button trigger modal-->
                                                                 <?php if ($role === 'admin' || $role === 'master') { ?>
-                                                                    <a onclick="confirmEdit(<?php echo $row['id']; ?>)" class="btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 ml-1 mr-1" data-toggle="modal"">
-                                                                        <i class="fa fa-edit" aria-hidden="true" style="color: #FFFFFF;"></i>
-                                                                    </a>
-                                                                    <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class="btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2">
-                                                                        <i class="fa fa-trash" aria-hidden="true" style="color: #FFFFFF"></i>
-                                                                    </a>
+                                                                    <?php if ($row['role'] === 'master') { ?>
+                                                                        <!-- Disabled actions with SweetAlert -->
+                                                                        <a onclick="showProtectedAlert()" class="btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 ml-1 mr-1">
+                                                                            <i class="fa fa-edit" aria-hidden="true" style="color: #FFFFFF;"></i>
+                                                                        </a>
+                                                                        <a onclick="showProtectedAlert()" class="btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2">
+                                                                            <i class="fa fa-trash" aria-hidden="true" style="color: #FFFFFF"></i>
+                                                                        </a>
+                                                                    <?php } else { ?>
+                                                                        <a onclick="confirmEdit(<?php echo $row['id']; ?>)" class="btn btn-success btn-sm d-flex align-items-center justify-content-center p-2 ml-1 mr-1" data-toggle="modal">
+                                                                            <i class="fa fa-edit" aria-hidden="true" style="color: #FFFFFF;"></i>
+                                                                        </a>
+                                                                        <a onclick="confirmDelete(<?php echo $row['id']; ?>)" class="btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2">
+                                                                            <i class="fa fa-trash" aria-hidden="true" style="color: #FFFFFF"></i>
+                                                                        </a>
+                                                                    <?php } ?>
                                                                 <?php } ?> 
                                                             </div>
                                                         </td>
@@ -515,6 +525,16 @@
         $('#account_status_toggle').change(function () {
             $('#account_status_value').val(this.checked ? 'active' : 'inactive');
         });
+
+        function showProtectedAlert() {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Action Not Allowed',
+                text: 'This master account cannot be EDITED or DELETED.',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            });
+        }
 
     </script>
 

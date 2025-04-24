@@ -10,40 +10,37 @@ $response = ['exists' => false];
 
 $resoNoInput = $_POST['reso_no'] ?? '';
 
-// Normalize input (e.g., remove extra spaces, lowercase)
+// Normalization function (preserve suffix letters and hyphens)
 function normalize($str) {
     $str = strtolower(trim($str));
-    // Keep only digits and hyphen, ignore everything else
-    $str = preg_replace('/[^0-9\-]/', '', $str);
+    // Allow letters, numbers, and hyphens (e.g. 191-a or 191b)
+    $str = preg_replace('/[^a-z0-9\-]/', '', $str);
     return $str;
 }
 
-// Try to extract number and year (e.g., from "181 s.2024" or "Resolution No. 181-2024")
-preg_match('/(\d+)[^\d]*(\d{4})/', $resoNoInput, $matches);
+// Match: number with optional letters (suffix) + 4-digit year
+preg_match('/(\d+[a-zA-Z\-]*)[^0-9]*(\d{4})/', $resoNoInput, $matches);
 
 if (isset($matches[1], $matches[2])) {
-    $number = ltrim($matches[1], '0'); // Remove leading zeroes
+    $number = strtolower(trim($matches[1])); // e.g. 191-a or 191b
     $year = $matches[2];
 
     $inputNormalized = normalize($number . '-' . $year);
 
-    // Fetch all resolution numbers and compare after normalization
     $sql = "SELECT * FROM resolution";
     $result = $conn->query($sql);
 
     while ($row = $result->fetch_assoc()) {
         $dbReso = $row['reso_no'];
-        
-        // Normalize DB value
-        preg_match('/(\d+)[^\d]*(\d{4})/', $dbReso, $dbMatches);
+
+        preg_match('/(\d+[a-zA-Z\-]*)[^0-9]*(\d{4})/', $dbReso, $dbMatches);
 
         if (isset($dbMatches[1], $dbMatches[2])) {
-            $dbNumber = ltrim($dbMatches[1], '0');
+            $dbNumber = strtolower(trim($dbMatches[1]));
             $dbYear = $dbMatches[2];
             $dbNormalized = normalize($dbNumber . '-' . $dbYear);
 
             if ($inputNormalized === $dbNormalized) {
-                // Match found
                 $response['exists'] = true;
                 $response['title'] = $row['title'];
                 $response['dateAdopted'] = $row['d_adopted'];
@@ -55,7 +52,7 @@ if (isset($matches[1], $matches[2])) {
                 $response['dateApproved'] = $row['d_approved'];
                 $response['attachment'] = $row['attachment'];
                 $response['notes'] = $row['notes'];
-                break; // Stop checking once a match is found
+                break;
             }
         }
     }

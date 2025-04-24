@@ -33,9 +33,10 @@
                             document.addEventListener('DOMContentLoaded', function() {
                                 Swal.fire({
                                     icon: 'success',
-                                    title: 'Login successfully',
+                                    title: 'Login Successful',
                                     showConfirmButton: false,
-                                    timer: 1500
+                                    text: 'You have been logged in successfully.',
+                                    timer: 2000
                                 }).then(() => {
                                     window.location.href = 'dashboard.php';
                                 });
@@ -128,12 +129,9 @@
                                         <div class="form-row d-flex justify-content-between mt-4 mb-2">
                                             <div class="form-group">
                                                 <div class="form-check ml-2">
-                                                    <input class="form-check-input" type="checkbox" id="basic_checkbox_1">
-                                                    <label class="form-check-label" for="basic_checkbox_1">Remember me</label>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <a href="page-forgot-password.html" style="color:#098209">Forgot Password?</a>
                                             </div>
                                         </div>
                                         <div class="text-center">

@@ -148,26 +148,26 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label" style="color: #000000">Author / Sponsor:</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." id="authorSponsor" name="authorSponsor" disabled>
-                                            </div>
+                                             <label class="col-sm-3 col-form-label" style="color:#000000">Author / Sponsor:</label>
+                                             <div class="col-sm-9">
+                                                <textarea class="form-control dynamic-textarea" style="resize: none; overflow: hidden;" rows="1" placeholder="Please type here..." id="authorSponsor" name="authorSponsor"></textarea>
+                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Co-Author:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" placeholder="Please type here..." id="coAuthor" name="coAuthor" disabled>
+                                                <input type="text" class="form-control" placeholder="Please type here..." id="coAuthor" name="coAuthor">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
                                             <div class="col-sm-9">
                                                 <select id="remarks" name="remarks" class="form-control" onchange="toggleDateFields()" disabled>
-                                                    <option selected>Choose...</option>
-                                                    <option>Forwarded to LCE</option>
-                                                    <option>Signed by LCE</option>
-                                                    <option>SP Approval</option>
-                                                    <option>Disapprove</option>
+                                                    <option value="" selected>Choose...</option>
+                                                    <option value="Forwarded to LCE">Forwarded to LCE</option>
+                                                    <option value="Signed by LCE">Signed by LCE</option>
+                                                    <option value="SP Approval">SP Approval</option>
+                                                    <option value="Disapprove">Disapprove</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -217,7 +217,7 @@
                                         </div>
                                         <div class="form-group row d-flex justify-content-center">
                                             <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;">Save</button>
-                                            <a href="files-resolution.php" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
+                                            <a href="#" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" data-href="files-resolution.php" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
                                         </div>
                                     </form>
                                 </div>
@@ -417,6 +417,11 @@
 
         document.addEventListener("DOMContentLoaded", function () {
             const textarea = document.getElementById("title");
+            textarea.addEventListener("input", autoExpand);
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const textarea = document.getElementById("authorSponsor");
             textarea.addEventListener("input", autoExpand);
         });
 
@@ -640,6 +645,27 @@
         }
     });
 
+    </script>
+
+    <script>
+        document.getElementById('cancel_btn').addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent immediate navigation
+            const redirectUrl = this.getAttribute('data-href');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "All unsaved changes will be lost.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, cancel it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = redirectUrl;
+                }
+            });
+        });
     </script>
     
 </body>
