@@ -3,6 +3,21 @@
 
 <?php include "header.php"; ?>
 
+<style>
+.spinner {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+
 
 <body>
 
@@ -28,7 +43,7 @@
                             
                             <div class="card-body">
                                 <div class="basic-form">
-                                    <form action="addresolution.php" method="post" enctype="multipart/form-data">
+                                    <form id="myForm" action="addresolution.php" method="post" enctype="multipart/form-data">
                                     <?php
                                         if (isset($_POST['save'])) {
                                             include("connect.php");
@@ -193,7 +208,7 @@
                                                 <span class="input-group-text" style="background-color: #098209;"> <i class="fa fa-paperclip"></i></span>
                                             </div>
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="attachment" name="attachment" onchange="updateFileName()">
+                                                <input type="file" class="custom-file-input" id="attachment" name="attachment" accept=".pdf" onchange="updateFileName()">
                                                 <label class="custom-file-label text-truncate" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; display:block;" for="attachment">Choose file</label>
                                             </div>
                                             <div class="input-group-append">
@@ -209,6 +224,13 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <!-- Loading Spinner Overlay -->
+            <div id="loadingOverlay" style="display: none; position: fixed; z-index: 9999; background: rgba(0,0,0,0.5); top: 0; left: 0; width: 100%; height: 100%; text-align: center;">
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                    <div class="spinner"></div>
+                    <p style="color: white; font-size: 1.2em;">Please wait...</p>
                 </div>
             </div>
         </div>
@@ -401,9 +423,11 @@
         function removeFile() {
             const fileInput = document.getElementById("attachment");
             const fileLabel = fileInput.nextElementSibling;
+            const errorElement = document.getElementById("attachment-error");
 
             fileInput.value = ""; // Clear file inputs
             fileLabel.textContent = "Choose file"; // Reset labels
+            if (errorElement) errorElement.remove();  // Remove error message if present
         }
 
         function toggleDateFields() {
@@ -505,6 +529,32 @@
                 }
             });
 
+            // Check attachment file
+            const fileInput = document.getElementById("attachment");
+            const file = fileInput.files[0];
+
+            if (file) {
+                const fileName = file.name.toLowerCase();
+                const isPdf = fileName.endsWith(".pdf");
+
+                const existingError = document.getElementById("attachment-error");
+                if (!isPdf) {
+                    isValid = false;
+
+                    if (!existingError) {
+                        const errorMsg = document.createElement("div");
+                        errorMsg.id = "attachment-error";
+                        errorMsg.className = "text-danger mt-1";
+                        errorMsg.textContent = "Only PDF files are allowed.";
+                        fileInput.parentNode.appendChild(errorMsg);
+                    }
+
+                    if (!firstInvalidField) firstInvalidField = "attachment";
+                } else {
+                    if (existingError) existingError.remove();
+                }
+            }
+
             if (!isValid) {
                 event.preventDefault(); // Stop submission
 
@@ -561,6 +611,35 @@
         updateMinDate("dateSigned", ["dateApproved"]);
     });
     
+    </script>
+
+    <script>
+    document.getElementById("myForm").addEventListener("submit", function() {
+        document.getElementById("loadingOverlay").style.display = "block";
+    });
+
+    document.getElementById("attachment").addEventListener("change", function () {
+    const file = this.files[0];
+        if (file) {
+            const fileName = file.name.toLowerCase();
+            const isPdf = fileName.endsWith(".pdf");
+            console.log("Changed file:", fileName, "| PDF?", isPdf);
+
+            const existingError = document.getElementById("attachment-error");
+            if (!isPdf) {
+                if (!existingError) {
+                    const errorMsg = document.createElement("div");
+                    errorMsg.id = "attachment-error";
+                    errorMsg.className = "text-danger mt-1";
+                    errorMsg.textContent = "Only PDF files are allowed.";
+                    this.closest('.input-group').parentNode.insertBefore(errorMsg, this.closest('.input-group').nextSibling);
+                }
+            } else {
+                if (existingError) existingError.remove();
+            }
+        }
+    });
+
     </script>
     
 </body>

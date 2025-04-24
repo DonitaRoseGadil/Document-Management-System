@@ -4,20 +4,25 @@ include "connect.php";
 if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
     $id = intval($_GET["id"]); // Ensure it's an integer
 
-    // Fetch the resolution title before deleting
-    $fetch_sql = "SELECT title FROM resolution WHERE id = ?";
+    // Fetch the resolution title and attachment before deleting
+    $fetch_sql = "SELECT title, attachment FROM resolution WHERE id = ?";
     $fetch_stmt = mysqli_prepare($conn, $fetch_sql);
     
     if ($fetch_stmt) {
         mysqli_stmt_bind_param($fetch_stmt, "i", $id);
         mysqli_stmt_execute($fetch_stmt);
-        mysqli_stmt_bind_result($fetch_stmt, $title);
+        mysqli_stmt_bind_result($fetch_stmt, $title, $attachment);
         mysqli_stmt_fetch($fetch_stmt);
         mysqli_stmt_close($fetch_stmt);
     }
 
     if (!empty($title)) {
-        // Proceed with deletion
+        // Delete file if it exists
+        if (!empty($attachment) && file_exists($attachment)) {
+            unlink($attachment); // Delete the uploaded file
+        }
+
+        // Proceed with deletion from database
         $sql = "DELETE FROM resolution WHERE id = ?";
         $stmt = mysqli_prepare($conn, $sql);
 
