@@ -8,7 +8,15 @@
 
 <?php include"header.php" ?>
 
+
 <body>
+    <!--*******************
+        Preloader start
+    ********************-->
+    <?php include"loadingscreen.php" ?>
+    <!--*******************
+        Preloader end
+    ********************-->
 
     <!--**********************************
         Main wrapper start

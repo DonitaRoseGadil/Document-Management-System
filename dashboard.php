@@ -5,6 +5,14 @@
 
 
 <body>
+    <!--*******************
+        Preloader start
+    ********************-->
+    <?php include"loadingscreen.php" ?>
+    <!--*******************
+        Preloader end
+    ********************-->
+    
     <!-- Main Wrapper Start -->
     <div id="main-wrapper">
         

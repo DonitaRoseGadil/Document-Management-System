@@ -8,6 +8,13 @@ ini_set('display_errors', 1);
 <html lang="en">
 
 <body>
+    <!--*******************
+        Preloader start
+    ********************-->
+    <?php include"loadingscreen.php" ?>
+    <!--*******************
+        Preloader end
+    ********************-->
 
     <!--**********************************
         Main wrapper start
