@@ -95,7 +95,7 @@ if(isset($_POST['save'])){
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const requiredFields = ["resoNo", "title", "dateAdopted", "authorSponsor", "remarks"];
+        const requiredFields = ["resoNo", "title", "dateAdopted", "authorSponsor"];
 
         function validateField(field) {
             let inputElement = document.getElementById(field);
