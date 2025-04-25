@@ -218,11 +218,11 @@
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Status:</label>
                                             <div class="col-sm-9">
                                                 <select id="remarks" name="remarks" class="form-control" onchange="toggleDateFields()">
-                                                    <option selected>Choose...</option>
-                                                    <option>Forwarded to LCE</option>
-                                                    <option>Signed by LCE</option>
-                                                    <option>SP Approval</option>
-                                                    <option>Disapprove</option>
+                                                    <option value="" selected>Choose...</option>
+                                                    <option value="Forwarded to LCE">Forwarded to LCE</option>
+                                                    <option value="Signed by LCE">Signed by LCE</option>
+                                                    <option value="SP Approval">SP Approval</option>
+                                                    <option value="Disapprove">Disapprove</option>
                                                 </select>
                                             </div>
                                         </div>
