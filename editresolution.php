@@ -17,7 +17,6 @@ if(isset($_POST['save'])){
     $spResoNo = mysqli_real_escape_string($conn, $_POST['spResoNo']);
     $dateApproved = mysqli_real_escape_string($conn, $_POST['dateApproved']);
 
-
     // Handle file uploads
     $attachment = $_FILES['attachment']['name'];
 

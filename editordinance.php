@@ -5,16 +5,16 @@ if(isset($_POST['save'])){
     error_reporting(0);
 
     $id = intval($_POST['id']);
-    $moNo = $_POST['moNo'];
-    $title = $_POST['title'];
-    $dateAdopted = $_POST['dateAdopted'];
-    $authorSponsor = $_POST['authorSponsor'];
-    $remarks = $_POST['remarks'];
-    $notes = $_POST['notes'];
-    $dateForwarded = $_POST['dateForwarded'];
-    $dateSigned = $_POST['dateSigned'];
-    $spResoNo = $_POST['spResoNo'];
-    $dateApproved = $_POST['dateApproved'];
+    $moNo = mysqli_real_escape_string($conn, $_POST['moNo']);
+    $title = mysqli_real_escape_string($conn, $_POST['title']);
+    $dateAdopted = mysqli_real_escape_string($conn, $_POST['dateAdopted']);
+    $authorSponsor = mysqli_real_escape_string($conn, $_POST['authorSponsor']);
+    $remarks = mysqli_real_escape_string($conn, $_POST['remarks']);
+    $notes = mysqli_real_escape_string($conn, $_POST['notes']);
+    $dateForwarded = mysqli_real_escape_string($conn, $_POST['dateForwarded']);
+    $dateSigned = mysqli_real_escape_string($conn, $_POST['dateSigned']);
+    $spResoNo = mysqli_real_escape_string($conn, $_POST['spResoNo']);
+    $dateApproved = mysqli_real_escape_string($conn, $_POST['dateApproved']);
 
     // Handle file uploads
     $attachment = $_FILES['attachment']['name'];
