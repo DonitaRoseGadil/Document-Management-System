@@ -201,7 +201,9 @@ $conn->close();
                                                         <th style="color: #000000; font-weight:bold; text-align: center;">Title</th>
                                                         <th style="color: #000000; font-weight:bold; text-align: center;">Action</th>
                                                         <th style="color: #000000; font-weight:bold; text-align: center;">Timestamp</th>
-                                                        <th style="color: #000000; font-weight:bold; text-align: center;"></th>
+                                                        <?php if ($role === 'master') { ?>
+                                                            <th style="color: #000000; font-weight:bold; text-align: center;"></th>
+                                                        <?php } ?>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="historyTableBody">
@@ -308,11 +310,13 @@ $conn->close();
                                                 <td style="color: #000000;">${log.title}</td>
                                                 <td style="color: #000000;">${log.action}</td>
                                                 <td style="color: #000000;">${log.timestamp}</td>
-                                                <td style="text-align: center;">
-                                                    <a onclick="confirmDelete(${log.id})" class="btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2" title="Delete">
-                                                        <i class="fa fa-trash" aria-hidden="true" style="color: #FFFFFF;"></i>
-                                                    </a>
-                                                </td>
+                                                <?php if ($role === 'master') { ?>
+                                                    <td style="text-align: center;">
+                                                        <a onclick="confirmDelete(${log.id})" class="btn btn-danger btn-sm d-flex align-items-center justify-content-center p-2" title="Delete">
+                                                            <i class="fa fa-trash" aria-hidden="true" style="color: #FFFFFF;"></i>
+                                                        </a>
+                                                    </td>
+                                                <?php } ?>
                                             </tr>`;
                         });
                     } else {
