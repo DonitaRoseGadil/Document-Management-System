@@ -19,7 +19,8 @@ function normalize($str) {
 }
 
 // Match number, year, optional "(Book 1)" or "(Book 2)"
-preg_match('/(\d+[a-zA-Z\-]*)\s*(?:s\.?|[-])?\s*(\d{4})\s*(\(.*?\))?/i', $resoNoInput, $matches);
+//preg_match('/(\d+[a-zA-Z\-]*)\s*(?:s\.?|[-])?\s*(\d{4})\s*(\(.*?\))?/i', $resoNoInput, $matches);
+preg_match('/(\d+[a-zA-Z\-]*)\s*(?:[, ]*\s*s\.?|[-])?\s*(\d{4})\s*(\(.*?\))?/i', $resoNoInput, $matches);
 
 if (isset($matches[1], $matches[2])) {
     $number = strtolower(trim($matches[1]));
@@ -35,7 +36,8 @@ if (isset($matches[1], $matches[2])) {
     while ($row = $result->fetch_assoc()) {
         $dbReso = $row['reso_no'];
 
-        preg_match('/(\d+[a-zA-Z\-]*)\s*(?:s\.?|[-])?\s*(\d{4})\s*(\(.*?\))?/i', $dbReso, $dbMatches);
+        // preg_match('/(\d+[a-zA-Z\-]*)\s*(?:s\.?|[-])?\s*(\d{4})\s*(\(.*?\))?/i', $dbReso, $dbMatches);
+        preg_match('/(\d+[a-zA-Z\-]*)\s*(?:[, ]*\s*s\.?|[-])?\s*(\d{4})\s*(\(.*?\))?/i', $dbReso, $dbMatches);
 
         if (isset($dbMatches[1], $dbMatches[2])) {
             $dbNumber = strtolower(trim($dbMatches[1]));
