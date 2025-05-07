@@ -91,7 +91,7 @@
                                                                                 }
                                                                             ?>
                                                                         </td>
-                                                                        <td class="text-center"><?php echo $row['timestamp']; ?></td>
+                                                                        <td class="text-center"><?php echo date('F j, Y \a\t h:i A', strtotime($row['timestamp'])); ?></td>
                                                                     </tr>   
                                                                     <?php
                                                                 }
@@ -150,7 +150,7 @@
                                                                                 }
                                                                             ?>
                                                                         </td>
-                                                                        <td class="text-center"><?php echo $row['timestamp']; ?></td>
+                                                                        <td class="text-center"><?php echo date('F j, Y \a\t h:i A', strtotime($row['timestamp'])); ?></td>
                                                                     </tr>   
                                                                     <?php
                                                                 }
@@ -211,7 +211,7 @@
                                                                             ?>
                                                                         </td>
                                                                         <td class="text-center"><?php echo $row['status']; ?></td>
-                                                                        <td class="text-center"><?php echo $row['timestamp']; ?></td>
+                                                                        <td class="text-center"><?php echo date('F j, Y \a\t h:i A', strtotime($row['timestamp'])); ?></td>
                                                                     </tr>   
                                                                     <?php
                                                                 }
