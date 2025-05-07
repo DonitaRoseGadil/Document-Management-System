@@ -143,8 +143,8 @@
                                 <div class="table-responsive">
                                     <table id="example" class="display" style="min-width: 845px; width: 100%;">
                                         <colgroup>
-                                            <col style="width: 40%;">
-                                            <col style="width: 20%;">
+                                            <col style="width: 35%;">
+                                            <col style="width: 25%;">
                                             <col style="width: 15%;">
                                             <col style="width: 15%;">
                                         </colgroup>
@@ -171,7 +171,23 @@
                                                     ?>
                                                     <tr>
                                                         <td style="pointer-events: none; border-bottom: 1px solid #098209; border-left: 1px solid #098209; text-transform: uppercase;"><?php echo $row["email"] ?></td>
-                                                        <td style="pointer-events: none; border-bottom: 1px solid #098209;  text-align: center; text-transform: uppercase;"><?php echo $row["role"]?></td>
+                                                        <td style="pointer-events: none; border-bottom: 1px solid #098209; text-align: center; text-transform: uppercase;">
+                                                            <?php 
+                                                                switch ($row["role"]) {
+                                                                    case "master":
+                                                                        echo "Sangguniang Bayan Secretary";
+                                                                        break;
+                                                                    case "admin":
+                                                                        echo "Sangguniang Bayan Staff";
+                                                                        break;
+                                                                    case "user":
+                                                                        echo "Sangguniang Bayan Council";
+                                                                        break;
+                                                                    default:
+                                                                        echo strtoupper($row["role"]); // fallback display
+                                                                }
+                                                            ?>
+                                                        </td>
                                                         <td style="pointer-events: none; border-bottom: 1px solid #098209;" class="text-center fs-4">
                                                             <?php 
                                                                 switch ($row['account_status']) {

@@ -82,7 +82,23 @@
                                         </div>
                                         <div class="row mt-4">
                                             <div class="col">
-                                                <h4 class="m-b-0" style="text-transform: uppercase; color:#000000"><?php echo htmlspecialchars($_SESSION['role']); ?></h4>
+                                                <h4 class="m-b-0" style="text-transform: uppercase; color:#000000">
+                                                    <?php 
+                                                        switch ($_SESSION['role']) {
+                                                            case "master":
+                                                                echo "Sangguniang Bayan Secretary";
+                                                                break;
+                                                            case "admin":
+                                                                echo "Sangguniang Bayan Staff";
+                                                                break;
+                                                            case "user":
+                                                                echo "Sangguniang Bayan Council";
+                                                                break;
+                                                            default:
+                                                                echo strtoupper(htmlspecialchars($_SESSION['role']));
+                                                        }
+                                                    ?>
+                                                </h4>
                                                 <span style="color:#000000">Role</span>
                                             </div>
                                         </div>
