@@ -87,9 +87,9 @@
                     <a href="./manageAccounts.php" aria-expanded="false"><i class="icon icon-users-mm"></i><span class="nav-text">Manage Accounts</span></a>
                 </li>
             <?php } ?>
-            <li>
+            <!-- <li>
                 <a href="./manual.php" aria-expanded="false"><i class="icon icon-book-open-2"></i><span class="nav-text">Manual</span></a>
-            </li>
+            </li> -->
         </ul>
     </div>
 
