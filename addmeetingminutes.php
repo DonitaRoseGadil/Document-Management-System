@@ -160,8 +160,8 @@
                                         <div class="d-flex justify-content-between align-items-center mt-5 mb-3">
                                             <h5 style="color: #098209;">AGENDA ITEM</h5>
                                             <div class="d-flex align-items-center">
-                                                <input type="number" id="formCountInput" class="form-control mr-2" min="1" max="50" style="width: 60px;" placeholder="0">
-                                                <button type="button" class="btn btn-primary" id="add-card-btn" value="Save Data" style="background-color: #098209; border: none; color: #FFFFFF;"><i class="fa fa-plus"></i> Form</button>
+                                                <input type="number" id="formCountInput" class="form-control mr-2" min="1" max="50" style="width: 60px; outline: 1px solid #098209;" placeholder="0">
+                                                <button type="button" class="btn btn-primary" id="add-card-btn" value="Save Data" style="background-color: #098209; border: none; color: #FFFFFF; height: 4vh;"><i class="fa fa-plus"></i> Form</button>
                                             </div>
                                         </div>
                                         <div id="dynamic-form-container">
@@ -169,7 +169,7 @@
                                         </div>
                                         <div class="form-group row d-flex justify-content-center mt-5">
                                             <button type="submit" class="btn btn-primary" id="save_btn" name="save" value="Save Data" style="background-color: #098209; border: none; width: 100px; color: #FFFFFF;">Save</button>
-                                            <a href="files-meetingminutes.php" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
+                                            <a href="#" class="btn btn-danger ml-2" id="cancel_btn" name="cancel" value="Cancel" data-href="files-meetingminutes.php" style="background-color: red; border: none; width: 100px; color: #FFFFFF;">Cancel</a>
                                         </div>
                                     </form>
                                 </div>
@@ -203,9 +203,29 @@
         });
 
         document.getElementById("add-card-btn").addEventListener("click", function() {
-            let count = parseInt(document.getElementById("formCountInput").value) || 1;
-            for (let i = 0; i < count; i++) {
-                addDynamicCard();
+            // let count = parseInt(document.getElementById("formCountInput").value) || 1;
+            // for (let i = 0; i < count; i++) {
+            //     addDynamicCard();
+            // }
+            let countInput = document.getElementById("formCountInput");
+            let count = parseInt(countInput.value);
+            
+            // Check if count is a valid number and greater than 0
+            if (!isNaN(count) && count > 0) {
+                for (let i = 0; i < count; i++) {
+                    addDynamicCard();
+                }
+                
+                // Reset the input field after adding forms
+                countInput.value = "";
+            } else {
+                // Alert the user if no valid number was entered
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Missing Information',
+                    text: 'Please enter the number of forms to add.',
+                    confirmButtonText: 'OK'
+                });
             }
         });
 
@@ -385,6 +405,28 @@
 
 
     </script>
+
+    <script>
+        document.getElementById('cancel_btn').addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent immediate navigation
+            const redirectUrl = this.getAttribute('data-href');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "All unsaved changes will be lost.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, cancel it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = redirectUrl;
+                }
+            });
+        });
+    </script>
+    
 
 </body>
 
