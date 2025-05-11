@@ -255,6 +255,7 @@
                                             <label class="col-sm-4 col-form-label">Username</label>
                                             <div class="col-sm-8">
                                                 <input type="text" class="form-control" name="email" id="email" placeholder="Please type here..." required>
+                                                <small id="emailWarning" style="color: red; display: none;">Username already exists!</small>
                                             </div>
                                         </div>
                                         <!-- Password Field -->
@@ -372,9 +373,57 @@
     <!-- Datatable -->
     <script src="./vendor/datatables/js/jquery.dataTables.min.js"></script>
     <script src="./js/plugins-init/datatables.init.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
     <!-- Toggle -->
     <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $('#email').on('input', function () {
+                var email = $(this).val();
+
+                if (email.length > 0) {
+                    $.ajax({
+                        url: 'check_username.php', // Create this PHP file
+                        type: 'POST',
+                        data: { email: email },
+                        success: function (response) {
+                            if (response === 'exists') {
+                                $('#emailWarning').show();
+                                $('button[name="save_account"]').prop('disabled', true);
+                            } else {
+                                $('#emailWarning').hide();
+                                $('button[name="save_account"]').prop('disabled', false);
+                            }
+                        }
+                    });
+                } else {
+                    $('#emailWarning').hide();
+                    $('button[name="save_account"]').prop('disabled', false);
+                }
+            });
+        });
+    </script>
+
+
+    <script>
+        $(document).ready(function() {
+            // Function to reset the add account form
+            function resetAddAccountForm() {
+                $('#addAccountModal form')[0].reset();
+            }
+            
+            // Reset forms when modals are closed (X button or backdrop click)
+            $('#addAccountModal').on('hidden.bs.modal', resetAddAccountForm);
+            
+            // Reset forms when Cancel buttons are clicked
+            $('#addAccountModal .btn-danger').click(resetAddAccountForm);
+            
+        });
+    </script>
     
     <script>
         function validatePasswords() {
