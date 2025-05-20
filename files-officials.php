@@ -149,24 +149,49 @@
             </div>
             <div class="modal-body">
 
-                <!-- View Mode -->
-                <div id="viewMode">
+            <!-- View Mode -->
+            <div id="viewMode">
                 <div class="row mb-4">
-                    <div class="col-md-4 text-center">
-                    <img id="modalImage" src="" class="img-fluid rounded shadow mb-3" style="max-height: 250px;">
-                    <h4 id="modalName" style="color: #098209;"></h4>
-                        <p id="modalPosition" style="color: black;"></p>
-                        <p style="color: black;"><span id="modalPosition"></span></p>
-                    <div class="mt-3">
-                        <button type="button" class="btn btn-sm btn-primary me-2" onclick="editOfficial(<?= $vm['id'] ?>)">
-                            <i class="fa fa-pencil"></i> Edit
-                        </button>
-                        <button type="button" class="btn btn-sm btn-danger" onclick="deleteOfficial(<?= $vm['id'] ?>)">
-                            <i class="fa fa-trash" aria-hidden="true" style="color: #FFFFFF"></i> Delete
-                        </button>
-                    </div>
+                    <div class="col-md-4">
+                        <div style="background-color: #098209; color: white; padding: 1.5rem; border-radius: 0.5rem; height: 100%; display: flex; flex-direction: column; align-items: center;">
+
+                            <!-- Image with top margin -->
+                            <img id="modalImage" src="" class="img-fluid rounded shadow mb-3" style="max-height: 250px; margin-top: 2rem;">
+
+                            <!-- Full Name and Position -->
+                            <h4 id="modalName" class="mb-1 text-white text-center"></h4>
+                            <p id="modalPosition" class="mb-3 text-white text-center"></p>
+
+                            <!-- Contact Information -->
+                            <div class="d-flex flex-column align-items-center px-3 mt-4">
+                                <p class="mb-1 text-white d-flex align-items-start" style="font-size: 0.9rem; text-align: justify;">
+                                    <i class="fa fa-envelope me-2 mt-1"></i>
+                                    <span id="modalEmailleft"></span>
+                                </p>
+                                <p class="mb-1 text-white d-flex align-items-start" style="font-size: 0.9rem; text-align: justify;">
+                                    <i class="fa fa-phone me-2 mt-1"></i>
+                                    <span id="modalMobileleft"></span>
+                                </p>
+                                <p class="mb-3 text-white d-flex align-items-start" style="font-size: 0.9rem; text-align: justify;">
+                                    <i class="fa fa-map-marker me-2 mt-1"></i>
+                                    <span id="modalAddressleft"></span>
+                                </p>
+                            </div>
+
+
+                            <!-- Buttons -->
+                            <div class="mt-auto d-flex justify-content-center gap-2">
+                                <button type="button" class="btn btn-light btn-sm me-2" onclick="editOfficial(currentOfficialId)">
+                                    <i class="fa fa-pencil"></i> Edit
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="deleteOfficial(currentOfficialId)">
+                                    <i class="fa fa-trash text-white"></i> Delete
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
+                      
                     <div class="col-md-8">
                     <!-- Personal Info -->
                     <h5 class="border-bottom pb-1 mb-2" style="color: #28a745;">Personal Information</h5>
@@ -423,6 +448,10 @@
         document.getElementById('modalSurname').textContent = data.surname;
         document.getElementById('modalFirstname').textContent = data.firstname;
         document.getElementById('modalMiddlename').textContent = data.middlename;
+
+        document.getElementById('modalAddressleft').textContent = data.address;
+        document.getElementById('modalMobileleft').textContent = data.mobile_number;
+        document.getElementById('modalEmailleft').textContent = data.email;
 
         document.getElementById('modalBirthday').textContent = data.birthday;
         document.getElementById('modalBirthplace').textContent = data.birthplace;
