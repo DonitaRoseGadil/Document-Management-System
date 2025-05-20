@@ -20,18 +20,18 @@
               $query = mysqli_query($conn, "SELECT * FROM officials WHERE position = 'Vice-Mayor'");
 
               if ($query && mysqli_num_rows($query) > 0) {
-                  $vm = mysqli_fetch_assoc($query);
+                  $row = mysqli_fetch_assoc($query);
           ?>
                   <div class="col-md-3 text-center mb-4">
-                    <div class="card" onclick='openModal(<?= json_encode($vm) ?>)'>
-                        <img src="<?= htmlspecialchars($vm['photo_path']) ?>" class="card-img-top">
+                    <div class="card" onclick='openModal(<?= json_encode($row) ?>)'>
+                        <img src="<?= htmlspecialchars($row['photo_path']) ?>" class="card-img-top">
                         <!-- Pabago nalang here ng bg nung card if di bagay yung green ahhahaha -->
                         <div class="card-body text-white text-center" style="background-color: #098209; padding: 1rem;">
                             <h3 class="card-title mb-1 fw-bold text-white" style="font-size: 1.1rem;">
-                                <?= htmlspecialchars($vm['firstname'] . ' ' . $vm['surname']) ?>
+                                <?= htmlspecialchars($row['firstname'] . ' ' . $row['surname']) ?>
                             </h3>
                             <p class="card-text mb-0" style="font-size: 0.95rem; opacity: 0.9;">
-                                <?= htmlspecialchars($vm['position']) ?>
+                                <?= htmlspecialchars($row['position']) ?>
                             </p>
                         </div>  
                     </div>
