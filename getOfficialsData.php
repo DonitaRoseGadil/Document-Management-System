@@ -1,6 +1,8 @@
 <?php
 include 'connect.php'; // your DB connection
 
+header('Content-Type: application/json');
+
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']); // sanitize
 
@@ -11,8 +13,11 @@ if (isset($_GET['id'])) {
     $result = $stmt->get_result();
     $official = $result->fetch_assoc();
 
-    // Send JSON response
-    header('Content-Type: application/json');
-    echo json_encode($official);
+    if ($official) {
+        echo json_encode($official); // ✅ valid official found
+    } else {
+        echo json_encode((object)[]); // ✅ empty object instead of null
+    }
+} else {
+    echo json_encode((object)[]); // ✅ no ID passed, return empty
 }
-?>
