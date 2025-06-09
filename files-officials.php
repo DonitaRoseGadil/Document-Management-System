@@ -1,3 +1,4 @@
+<!-- NEW RECOVERED -->
 <?php include "connect.php"; ?>
 <?php include "sidebar.php"; ?>
 
