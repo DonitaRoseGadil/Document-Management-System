@@ -218,7 +218,7 @@
                                                                     <button type="button" class="btn btn-light btn-sm me-2" onclick="editOfficial(currentOfficialId)">
                                                                         <i class="fa fa-pencil"></i> Edit
                                                                     </button>
-                                                                    <button type="button" class="btn btn-danger btn-sm" onclick="deleteOfficial(currentOfficialId)">
+                                                                    <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(currentOfficialId)">    
                                                                         <i class="fa fa-trash text-white"></i> Delete
                                                                     </button>
                                                                 </div>
@@ -499,7 +499,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
+        let currentOfficialId = null;
+
         function openModal(data) {
+            currentOfficialId = data.id;
             // Compose full name with optional middlename
             const fullName = `${data.firstname} ${data.middlename ? data.middlename + ' ' : ''}${data.surname}`.trim();
 
@@ -592,6 +595,80 @@
             }
         }
 
+        function confirmDelete(id) {
+            // Close the Bootstrap modal first
+            const modalElement = document.getElementById('officialModal');
+            const bsModal = bootstrap.Modal.getInstance(modalElement);
+            if (bsModal) {
+                bsModal.hide();
+            }
+
+            // Then show SweetAlert password input
+            Swal.fire({
+                title: "Enter Password",
+                input: "password",
+                inputAttributes: {
+                    autocapitalize: "off",
+                    required: true
+                },
+                showCancelButton: true,
+                confirmButtonText: "Submit",
+                showLoaderOnConfirm: true,
+                preConfirm: (password) => {
+                    return fetch("validate_password.php", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        body: "password=" + encodeURIComponent(password)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.success) {
+                            throw new Error(data.message || "Incorrect password.");
+                        }
+                    })
+                    .catch(error => {
+                        Swal.showValidationMessage(error.message);
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Are you sure?",
+                        text: "You won't be able to revert this!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Confirm!"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Delete via AJAX
+                            fetch("deleteOfficial.php?id=" + id)
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        Swal.fire({
+                                            title: "Deleted!",
+                                            text: data.message,
+                                            icon: "success",
+                                            showConfirmButton: false,
+                                            timer: 2000
+                                        }).then(() => {
+                                            location.reload(); // reload to reflect changes
+                                        });
+                                    } else {
+                                        Swal.fire("Error", data.message, "error");
+                                    }
+                                });
+                        }
+                    });
+                }
+            });
+        }
+    
     </script>
 
 </body>

@@ -212,16 +212,29 @@
                                                 <h5 style="color: #098209; font-weight: bold;">Basic Information</h5>
                                             </div>
                                         </div>
+                                        <?php
+                                        // Get current counts from DB
+                                        $positions = ['Vice-Mayor', 'Councilor', 'LNB', 'PPSK'];
+                                        $limits = ['Vice-Mayor' => 1, 'Councilor' => 10, 'LNB' => 5, 'PPSK' => 4];
+                                        $current = [];
+
+                                        foreach ($positions as $pos) {
+                                            $stmt = $conn->prepare("SELECT COUNT(*) as count FROM officials WHERE position = ?");
+                                            $stmt->bind_param("s", $pos);
+                                            $stmt->execute();
+                                            $res = $stmt->get_result()->fetch_assoc();
+                                            $current[$pos] = $res['count'];
+                                        }
+                                        ?>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Position:</label>
                                             <div class="col-sm-9">
                                                 <select class="form-control" id="position" name="position" required>
                                                     <option value="" selected>Choose...</option>
-                                                    <option value="Vice-Mayor">Vice-Mayor</option>
-                                                    <!-- diko pa sure if need na may 1-8 yun sa option ng councilor para ma-identify sino yun -->
-                                                    <option value="Councilor">Councilor</option>
-                                                    <option value="LNB">LNB</option>
-                                                    <option value="PPSK">PPSK</option>
+                                                    <option value="Vice-Mayor" <?= $current['Vice-Mayor'] >= $limits['Vice-Mayor'] ? 'disabled' : '' ?>>Vice-Mayor</option>
+                                                    <option value="Councilor" <?= $current['Councilor'] >= $limits['Councilor'] ? 'disabled' : '' ?>>Councilor</option>
+                                                    <option value="LNB" <?= $current['LNB'] >= $limits['LNB'] ? 'disabled' : '' ?>>LNB</option>
+                                                    <option value="PPSK" <?= $current['PPSK'] >= $limits['PPSK'] ? 'disabled' : '' ?>>PPSK</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -449,6 +462,7 @@
     <script src="./vendor/global/global.min.js"></script>
     <script src="./js/quixnav-init.js"></script>
     <script src="./js/custom.min.js"></script>
+    <script src="./js/inputmask.min.js"></script>
 
     <script>
 
@@ -587,6 +601,12 @@
                 }
             });
         });
+    </script>
+
+    <script>
+        Inputmask("99999999999").mask("#gsis_number");
+        Inputmask("9999-9999-999").mask("#pagibig_number");
+        Inputmask("99-999999999-9").mask("#philhealth_number");
     </script>
 </body>
 
