@@ -685,17 +685,6 @@
             const modal = bootstrap.Modal.getInstance(document.getElementById('editModeOfficial'));
             modal.hide();
         });
-
-
-        // DELETE OFFICIAL
-        document.getElementById("deleteBtn").addEventListener("click", function () {
-            // Optional: confirm before delete
-            if (confirm("Are you sure you want to delete this official?")) {
-                deleteOfficial(); // replace with your actual delete function
-            }
-        });
-
-
     
     // function toggleEdit() {
     //     const view = document.getElementById('viewMode');
@@ -710,6 +699,14 @@
     // }
 
         function confirmDelete(id) {
+            // Close the Bootstrap modal first
+            const modalElement = document.getElementById('officialModal');
+            const bsModal = bootstrap.Modal.getInstance(modalElement);
+            if (bsModal) {
+                bsModal.hide();
+            }
+
+            // Then show SweetAlert password input
             Swal.fire({
                 title: "Enter Password",
                 input: "password",
@@ -751,14 +748,24 @@
                         confirmButtonText: "Confirm!"
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            Swal.fire({
-                                title: "Deleted!",
-                                text: "Your file has been deleted.",
-                                icon: "success",
-                                showConfirmButton: false,
-                                timer: 2000
-                            });
-                            window.location.href = "#";
+                            // Delete via AJAX
+                            fetch("deleteOfficial.php?id=" + id)
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        Swal.fire({
+                                            title: "Deleted!",
+                                            text: data.message,
+                                            icon: "success",
+                                            showConfirmButton: false,
+                                            timer: 2000
+                                        }).then(() => {
+                                            location.reload(); // reload to reflect changes
+                                        });
+                                    } else {
+                                        Swal.fire("Error", data.message, "error");
+                                    }
+                                });
                         }
                     });
                 }
