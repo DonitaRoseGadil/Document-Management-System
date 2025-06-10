@@ -1,5 +1,34 @@
-<?php include "connect.php"; ?>
-<?php include "sidebar.php"; ?>
+<?php 
+    error_reporting(E_ALL); // Enable error reporting for development
+    ini_set('display_errors', 1);
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<?php include "header.php"; ?>
+
+<body>
+    
+    <!--*******************
+        Preloader start
+    ********************-->
+    <?php include"loadingscreen.php" ?>
+    <!--*******************
+        Preloader end
+    ********************-->
+    
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
+    <div id="main-wrapper">
+
+        <?php 
+            
+            include "sidebar.php";
+            
+            // Fetch role from session
+            $role = isset($_SESSION['role']) ? $_SESSION['role'] : 'user';
+        ?>
 
 <!-- MAIN WRAPPER -->
 <div class="content-body" style="background-color: #f1f9f1">
