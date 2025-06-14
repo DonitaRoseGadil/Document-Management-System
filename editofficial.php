@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Handle photo upload
     $photo_path = null;
     if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
-        $target_dir = "uploads/photos/";
+        $target_dir = "uploads/";
         $file_name = basename($_FILES["image"]["name"]);
         $target_file = $target_dir . uniqid() . "_" . $file_name;
 
