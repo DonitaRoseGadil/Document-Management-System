@@ -190,6 +190,7 @@
                             <!-- Full Name and Position -->
                             <h4 id="modalName" class="mb-1 text-white text-center"></h4>
                             <p id="modalPosition" class="mb-3 text-white text-center"></p>
+                            
 
                             <!-- Contact Information -->
                             <div class="d-flex flex-column align-items-center px-3 mt-4">
@@ -223,6 +224,8 @@
                                                             <!-- Personal Info -->
                                                             <h5 class="border-bottom pb-1 mb-2" style="color: #28a745;">Personal Information</h5>
                                                             <div class="row text-dark">
+                                                                <div class="col-md-6 mb-2"><strong>Year Term Start:</strong> <span id="modalYearTermStart"></span></div>
+                                                                <div class="col-md-6 mb-2"><strong>Year Term End:</strong> <span id="modalYearTermEnd"></span></div>
                                                                 <div class="col-md-6 mb-2"><strong>Surname:</strong> <span id="modalSurname"></span></div>
                                                                 <div class="col-md-6 mb-2"><strong>Firstname:</strong> <span id="modalFirstname"></span></div>
                                                                 <div class="col-md-6 mb-2"><strong>Middlename:</strong> <span id="modalMiddlename"></span></div>
@@ -332,7 +335,27 @@
                         <div class="col-md-8">
                         <!-- Personal Info -->
                         <h5 class="border-bottom pb-1 mb-2" style="color: #28a745;">Personal Information</h5>
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label" style="color: #000000">Position:</label>
+                           <div class="col-sm-9">
+                                <select class="form-control" id="edit_position" name="position" required>
+                                    <option value="" disabled selected>Select...</option>
+                                    <option value="Vice-Mayor">Vice-Mayor</option>
+                                    <option value="Councilor">Councilor</option>
+                                    <option value="LNB">LNB</option>
+                                    <option value="PPSK">PPSK</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="row text-dark">
+                                <div class="col-md-6 mb-2">
+                                    <label for="edit_yeartermstart" class="form-label">Year Term Start:</label>
+                                    <input type="number" class="form-control" id="edit_yeartermstart" name="yeartermstart" required>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label for="edit_yeartermend" class="form-label">Year Term End:</label>
+                                    <input type="number" class="form-control" id="edit_yeartermend" name="yeartermend" required>
+                                </div>
                                 <div class="col-md-6 mb-2">
                                     <label for="edit_surname" class="form-label">Surname:</label>
                                     <input type="text" class="form-control" id="edit_surname" name="surname">
@@ -483,6 +506,8 @@
         document.getElementById('modalImage').src = data.photo_path;
         document.getElementById('modalPosition').textContent = data.position;
         // If you want to keep separate name fields, you can set them too:
+        document.getElementById('modalYearTermStart').innerText = data.term_start;
+        document.getElementById('modalYearTermEnd').innerText = data.term_end;
         document.getElementById('modalSurname').textContent = data.surname;
         document.getElementById('modalFirstname').textContent = data.firstname;
         document.getElementById('modalMiddlename').textContent = data.middlename;
@@ -545,6 +570,8 @@
 
             // setInputValue('edit_official_id', official.id);
             setInputValue('edit_position', official.position);
+            setInputValue('edit_yeartermstart', official.term_start);
+            setInputValue('edit_yeartermend', official.term_end);
             setInputValue('edit_surname', official.surname);
             setInputValue('edit_firstname', official.firstname);
             setInputValue('edit_middlename', official.middlename);
@@ -603,82 +630,97 @@
             });
         }
 
-        document.getElementById("editBtn").addEventListener("click", function () {
-            const id = this.getAttribute('data-official-id'); // Assuming you set this attribute in your HTML
-            if (!id) {
-                alert('No official ID found!');
-                return;
-            }
-            editOfficial(id);  // your existing editOfficial function
-        });
-
-        document.getElementById('edit_image').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-            document.getElementById('modalImageEdit').src = e.target.result;  // show new image preview
-            }
-            reader.readAsDataURL(file);
-        }
-        });
-
-        // SAVE CHANGES IN EDIT MODAL
-        document.getElementById('saveBtn').addEventListener('click', function (e) {
-            e.preventDefault();
-
-            const formData = new FormData();
-            formData.append('id', document.getElementById('edit_official_id').value); // make sure this hidden input exists
-            // formData.append('position', document.getElementById('edit_position').value);
-            formData.append('surname', document.getElementById('edit_surname').value);
-            formData.append('firstname', document.getElementById('edit_firstname').value);
-            formData.append('middlename', document.getElementById('edit_middlename').value);
-            formData.append('birthday', document.getElementById('edit_birthday').value);
-            formData.append('birthplace', document.getElementById('edit_birthplace').value);
-            formData.append('address', document.getElementById('edit_address').value);
-            formData.append('contact', document.getElementById('edit_contact').value);
-            formData.append('email', document.getElementById('edit_email').value);
-            formData.append('gender', document.getElementById('edit_gender').value);
-
-            formData.append('education_attainment', document.getElementById('edit_education_attainment').value);
-            formData.append('education_school', document.getElementById('edit_education_school').value);
-            formData.append('education_date', document.getElementById('edit_education_date').value);
-
-            formData.append('civil_status', document.getElementById('edit_civil_status').value);
-            formData.append('spouse_name', document.getElementById('edit_spouse_name').value);
-            formData.append('spouse_birthday', document.getElementById('edit_spouse_birthday').value);
-            formData.append('spouse_birthplace', document.getElementById('edit_spouse_birthplace').value);
-            formData.append('dependents', document.getElementById('edit_dependents').value);
-
-            formData.append('gsis_number', document.getElementById('edit_gsis').value);
-            formData.append('pagibig_number', document.getElementById('edit_pagibig').value);
-            formData.append('philhealth_number', document.getElementById('edit_philhealth').value);
-
-
-            // Image file
-            const imageFile = document.getElementById('edit_image').files[0];
-            if (imageFile) {
-                formData.append('image', imageFile);
+        document.addEventListener('DOMContentLoaded', function () {
+            const editBtn = document.getElementById("editBtn");
+            if (editBtn) {
+                editBtn.addEventListener("click", function () {
+                    const id = this.getAttribute('data-official-id');
+                    if (!id) {
+                        alert('No official ID found!');
+                        return;
+                    }
+                    editofficial(id);
+                });
             }
 
-            fetch('editOfficial.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(res => res.json())
-            .then(response => {
-                if (response.success) {
-                    alert('Official updated successfully!');
-                    location.reload(); // Or re-fetch data if you're avoiding full reloads
-                } else {
-                    alert('Update failed: ' + response.message);
-                }
-            })
-            .catch(err => {
-                console.error(err);
-                alert('An error occurred while saving.');
-            });
+            const imageInput = document.getElementById('edit_image');
+            if (imageInput) {
+                imageInput.addEventListener('change', function(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            document.getElementById('modalImageEdit').src = e.target.result;
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            const saveBtn = document.getElementById('saveBtn');
+            if (saveBtn) {
+                saveBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    const formData = new FormData();
+                    formData.append('id', document.getElementById('edit_official_id').value);
+                    formData.append('position', document.getElementById('edit_position').value);
+                    formData.append('term_start', document.getElementById('edit_yeartermstart').value);
+                    formData.append('term_end', document.getElementById('edit_yeartermend').value);
+                    formData.append('surname', document.getElementById('edit_surname').value);
+                    formData.append('firstname', document.getElementById('edit_firstname').value);
+                    formData.append('middlename', document.getElementById('edit_middlename').value);
+                    formData.append('birthday', document.getElementById('edit_birthday').value);
+                    formData.append('birthplace', document.getElementById('edit_birthplace').value);
+                    formData.append('address', document.getElementById('edit_address').value);
+                    formData.append('contact', document.getElementById('edit_contact').value);
+                    formData.append('email', document.getElementById('edit_email').value);
+                    formData.append('gender', document.getElementById('edit_gender').value);
+                    formData.append('education_attainment', document.getElementById('edit_education_attainment').value);
+                    formData.append('education_school', document.getElementById('edit_education_school').value);
+                    formData.append('education_date', document.getElementById('edit_education_date').value);
+                    formData.append('civil_status', document.getElementById('edit_civil_status').value);
+                    formData.append('spouse_name', document.getElementById('edit_spouse_name').value);
+                    formData.append('spouse_birthday', document.getElementById('edit_spouse_birthday').value);
+                    formData.append('spouse_birthplace', document.getElementById('edit_spouse_birthplace').value);
+                    formData.append('dependents', document.getElementById('edit_dependents').value);
+                    formData.append('gsis_number', document.getElementById('edit_gsis').value);
+                    formData.append('pagibig_number', document.getElementById('edit_pagibig').value);
+                    formData.append('philhealth_number', document.getElementById('edit_philhealth').value);
+
+                    const imageFile = document.getElementById('edit_image').files[0];
+                    if (imageFile) {
+                        formData.append('image', imageFile);
+                    }
+
+                    fetch('editofficial.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(res => res.json())
+                    .then(response => {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Official Updated',
+                                text: 'The official has been successfully updated.',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Update Failed',
+                                text: response.message || 'An unexpected error occurred.',text: json.message,
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    })
+                });
+            }
         });
+
 
         // CANCEL BUTTON TO EDIT
         document.getElementById('cancelBtn').addEventListener('click', function () {

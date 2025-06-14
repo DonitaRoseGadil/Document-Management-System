@@ -7,6 +7,8 @@
     document.addEventListener("DOMContentLoaded", function () {
         const requiredFields = [
             "position",
+            "term_start",
+            "term_end",
             "surname",
             "firstname",
             "birthday",
@@ -118,6 +120,8 @@
 
                                                 // Collect POST data
                                                 $position = $_POST['position'];
+                                                $term_start = $_POST['term_start'];
+                                                $term_end = $_POST['term_end'];
                                                 $surname = $_POST['surname'];
                                                 $firstname = $_POST['firstname'];
                                                 $middlename = $_POST['middlename'];
@@ -167,15 +171,15 @@
 
                                                 // Prepare SQL insert
                                                 $sql = "INSERT INTO officials 
-                                                    (position, surname, firstname, middlename, birthday, birthplace, address, mobile_number, email, gender,
+                                                    (position, surname, term_start, term_end, firstname, middlename, birthday, birthplace, address, mobile_number, email, gender,
                                                     education_attainment, education_school, education_date,
                                                     civil_status, spouse_name, spouse_birthday, spouse_birthplace,
                                                     dependents, gsis_number, pagibig_number, philhealth_number, photo_path) 
-                                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
                                                 $stmt = $conn->prepare($sql);
-                                                $stmt->bind_param("ssssssssssssssssssssss", 
-                                                    $position, $surname, $firstname, $middlename, $birthday, $birthplace, $address, $mobile_number, $email, $gender,
+                                                $stmt->bind_param("ssssssssssssssssssssssss", 
+                                                    $position, $term_start, $term_end, $surname, $firstname, $middlename, $birthday, $birthplace, $address, $mobile_number, $email, $gender,
                                                     $education_attainment, $education_school, $education_date,
                                                     $civil_status, $spouse_name, $spouse_birthday, $spouse_birthplace,
                                                     $dependents, $gsis_number, $pagibig_number, $philhealth_number, $photo_path);
@@ -239,6 +243,19 @@
                                             </div>
                                         </div>
 
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Term Start:</label>
+                                            <div class="col-sm-9">
+                                                <input type="number" class="form-control" id="term_start" name="term_start" min="1900" max="2100" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 col-form-label">Term End:</label>
+                                            <div class="col-sm-9">
+                                                <input type="number" class="form-control" id="term_end" name="term_end" min="1900" max="2100" required>
+                                            </div>
+                                        </div>
                                         <div class="form-group row">
                                             <label class="col-sm-3 col-form-label" style="color: #000000">Surname:</label>
                                             <div class="col-sm-9">

@@ -1,18 +1,21 @@
 <?php
+include 'connect.php';
 
-include 'connect.php'; // your DB connection file
+header('Content-Type: application/json'); // Tell JS to expect JSON
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Collect POST data and sanitize as needed
-    $id = $_POST['official_id'];
+    // Collect POST data
+    $id = $_POST['id'];
     $position = $_POST['position'];
+    $term_start = $_POST['term_start'];
+    $term_end = $_POST['term_end'];
     $surname = $_POST['surname'];
     $firstname = $_POST['firstname'];
     $middlename = $_POST['middlename'];
     $birthday = $_POST['birthday'];
     $birthplace = $_POST['birthplace'];
     $address = $_POST['address'];
-    $mobile_number = $_POST['mobile_number'];
+    $mobile_number = $_POST['contact'];
     $email = $_POST['email'];
     $gender = $_POST['gender'];
     $education_attainment = $_POST['education_attainment'];
@@ -27,27 +30,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pagibig_number = $_POST['pagibig_number'];
     $philhealth_number = $_POST['philhealth_number'];
 
-    // Handle photo upload if exists
-    $photo_path = null; // default if no new photo uploaded
-    if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
-        $target_dir = "uploads/photos/"; // your upload folder
-        $file_name = basename($_FILES["photo"]["name"]);
-        $target_file = $target_dir . uniqid() . "_" . $file_name; // unique filename
+    // Handle photo upload
+    $photo_path = null;
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === 0) {
+        $target_dir = "uploads/photos/";
+        $file_name = basename($_FILES["image"]["name"]);
+        $target_file = $target_dir . uniqid() . "_" . $file_name;
 
-        // Optional: Check file type, size here
-
-        if (move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
+        if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
             $photo_path = $target_file;
         } else {
-            echo "Sorry, there was an error uploading your photo.";
+            echo json_encode(['success' => false, 'message' => 'Photo upload failed.']);
             exit;
         }
     }
 
-    // Prepare the SQL query with or without photo update
+    // Prepare query
     if ($photo_path) {
         $sql = "UPDATE officials SET
-            position = ?, surname = ?, firstname = ?, middlename = ?,
+            position = ?, term_start = ?, term_end = ?, surname = ?, firstname = ?, middlename = ?,
             birthday = ?, birthplace = ?, address = ?, mobile_number = ?,
             email = ?, gender = ?, education_attainment = ?, education_school = ?,
             education_date = ?, civil_status = ?, spouse_name = ?, spouse_birthday = ?,
@@ -56,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             WHERE id = ?";
     } else {
         $sql = "UPDATE officials SET
-            position = ?, surname = ?, firstname = ?, middlename = ?,
+            position = ?, term_start = ?, term_end = ?, surname = ?, firstname = ?, middlename = ?,
             birthday = ?, birthplace = ?, address = ?, mobile_number = ?,
             email = ?, gender = ?, education_attainment = ?, education_school = ?,
             education_date = ?, civil_status = ?, spouse_name = ?, spouse_birthday = ?,
@@ -68,8 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $conn->prepare($sql);
 
     if ($photo_path) {
-        $stmt->bind_param("ssssssssssssssssssssssi",
-            $position, $surname, $firstname, $middlename,
+        $stmt->bind_param("ssssssssssssssssssssssssi",
+            $position, $term_start, $term_end, $surname, $firstname, $middlename,
             $birthday, $birthplace, $address, $mobile_number,
             $email, $gender, $education_attainment, $education_school,
             $education_date, $civil_status, $spouse_name, $spouse_birthday,
@@ -77,8 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $philhealth_number, $photo_path, $id
         );
     } else {
-        $stmt->bind_param("sssssssssssssssssssssi",
-            $position, $surname, $firstname, $middlename,
+        $stmt->bind_param("sssssssssssssssssssssssi",
+            $position, $term_start, $term_end, $surname, $firstname, $middlename,
             $birthday, $birthplace, $address, $mobile_number,
             $email, $gender, $education_attainment, $education_school,
             $education_date, $civil_status, $spouse_name, $spouse_birthday,
@@ -88,10 +89,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($stmt->execute()) {
-        header("Location: officials_list.php?success=1");
-        exit;
+        echo json_encode(['success' => true]);
     } else {
-        echo "Error updating record: " . $stmt->error;
+        echo json_encode(['success' => false, 'message' => $stmt->error]);
     }
 
     $stmt->close();
