@@ -37,9 +37,12 @@
         <h3 class="text-center mb-0" style="color: #098209;">Organizational Chart</h3>
 
         <!-- Button aligned right below title -->
-        <div class="d-flex justify-content-end mb-2">
-            <a href="addOfficials.php" class="btn" style="background-color: #098209; color: white;">
+        <div class="d-flex justify-content-end mb-2 ml-4">
+            <a href="addOfficials.php" class="btn mr-1" style="background-color: #098209; color: white;">
                 + Add Officials
+            </a>
+            <a href="previousTerms.php" class="btn btn-secondary">
+                📅 Publish the Chart
             </a>
         </div>
         
@@ -53,7 +56,10 @@
           ?>
                   <div class="col-md-3 text-center mb-4">
                     <div class="card" onclick='openModal(<?= json_encode($row) ?>, false)'>
-                        <img src="<?= htmlspecialchars($row['photo_path']) ?>" class="card-img-top">
+                        <img src="<?= htmlspecialchars($row['photo_path']) ?>" 
+                            class="card-img-top img-fluid" 
+                            style="object-fit: cover; width: 100%; height: 200px;">
+
                         <!-- Pabago nalang here ng bg nung card if di bagay yung green ahhahaha -->
                         <div class="card-body text-white text-center" style="background-color: #098209; padding: 1rem;">
                             <h3 class="card-title mb-1 fw-bold text-white" style="font-size: 1.1rem;">
@@ -350,11 +356,11 @@
                         <div class="row text-dark">
                                 <div class="col-md-6 mb-2">
                                     <label for="edit_yeartermstart" class="form-label">Year Term Start:</label>
-                                    <input type="number" class="form-control" id="edit_yeartermstart" name="yeartermstart" required>
+                                    <input type="date" class="form-control" id="edit_yeartermstart" name="yeartermstart" required>
                                 </div>
                                 <div class="col-md-6 mb-2">
                                     <label for="edit_yeartermend" class="form-label">Year Term End:</label>
-                                    <input type="number" class="form-control" id="edit_yeartermend" name="yeartermend" required>
+                                    <input type="date" class="form-control" id="edit_yeartermend" name="yeartermend" required>
                                 </div>
                                 <div class="col-md-6 mb-2">
                                     <label for="edit_surname" class="form-label">Surname:</label>

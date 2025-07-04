@@ -171,7 +171,7 @@
 
                                                 // Prepare SQL insert
                                                 $sql = "INSERT INTO officials 
-                                                    (position, surname, term_start, term_end, firstname, middlename, birthday, birthplace, address, mobile_number, email, gender,
+                                                    (position, term_start, term_end, surname, firstname, middlename, birthday, birthplace, address, mobile_number, email, gender,
                                                     education_attainment, education_school, education_date,
                                                     civil_status, spouse_name, spouse_birthday, spouse_birthplace,
                                                     dependents, gsis_number, pagibig_number, philhealth_number, photo_path) 
@@ -244,16 +244,16 @@
                                         </div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label">Term Start:</label>
+                                            <label class="col-sm-3 col-form-label" style="color: #000000">Term Start:</label>
                                             <div class="col-sm-9">
-                                                <input type="number" class="form-control" id="term_start" name="term_start" min="1900" max="2100" required>
+                                                <input type="date" class="form-control" id="term_start" name="term_start" min="1900" max="2100" required>
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
-                                            <label class="col-sm-3 col-form-label">Term End:</label>
+                                            <label class="col-sm-3 col-form-label" style="color: #000000">Term End:</label>
                                             <div class="col-sm-9">
-                                                <input type="number" class="form-control" id="term_end" name="term_end" min="1900" max="2100" required>
+                                                <input type="date" class="form-control" id="term_end" name="term_end" min="1900" max="2100" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">

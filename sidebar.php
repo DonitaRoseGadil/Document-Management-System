@@ -89,7 +89,12 @@
             <?php } ?>
             <?php if ($role === 'master') { ?>
                 <li>
-                    <a href="./files-officials.php" aria-expanded="false"><i class="icon icon-users-mm"></i><span class="nav-text">Composition Data</span></a>
+                    <a href="./files-officials.php" aria-expanded="false"><i class="icon icon-users-mm"></i><span class="nav-text">Organizational Chart</span></a>
+                </li>
+            <?php } ?>
+            <?php if ($role === 'master') { ?>
+                <li>
+                    <a href="./publishedTerms.php" aria-expanded="false"><i class="icon icon-users-mm"></i><span class="nav-text"> Published Terms</span></a>
                 </li>
             <?php } ?>
             <!-- <li>
